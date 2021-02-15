@@ -30,3 +30,12 @@
 *.exe
 *.out
 *.app
+
+# Build directory
+[Bb]uild
+
+# Ignore Visual Studio Code Configurations
+.vscode
+
+# Ignore macOS 'Desktop Services Store' fles
+.DS_Store
