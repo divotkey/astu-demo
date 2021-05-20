@@ -3,7 +3,7 @@
 int main()
 {
     SayVersion();
-    SayCopyright();
+    SayCopyright(true);
     
     return 0;
 }
