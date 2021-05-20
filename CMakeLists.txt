@@ -11,4 +11,3 @@ add_subdirectory(${PROJECT_SOURCE_DIR}/astu astu)
 
 # Collection of Sub-projects
 add_subdirectory(${PROJECT_SOURCE_DIR}/src/helloastu helloastu)
-add_subdirectory(${PROJECT_SOURCE_DIR}/src/querydevices querydevices)
