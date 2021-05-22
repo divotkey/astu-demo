@@ -1,5 +1,6 @@
 // C++ Standard Library includes
 #include <iostream>
+#include <cmath>
 
 // AST Utilities includes
 #include <Mouse.h>
@@ -11,6 +12,8 @@
 
 using namespace astu;
 using namespace std;
+
+#define ZOOM_STEP 1.1f
 
 CameraControlService::CameraControlService(int updatePriority)
     : Service("Camera Control Service")
@@ -24,6 +27,7 @@ CameraControlService::CameraControlService(int updatePriority)
 void CameraControlService::OnStartup()
 {
     dragging = false;
+    zoomLevel = 0;
 }
 
 void CameraControlService::OnShutdown()
@@ -45,6 +49,8 @@ bool CameraControlService::OnKeyPressed(int keycode)
 {
     if (keycode == homeKey) {
         GetCamera().SetPosition(0, 0);
+        GetCamera().SetZoom(1.0f);
+        zoomLevel = 0;
         dragging = false;
         return true;
     }
@@ -74,6 +80,14 @@ bool CameraControlService::OnMouseButtonReleased(int button, int x, int y)
     dragging = false;
     return true;
 }
+
+bool CameraControlService::OnMouseWheel(int amount)
+{
+    zoomLevel += amount;
+    GetCamera().SetZoom( std::pow(ZOOM_STEP, zoomLevel) );
+    return true;
+}
+
 
 void CameraControlService::UpdateCamera(int screenX, int screenY)
 {

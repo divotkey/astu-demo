@@ -17,6 +17,7 @@ class CameraControlService
     , public astu::Updatable
     , public astu::KeystrokeListener
     , public astu::MouseButtonListener
+    , public astu::MouseWheelListener
     , public astu::Camera2Client
 {
 public:
@@ -42,6 +43,10 @@ public:
     virtual bool OnMouseButtonPressed(int button, int x, int y) override;
     virtual bool OnMouseButtonReleased(int button, int x, int y) override;
 
+    // Inherited via MouseWheelListener
+    virtual bool OnMouseWheel(int amount) override;
+
+
 private:
     /** The mouse button used to control the camera position. */
     int mouseButton;
@@ -52,6 +57,9 @@ private:
     /** Indicates whether the user is currently changing the camera position. */
     bool dragging;
 
+    /** Used to calculate the zoom factor. */
+    int zoomLevel;
+
     /** The start position of the camera movement in screen coordinates. */
     astu::Vector2f startScreenPos;
 
@@ -59,4 +67,6 @@ private:
     astu::Vector2f startWorldPos;
 
     void UpdateCamera(int screenX, int screenY);
+
+
 };

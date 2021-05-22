@@ -59,6 +59,9 @@ void AddCoreServices()
     // Receives and distributes mouse button events.
     sm.AddService( make_shared<MouseButtonEventService>() );
 
+    // Receives and distributes mouse wheel events.
+    sm.AddService( make_shared<MouseWheelEventService>() );
+
     // Receives and distributes keystroke events.
     sm.AddService( make_shared<KeystrokeEventService>() );
 
