@@ -1,5 +1,5 @@
 /*
- * Boilerplate Code for SDL/ASTU Applications - Version 1.2.0
+ * Example code showing how to use the 2D scene graph with SDL
  * Requires AST Utilities 0.9
  */
 
@@ -17,20 +17,22 @@
 #include <SdlEventService.h>
 #include <SdlRenderService.h>
 #include <SdlTimeService.h>
+#include <SdlSceneGraph2.h>
+#include <Camera2Service.h>
+#include <EntityService.h>
 
-// Uncomment if 2D scene graph is used.
-// #include <SdlSceneGraph2.h>
-// #include <Camera2Service.h>
-
-// Uncomment if ECS (Entoty Component System) is used
-// #include <EntityService.h>
+// Local includes
+#include "CameraModeChangerService.h"
+#include "StatusIndicatorService.h"
+#include "CameraControlService.h"
+#include "SceneGraphTestService.h"
 
 using namespace astu;
 using namespace std;
 
 // Constants to be adapted to the requirements of this application
-const string kAppTitle = "Boilerplate Code for SDL/ASTU Applications";
-const string kAppVersion = "1.3.0";
+const string kAppTitle = "AST Utilities, 2D Scene Graph Demo";
+const string kAppVersion = "1.0.0";
 const int kRes = 3;
 
 // Global constants which should note be changed without care.
@@ -41,6 +43,7 @@ const std::array<std::array<int, 2>, 6> kResolutions = {
     1366, 768, 
     1680, 1050, 
     1920, 1080 };
+
 
 // Adds core services required for any application.
 void AddCoreServices()
@@ -88,10 +91,48 @@ void AddSdlServices()
 // Adds application specific services.
 void AddCustomServices()
 {
-    // Get service manager instance to shorten code and avoid functions calls.
-    auto & sm = ServiceManager::GetInstance();
+    // We are using the ASTU_CREATE_AND_ADD_SERVICE macro here instead
+    // the usual way to create and add services. There is no difference
+    // to the way services gete added in e.g., AddSdlServices()
+    // or AddCoreServices().
+    //
+    // In case services must be created with a parameter in the constructor,
+    // the macro ASTU_CREATE_AND_ADD_SERVICE cannot be used.
+    //
+    // Example hot to add services without macros:
+    // auto & sm = ServiceManager::GetInstance();
+    // sm.AddService( make_shared<Camera2Service>() );
 
-    // TODO add custom services.
+    // We are using the camera system to become independent from the
+    // actual screen resolution and sill beeing able to see th entire 
+    // game world. Beside that we need the camera to carry out a 
+    // screen-to-world transformation to place graphical elements via 
+    // mouse click.
+    ASTU_CREATE_AND_ADD_SERVICE( Camera2Service );
+
+    // The SDL vertex buffer builder is used to create vertex buffer that
+    // work with the SDL-based implementation of the scene graph.
+    ASTU_CREATE_AND_ADD_SERVICE( SdlVertexBuffer2BuilderService );
+
+    // This service provides an SDL-based implementation of the 2D
+    // scene graph.
+    ASTU_CREATE_AND_ADD_SERVICE( SdlSceneGraph2 );
+
+    // This application's own service, which is used to add create and
+    // some leafes and branches to the scene graph.
+    ASTU_CREATE_AND_ADD_SERVICE( SceneGraphTestService );
+
+    // Add service to let the user change the camera mode.
+    ASTU_CREATE_AND_ADD_SERVICE( CameraModeChangerService );
+
+    // Add signal service for string, to show status updates.
+    ASTU_CREATE_AND_ADD_SERVICE( SignalService<std::string> );
+
+    // Add service that reacts to string status messages. */
+    ASTU_CREATE_AND_ADD_SERVICE( StatusIndicatorService );
+
+    // Add service which let the user controll the camera with the mouse. */
+    ASTU_CREATE_AND_ADD_SERVICE( CameraControlService );    
 }
 
 
@@ -108,8 +149,20 @@ void ConfigureApplication()
 {
     // Configure application main window.
     auto & wm = ASTU_SERVICE(IWindowManager);
-    wm.SetTitle(kAppTitle + " - Version " + kAppVersion);
+
+    // wm.SetTitle(kAppTitle + " - Version " + kAppVersion);
     wm.SetSize(kResolutions.at(kRes)[0], kResolutions.at(kRes)[1]);
+    wm.SetResizeable(true);
+
+    ASTU_SERVICE(StatusIndicatorService)
+        .SetWindowTitle(kAppTitle + " - Version " + kAppVersion);
+
+    // /** Configure the game world to be 4 by 3 meters. */
+    // ASTU_SERVICE(SceneGraphTestService).SetWorldSize(4, 3);
+
+    // ASTU_SERVICE(CameraModeChangerService)
+    //     .SetFixedWorldWidth(5)
+    //     .SetFixedWorldHeight(4);
 }
 
 // Starts all services, runs the main loop and shuts down all services.
