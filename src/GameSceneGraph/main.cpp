@@ -193,7 +193,6 @@ void RunApplication()
     ASTU_SHUTDOWN_SERVICES();
 }
 
-
 // Main entry point of the application.
 int main()
 {
