@@ -16,11 +16,13 @@ public:
 
     /**
      * Constructor.
+     * 
+     * @param windowTitle   the title for the application window
      */
-    StatusIndicatorService();
+    StatusIndicatorService(const std::string & windowTitle = "");
 
     /**
-     * Specifies the window title for the application window.
+     * Specifies the title for the application window.
      * 
      * @param title the title
      */

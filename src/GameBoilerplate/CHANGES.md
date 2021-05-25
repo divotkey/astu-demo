@@ -1,5 +1,9 @@
 # Changes
 
+## Version 1.4.0
+- Entirely relies on macros instead of using `ServiceManager` directly.
+- Added `GetApplicationTitle` to assemble application title.
+
 ## Version 1.3.0
 *2021-05-20*
 

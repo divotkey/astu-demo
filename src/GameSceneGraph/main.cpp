@@ -33,62 +33,72 @@ using namespace std;
 // Constants to be adapted to the requirements of this application
 const string kAppTitle = "AST Utilities, 2D Scene Graph Demo";
 const string kAppVersion = "1.0.0";
+
+// Chages this value to let the application window have one of the 
+// standard dimentions specified in the kResolutions array.
 const int kRes = 3;
 
 // Global constants which should note be changed without care.
 const std::array<std::array<int, 2>, 6> kResolutions = {
-    800, 600,
-    1024, 768, 
-    1280, 720, 
-    1366, 768, 
-    1680, 1050, 
-    1920, 1080 };
+    800, 600,       // res 0    SVGA,       Aspect ratio 4:3
+    1024, 768,      // res 1    XGA,        Aspect ratio 4:3 
+    1280, 720,      // res 2    HD (921k)   Aspect Ratio ~16:9 
+    1366, 768,      // res 3    HD (1049k)  Aspect Ratio ~16:9 
+    1680, 1050,     // rew 4    WSXGA+      Aspect Ratio 16:9
+    1920, 1080      // res 5    FHD (1080)  Aspect Ratio 16:9
+    };   
 
+// Concatenates some meta-information about the application to assemble a title.
+std::string GetApplicationTitle() {
+    return kAppTitle + " - Version " + kAppVersion;
+}
+
+// Outputs some meta-information about this application.
+void PrintHeader()
+{
+    cout << kAppTitle << " - Version " << kAppVersion << endl << endl;
+    SayVersion();
+    SayCopyright(true);
+}
 
 // Adds core services required for any application.
 void AddCoreServices()
 {
-    // Get service manager instance to shorten code and avoid functions calls.
-    auto & sm = ServiceManager::GetInstance();
-
     // The update service functions as the central facility for things 
     // (services, systems, etc) that need to be updated once within the 
     // main application loop.
-    sm.AddService( make_shared<UpdateService>());
+    ASTU_CREATE_AND_ADD_SERVICE( UpdateService );
 
     // Receives and distributes mouse button events.
-    sm.AddService( make_shared<MouseButtonEventService>() );
+    ASTU_CREATE_AND_ADD_SERVICE( MouseButtonEventService );
 
     // Receives and distributes mouse wheel events.
-    sm.AddService( make_shared<MouseWheelEventService>() );
+    ASTU_CREATE_AND_ADD_SERVICE( MouseWheelEventService );
 
     // Receives and distributes keystroke events.
-    sm.AddService( make_shared<KeystrokeEventService>() );
+    ASTU_CREATE_AND_ADD_SERVICE( KeystrokeEventService );
 
     // Receives and distributes resize events.
-    sm.AddService( make_shared<ResizeEventService>() );
+    ASTU_CREATE_AND_ADD_SERVICE( ResizeEventService );
 }
 
 // Adds services required to run SDL-based interactive applications.
 void AddSdlServices()
 {
-    // Get service manager instance to shorten code and avoid functions calls.
-    auto & sm = ServiceManager::GetInstance();
-
     // Initializes and de-initializes SDL and its subsystems.
-    sm.AddService( make_shared<SdlService>() );
+    ASTU_CREATE_AND_ADD_SERVICE( SdlService );
 
     // Maintains main application window.
-    sm.AddService( make_shared<SdlVideoService>() );
+    ASTU_CREATE_AND_ADD_SERVICE( SdlVideoService );
 
     // Offers an layer-based 2D graphics facility based on SDL render mechanism.
-    sm.AddService( make_shared<SdlRenderService>() );
+    ASTU_CREATE_AND_ADD_SERVICE( SdlRenderService );
 
     // Empties the SDL-Event queue and distributes events.
-    sm.AddService( make_shared<SdlEventService>() );
+    ASTU_CREATE_AND_ADD_SERVICE( SdlEventService );
 
     // Provides an SDL-based implementation of the ITimeService interface.
-    sm.AddService( make_shared<SdlTimeService>() );
+    ASTU_CREATE_AND_ADD_SERVICE( SdlTimeService );
 }
 
 // Adds application specific services.
@@ -132,19 +142,10 @@ void AddCustomServices()
     ASTU_CREATE_AND_ADD_SERVICE( SignalService<std::string> );
 
     // Add service that reacts to string status messages. */
-    ASTU_CREATE_AND_ADD_SERVICE( StatusIndicatorService );
+    ASTU_CREATE_AND_ADD_SERVICE( StatusIndicatorService, GetApplicationTitle());
 
     // Add service which let the user controll the camera with the mouse. */
     ASTU_CREATE_AND_ADD_SERVICE( CameraControlService );    
-}
-
-
-// Output some information about this application.
-void PrintHeader()
-{
-    cout << kAppTitle << " - Version " << kAppVersion << endl << endl;
-    SayVersion();
-    SayCopyright(true);
 }
 
 // Configures services according to application specific settings and configurations.
@@ -153,19 +154,22 @@ void ConfigureApplication()
     // Configure application main window.
     auto & wm = ASTU_SERVICE(IWindowManager);
 
+    // We do not need to set the wintow title, hence the window title is hanled
+    // by the StatusIndicatorService service.
     // wm.SetTitle(kAppTitle + " - Version " + kAppVersion);
+
+    // Set initial size of main application window and make it resizeable.
     wm.SetSize(kResolutions.at(kRes)[0], kResolutions.at(kRes)[1]);
     wm.SetResizeable(true);
 
-    ASTU_SERVICE(StatusIndicatorService)
-        .SetWindowTitle(kAppTitle + " - Version " + kAppVersion);
+    /////// Uncomment experiment with different world sizes ///////
 
-    // /** Configure the game world to be 4 by 3 meters. */
-    // ASTU_SERVICE(SceneGraphTestService).SetWorldSize(4, 3);
+    // // Configure the game world to be e.g., 16 by 9 meters.
+    // ASTU_SERVICE(SceneGraphTestService).SetWorldSize(16, 9);
 
-    // ASTU_SERVICE(CameraModeChangerService)
-    //     .SetFixedWorldWidth(5)
-    //     .SetFixedWorldHeight(4);
+    // // Confiture the visible area (view) of the game world
+    // // to be 16 by 9 meters as well.
+    // ASTU_SERVICE(CameraModeChangerService).SetViewSize(16, 9);
 }
 
 // Starts all services, runs the main loop and shuts down all services.

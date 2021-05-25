@@ -10,8 +10,9 @@
 using namespace astu;
 using namespace std;
 
-StatusIndicatorService::StatusIndicatorService()
+StatusIndicatorService::StatusIndicatorService(const std::string & windowTitle)
     : BaseService("Status Indicator Service")
+    , title(windowTitle)
 {
     // Intentionally left empty
 }
@@ -46,7 +47,11 @@ bool StatusIndicatorService::OnSignal(const string & signal)
 void StatusIndicatorService::UpdateTitle()
 {
     if (status.empty()) {
-        ASTU_SERVICE(IWindowManager).SetTitle(title);   
+        if (!title.empty()) {
+            ASTU_SERVICE(IWindowManager).SetTitle(title);   
+        }
+    } else if (title.empty()) {
+        ASTU_SERVICE(IWindowManager).SetTitle(status);   
     } else {
         ASTU_SERVICE(IWindowManager).SetTitle(title + " | " + status);   
     }
