@@ -32,7 +32,7 @@ using namespace std;
 const string kAppTitle = "Boilerplate Code for SDL/ASTU Applications";
 const string kAppVersion = "1.4.0";
 
-// Chages this value to let the application window have one of the 
+// Change this value to let the application window have one of the 
 // standard dimentions specified in the kResolutions array.
 const int kRes = 3;
 
@@ -102,9 +102,6 @@ void AddSdlServices()
 // Adds application specific services.
 void AddCustomServices()
 {
-    // Get service manager instance to shorten code and avoid functions calls.
-    auto & sm = ServiceManager::GetInstance();
-
     // TODO add custom services.
 }
 

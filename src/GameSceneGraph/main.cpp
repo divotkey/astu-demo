@@ -34,7 +34,7 @@ using namespace std;
 const string kAppTitle = "AST Utilities, 2D Scene Graph Demo";
 const string kAppVersion = "1.0.0";
 
-// Chages this value to let the application window have one of the 
+// Change this value to let the application window have one of the 
 // standard dimentions specified in the kResolutions array.
 const int kRes = 3;
 
