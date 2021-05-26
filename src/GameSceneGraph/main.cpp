@@ -79,6 +79,9 @@ void AddCoreServices()
     // Receives and distributes mouse wheel events.
     ASTU_CREATE_AND_ADD_SERVICE( MouseWheelEventService );
 
+    // Receives and distributes mouse move events.
+    ASTU_CREATE_AND_ADD_SERVICE( MouseMoveEventService );
+
     // Receives and distributes keystroke events.
     ASTU_CREATE_AND_ADD_SERVICE( KeystrokeEventService );
 
