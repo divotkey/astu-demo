@@ -11,12 +11,15 @@
 #include <AstUtils.h>
 #include <ServiceManager.h>
 #include <UpdateService.h>
-#include <Events.h>
 #include <SdlService.h>
 #include <SdlVideoService.h>
 #include <SdlEventService.h>
 #include <SdlRenderService.h>
 #include <SdlTimeService.h>
+#include <IRenderService.h>
+#include <IWindowManager.h>
+#include <Events.h>
+
 
 // Uncomment if 2D scene graph is used.
 // #include <SdlSceneGraph2.h>
@@ -28,9 +31,11 @@
 using namespace astu;
 using namespace std;
 
+
 // Constants to be adapted to the requirements of this application
 const string kAppTitle = "Boilerplate Code for SDL/ASTU Applications";
 const string kAppVersion = "1.4.0";
+const Color4f backgroundColor = WebColors::Black;
 
 // Change this value to let the application window have one of the 
 // standard dimentions specified in the kResolutions array.
@@ -45,6 +50,7 @@ const std::array<std::array<int, 2>, 6> kResolutions = {
     1680, 1050,     // rew 4    WSXGA+      Aspect Ratio 16:9
     1920, 1080      // res 5    FHD (1080)  Aspect Ratio 16:9
     };   
+
 
 // Concatenates some meta-information about the application to assemble a title.
 std::string GetApplicationTitle() {
@@ -112,6 +118,9 @@ void ConfigureApplication()
     auto & wm = ASTU_SERVICE(IWindowManager);
     wm.SetTitle(kAppTitle + " - Version " + kAppVersion);
     wm.SetSize(kResolutions.at(kRes)[0], kResolutions.at(kRes)[1]);
+
+    // Configure background color
+    ASTU_SERVICE(IRenderService).SetBackgroundColor(backgroundColor);
 }
 
 // Starts all services, runs the main loop and shuts down all services.

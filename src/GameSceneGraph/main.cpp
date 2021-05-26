@@ -11,12 +11,15 @@
 #include <AstUtils.h>
 #include <ServiceManager.h>
 #include <UpdateService.h>
-#include <Events.h>
 #include <SdlService.h>
 #include <SdlVideoService.h>
 #include <SdlEventService.h>
 #include <SdlRenderService.h>
 #include <SdlTimeService.h>
+#include <IRenderService.h>
+#include <IWindowManager.h>
+#include <Events.h>
+
 #include <SdlSceneGraph2.h>
 #include <Camera2Service.h>
 #include <EntityService.h>
@@ -33,6 +36,7 @@ using namespace std;
 // Constants to be adapted to the requirements of this application
 const string kAppTitle = "AST Utilities, 2D Scene Graph Demo";
 const string kAppVersion = "1.0.0";
+const Color4f backgroundColor = WebColors::Black;
 
 // Change this value to let the application window have one of the 
 // standard dimentions specified in the kResolutions array.
@@ -161,6 +165,9 @@ void ConfigureApplication()
     // Set initial size of main application window and make it resizeable.
     wm.SetSize(kResolutions.at(kRes)[0], kResolutions.at(kRes)[1]);
     wm.SetResizeable(true);
+
+    // Configure background color
+    ASTU_SERVICE(IRenderService).SetBackgroundColor(backgroundColor);
 
     /////// Uncomment experiment with different world sizes ///////
 
