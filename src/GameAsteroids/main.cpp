@@ -1,6 +1,7 @@
 /*
- * Boilerplate Code for SDL/ASTU Applications - Version 1.2.0
- * Requires AST Utilities 0.9
+ * Asteroids Clone - Version 1.0.0
+ *
+ * Copyright (c) 2021 Roman Divotkey. All rights reserved.
  */
 
 // C++ Standard Library includes
@@ -20,22 +21,27 @@
 #include <IWindowManager.h>
 #include <Events.h>
 
+#include <EntityFactoryService.h>
+#include <SdlSceneGraph2.h>
+#include <Camera2Service.h>
+#include <EntityService.h>
 
-// Uncomment if 2D scene graph is used.
-// #include <SdlSceneGraph2.h>
-// #include <Camera2Service.h>
-
-// Uncomment if ECS (Entoty Component System) is used
-// #include <EntityService.h>
+// Local includes
+#include "PhysicsSystem.h"
+#include "Mesh2System.h"
+#include "ShipSystem.h"
+#include "WrapSystem.h"
+#include "GunSystem.h"
+#include "GameManager.h"
 
 using namespace astu;
 using namespace std;
 
 
 // Constants to be adapted to the requirements of this application
-const string kAppTitle = "Boilerplate Code for SDL/ASTU Applications";
-const string kAppVersion = "1.5.0";
-const Color4f backgroundColor = WebColors::Black;
+const string kAppTitle = "Asteroids Clone";
+const string kAppVersion = "1.0.0";
+const Color4f backgroundColor = WebColors::Silver;
 
 // Change this value to let the application window have one of the 
 // standard dimentions specified in the kResolutions array.
@@ -111,7 +117,17 @@ void AddSdlServices()
 // Adds application specific services.
 void AddCustomServices()
 {
-    // TODO add custom services.
+    ASTU_CREATE_AND_ADD_SERVICE( Camera2Service );
+    ASTU_CREATE_AND_ADD_SERVICE( SdlSceneGraph2 );
+    ASTU_CREATE_AND_ADD_SERVICE( SdlVertexBuffer2BuilderService );
+    ASTU_CREATE_AND_ADD_SERVICE( EntityService );
+    ASTU_CREATE_AND_ADD_SERVICE( EntityFactoryService );
+    ASTU_CREATE_AND_ADD_SERVICE( Mesh2System );    
+    ASTU_CREATE_AND_ADD_SERVICE( PhysicsSystem );
+    ASTU_CREATE_AND_ADD_SERVICE( ShipSystem );
+    ASTU_CREATE_AND_ADD_SERVICE( WrapSystem );
+    ASTU_CREATE_AND_ADD_SERVICE( GameManager );
+    ASTU_CREATE_AND_ADD_SERVICE( GunSystem );
 }
 
 // Configures services according to application specific settings and configurations.
@@ -150,7 +166,6 @@ void RunApplication()
     // all services.
     ASTU_SHUTDOWN_SERVICES();
 }
-
 
 // Main entry point of the application.
 int main()
