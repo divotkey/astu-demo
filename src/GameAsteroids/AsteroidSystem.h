@@ -10,12 +10,14 @@
 #include <UpdateService.h>
 #include <EntitySystems.h>
 #include <ITimeManager.h>
-#include <SignalService.h>
 
-class GunSystem 
-    : public astu::Updatable
-    , private astu::OneFamilyEntitySystem
-    , private astu::TimeClient
+// Local includes
+#include "CollisionSystem.h"
+
+
+class AsteroidSystem 
+    : public astu::OneFamilyEntitySystem
+    , private astu::SignalListener<CollisionEvent>
 {
 public:
 
@@ -24,7 +26,7 @@ public:
      * 
      * @param updatePriority    the priority used to update this system
      */
-    GunSystem(int updatePriority = 0);
+    AsteroidSystem(int updatePriority = 0);
 
 private:
     /** The entity family this system processes. */
@@ -34,11 +36,8 @@ private:
     virtual void OnStartup() override;
     virtual void OnShutdown() override;
 
-    // Inherited via Updatable
-    virtual void OnUpdate() override;    
+    // Inherited via SignalListener<CollisionEvent>
+    virtual bool OnSignal(const CollisionEvent & signal) override;  
 
-    // Inherited via OneFamilyEntitySystem
-    virtual void ProcessEntity(astu::Entity & entity) override;
-
-    bool IsFirePressed(int ctrl) const;
+    void HandleCollision(astu::Entity& asteroid, astu::Entity & opponent);
 };

@@ -27,13 +27,17 @@ public:
     virtual void OnShutdown() override;
 
 private:
+    /** The current level, which defines score, number of asteroids, etc. */
+    int curLevel;
 
     void RegisterEntityPrototypes();
     void DeregisterEntityPrototypes();
     void ConfigureGameWorld();
     void SpawnPlayer();
+    void SpawnAsteroids();
     std::shared_ptr<astu::Entity> CreateBigAsteroid();
     std::shared_ptr<astu::Entity> CreatePlayerShip();
     std::shared_ptr<astu::Entity> CreateBullet();
     std::shared_ptr<astu::VertexBuffer2> CreateShipMesh();
+    std::shared_ptr<astu::VertexBuffer2> CreateAsteroidMesh(float r);
 };

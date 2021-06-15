@@ -34,10 +34,12 @@ GunSystem::GunSystem(int updatePriority)
 
 void GunSystem::OnStartup()
 {
+    // Intentionally left empty.
 }
 
 void GunSystem::OnShutdown()
 {
+    // Intentionally left empty.
 }
 
 void GunSystem::OnUpdate()

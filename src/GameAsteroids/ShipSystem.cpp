@@ -30,10 +30,12 @@ ShipSystem::ShipSystem(int updatePriority)
 
 void ShipSystem::OnStartup()
 {
+    // Intentionally left empty.
 }
 
 void ShipSystem::OnShutdown()
 {
+    // Intentionally left empty.
 }
 
 void ShipSystem::OnUpdate()

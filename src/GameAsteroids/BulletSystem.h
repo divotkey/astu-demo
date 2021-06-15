@@ -11,10 +11,15 @@
 #include <EntitySystems.h>
 #include <ITimeManager.h>
 
+// Local includes
+#include "CollisionSystem.h"
+
+
 class BulletSystem 
     : public astu::Updatable
     , private astu::OneFamilyEntitySystem
     , private astu::TimeClient
+    , private astu::SignalListener<CollisionEvent>
 {
 public:
 
@@ -38,4 +43,7 @@ private:
 
     // Inherited via OneFamilyEntitySystem
     virtual void ProcessEntity(astu::Entity & entity) override;
+
+    // Inherited via SignalListener<CollisionEvent>
+    virtual bool OnSignal(const CollisionEvent & signal) override;  
 };

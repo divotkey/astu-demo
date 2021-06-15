@@ -28,11 +28,13 @@
 
 // Local includes
 #include "PhysicsSystem.h"
+#include "CollisionSystem.h"
 #include "Mesh2System.h"
 #include "ShipSystem.h"
 #include "WrapSystem.h"
 #include "GunSystem.h"
 #include "BulletSystem.h"
+#include "AsteroidSystem.h"
 #include "GameManager.h"
 
 using namespace astu;
@@ -125,11 +127,14 @@ void AddCustomServices()
     ASTU_CREATE_AND_ADD_SERVICE( EntityFactoryService );
     ASTU_CREATE_AND_ADD_SERVICE( Mesh2System );    
     ASTU_CREATE_AND_ADD_SERVICE( PhysicsSystem );
+    ASTU_CREATE_AND_ADD_SERVICE( CollisionSystem );
     ASTU_CREATE_AND_ADD_SERVICE( ShipSystem );
     ASTU_CREATE_AND_ADD_SERVICE( WrapSystem );
     ASTU_CREATE_AND_ADD_SERVICE( GameManager );
     ASTU_CREATE_AND_ADD_SERVICE( GunSystem );
     ASTU_CREATE_AND_ADD_SERVICE( BulletSystem );
+    ASTU_CREATE_AND_ADD_SERVICE( AsteroidSystem );
+    ASTU_CREATE_AND_ADD_SERVICE( SignalService<CollisionEvent> );
 }
 
 // Configures services according to application specific settings and configurations.

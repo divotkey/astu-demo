@@ -36,10 +36,12 @@ void WrapSystem::SetWrapSize(float w, float h)
 
 void WrapSystem::OnStartup()
 {
+    // Intentionally left empty.
 }
 
 void WrapSystem::OnShutdown()
 {
+    // Intentionally left empty.
 }
 
 void WrapSystem::OnUpdate()

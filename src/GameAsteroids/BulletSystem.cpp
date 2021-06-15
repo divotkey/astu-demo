@@ -30,10 +30,12 @@ BulletSystem::BulletSystem(int updatePriority)
 
 void BulletSystem::OnStartup()
 {
+    // Intentionally left empty.
 }
 
 void BulletSystem::OnShutdown()
 {
+    // Intentionally left empty.
 }
 
 void BulletSystem::OnUpdate()
@@ -52,3 +54,18 @@ void BulletSystem::ProcessEntity(Entity & entity)
     }
 
 }
+
+bool BulletSystem::OnSignal(const CollisionEvent & signal)
+{
+    if (signal.entityA->HasComponent<Bullet>()) {
+        GetEntityService().RemoveEntity(signal.entityA);
+    }
+
+    if (signal.entityB->HasComponent<Bullet>()) {
+        GetEntityService().RemoveEntity(signal.entityB);
+    }
+
+    // Do not consume collision events.
+    return false;
+}
+
