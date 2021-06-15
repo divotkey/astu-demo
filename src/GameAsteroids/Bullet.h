@@ -11,60 +11,30 @@
 
 // AST Utilities includes
 #include <EntityService.h>
+#include <Vector2.h>
 
 /**
  * An entity component which makes an entity a bullet.
  */
 class Bullet : public astu::EntityComponent {
 public:
+    /** The time until the bullet gets destroyed, even without collision. */
+    float ttl;
 
     /**
      * Constructor.
      * 
-     * @param maxDist   the maximum distance
+     * @param ttl   the maximum time to live
      */
-    Bullet(float maxDist) 
-        : maxDistance(maxDist)
-        , maxDistanceSquared(maxDist * maxDist)
+    Bullet(float ttl) 
+        : ttl(ttl)
     {
         // Intentionally left empty.
-    }
-
-    void SetMaxDistance(float d) {
-        maxDistance = std::abs(d);
-        maxDistanceSquared = maxDistance;
-    }
-
-    float GetMaxDistanceSquared() const { 
-        return maxDistanceSquared;
-    }
-
-    float GetMaxDistance() const {
-        return maxDistance;
-    }
-
-    void SetStartPosition(const astu::Vector2f p) {
-        startPos = p;
-    }
-
-    const Vector2f& GetStartPosition() const {
-        return 
     }
 
     // Inherited via EntityComponent
     virtual std::shared_ptr<EntityComponent> Clone() override {
         // Create copy using copy-constructor.
-        return std::make_shared<Gun>(*this);
+        return std::make_shared<Bullet>(*this);
     }
-
-private:
-    /** The maximum distance a bullet can trave in world units. */
-    float maxDistance;
-
-    /** The maximum distance a bullet can trave in world units, squared. */
-    float maxDistanceSquared;
-
-    /** The start position of this bullet. */
-    astu::Vector2f startPos;
-
 };

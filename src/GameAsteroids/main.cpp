@@ -32,6 +32,7 @@
 #include "ShipSystem.h"
 #include "WrapSystem.h"
 #include "GunSystem.h"
+#include "BulletSystem.h"
 #include "GameManager.h"
 
 using namespace astu;
@@ -128,6 +129,7 @@ void AddCustomServices()
     ASTU_CREATE_AND_ADD_SERVICE( WrapSystem );
     ASTU_CREATE_AND_ADD_SERVICE( GameManager );
     ASTU_CREATE_AND_ADD_SERVICE( GunSystem );
+    ASTU_CREATE_AND_ADD_SERVICE( BulletSystem );
 }
 
 // Configures services according to application specific settings and configurations.

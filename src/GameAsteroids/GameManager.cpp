@@ -17,6 +17,7 @@
 #include "Wrap.h"
 #include "WrapSystem.h"
 #include "Gun.h"
+#include "Bullet.h"
 #include "GameManager.h"
 
 using namespace astu;
@@ -34,6 +35,7 @@ using namespace std;
 #define GUN_MUZZLE_VELOCITY     15.0f
 #define BULLET_WIDTH            0.025f
 #define BULLET_HEIGHT           0.15f
+#define BULLET_TTL              1.0f
 
 GameManager::GameManager()
     : BaseService("Game Manager")
@@ -124,6 +126,7 @@ shared_ptr<Entity> GameManager::CreateBullet()
     entity->AddComponent( make_shared<Pose2>() );
     entity->AddComponent( make_shared<Body2>() );
     entity->AddComponent( make_shared<Wrap>() );
+    entity->AddComponent( make_shared<Bullet>(BULLET_TTL) );
 
     entity->AddComponent( make_shared<Mesh2>(Polyline2Builder()
         .VertexBuffer( Shape2Generator().GenRectangle(BULLET_WIDTH, BULLET_HEIGHT) )
