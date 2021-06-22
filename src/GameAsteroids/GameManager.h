@@ -13,8 +13,16 @@
 #include <EntityService.h>
 #include <VertexBuffer2.h>
 #include <Service.h>
+#include <SignalService.h>
 
-class GameManager : public astu::BaseService {
+// Local includes
+#include "GameEvents.h"
+#include "Asteroid.h"
+
+class GameManager 
+    : public astu::BaseService
+    , private astu::SignalListener<GameEvent>
+{
 public:
 
     /**
@@ -30,14 +38,22 @@ private:
     /** The current level, which defines score, number of asteroids, etc. */
     int curLevel;
 
+    /** The current number of asteroids left. */
+    int numAsteroids;
+
     void RegisterEntityPrototypes();
     void DeregisterEntityPrototypes();
     void ConfigureGameWorld();
     void SpawnPlayer();
     void SpawnAsteroids();
-    std::shared_ptr<astu::Entity> CreateBigAsteroid();
+    void SpawnAsteroid(const astu::Vector2f & p);
+    std::shared_ptr<astu::Entity> CreateAsteroid(Asteroid::Type type, float radius);
     std::shared_ptr<astu::Entity> CreatePlayerShip();
     std::shared_ptr<astu::Entity> CreateBullet();
     std::shared_ptr<astu::VertexBuffer2> CreateShipMesh();
     std::shared_ptr<astu::VertexBuffer2> CreateAsteroidMesh(float r);
+
+    // Inherited via SignalListener<GameEvent>
+    virtual bool OnSignal(const GameEvent & signal) override;        
+
 };

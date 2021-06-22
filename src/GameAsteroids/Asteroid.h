@@ -24,13 +24,33 @@ public:
     /** The type of this asteroid. */
     Type type;
 
+    /** The maximum linear velocity. */
+    float maxLinVel;
+
+    /** The minimum linear velocity. */
+    float minLinVel;
+
+    /** The maximum angular velocity. */
+    float maxAngVel;
+
+    /** The minimum angular velocity. */
+    float minAngVel;
+
     /**
      * Constructor.
      * 
-     * @param type   the type of this asteroid.
+     * @param type      the type of this asteroid
+     * @param maxLinVel maximum linear velocity
+     * @param minLinVel maximum linear velocity
+     * @param maxAngVel maximum angular velocity
+     * @param minAngVel minimum angular velocity
      */
-    Asteroid(Type type) 
+    Asteroid(Type type, float maxLinVel, float minLinVel, float maxAngVel, float minAngVel) 
         : type(type)
+        , maxLinVel(maxLinVel)
+        , minLinVel(minLinVel)
+        , maxAngVel(maxAngVel)
+        , minAngVel(minAngVel)
     {
         // Intentionally left empty.
     }

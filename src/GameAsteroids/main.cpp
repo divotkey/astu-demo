@@ -36,6 +36,7 @@
 #include "BulletSystem.h"
 #include "AsteroidSystem.h"
 #include "GameManager.h"
+#include "GameEvents.h"
 
 using namespace astu;
 using namespace std;
@@ -135,6 +136,7 @@ void AddCustomServices()
     ASTU_CREATE_AND_ADD_SERVICE( BulletSystem );
     ASTU_CREATE_AND_ADD_SERVICE( AsteroidSystem );
     ASTU_CREATE_AND_ADD_SERVICE( SignalService<CollisionEvent> );
+    ASTU_CREATE_AND_ADD_SERVICE( SignalService<GameEvent> );
 }
 
 // Configures services according to application specific settings and configurations.

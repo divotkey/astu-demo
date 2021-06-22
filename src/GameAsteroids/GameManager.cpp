@@ -27,7 +27,7 @@ using namespace astu;
 using namespace std;
 
 // Set to true for debug visualization
-#define DEBUG_VISUALS   true
+#define DEBUG_VISUALS   false
 
 // Game Mechanics Constants
 #define WORLD_VIEW_WIDTH        16
@@ -47,11 +47,13 @@ using namespace std;
 
 #define NUM_ASTEROID_SEGMENTS   13
 #define MIN_NUM_ASTEROIDS       3
-#define BIG_ASTEROID_RADIUS     0.7f
 #define ASTEROID_MIN_VEL        0.05f
-#define ASTEROID_MAX_VEL        1.0f
-#define ASTEROID_MIN_ANG_VEL    -1.5
-#define ASTEROID_MAX_ANG_VEL    1.0
+#define ASTEROID_MAX_VEL        1.5f
+#define ASTEROID_MIN_ANG_VEL    -1.5f
+#define ASTEROID_MAX_ANG_VEL    1.0f
+#define BIG_ASTEROID_RADIUS     0.7f
+#define MEDIUM_ASTEROID_RADIUS  (BIG_ASTEROID_RADIUS * 0.618f)
+#define SMALL_ASTEROID_RADIUS  (MEDIUM_ASTEROID_RADIUS * 0.618f)
 
 GameManager::GameManager()
     : BaseService("Game Manager")
@@ -69,6 +71,7 @@ void GameManager::OnStartup()
     RegisterEntityPrototypes();
     ConfigureGameWorld();
     curLevel = 0;
+    numAsteroids = 0;
     SpawnPlayer();
     SpawnAsteroids();
 }
@@ -82,25 +85,33 @@ void GameManager::RegisterEntityPrototypes()
 {
     auto & entityFactory = ASTU_SERVICE(EntityFactoryService);
     entityFactory.RegisterPrototype("Ship", CreatePlayerShip());
-    entityFactory.RegisterPrototype("BitAsteroid", CreateBigAsteroid());    
+    entityFactory.RegisterPrototype("BigAsteroid", CreateAsteroid(Asteroid::BIG, BIG_ASTEROID_RADIUS));    
+    entityFactory.RegisterPrototype("MediumAsteroid", CreateAsteroid(Asteroid::MEDIUM, MEDIUM_ASTEROID_RADIUS));    
+    entityFactory.RegisterPrototype("SmallAsteroid", CreateAsteroid(Asteroid::SMALL, SMALL_ASTEROID_RADIUS));    
     entityFactory.RegisterPrototype("Bullet", CreateBullet());    
 }
 
 void GameManager::DeregisterEntityPrototypes()
 {
     auto & entityFactory = ASTU_SERVICE(EntityFactoryService);
-    entityFactory.DeregisterPrototype("BitAsteroid");
+    entityFactory.DeregisterPrototype("BigAsteroid");
     entityFactory.DeregisterPrototype("Ship");
 }
 
-shared_ptr<Entity> GameManager::CreateBigAsteroid()
+shared_ptr<Entity> GameManager::CreateAsteroid(Asteroid::Type type, float radius)
 {
     auto entity = make_shared<Entity>();
     entity->AddComponent( make_shared<Pose2>() );
     entity->AddComponent( make_shared<Wrap>() );
     entity->AddComponent( make_shared<Body2>() );
-    entity->AddComponent( make_shared<Collider>(BIG_ASTEROID_RADIUS) );
-    entity->AddComponent( make_shared<Asteroid>(Asteroid::BIG));
+    entity->AddComponent( make_shared<Collider>(radius) );
+    entity->AddComponent( make_shared<Asteroid>(
+        type, 
+        ASTEROID_MAX_VEL, 
+        ASTEROID_MIN_VEL, 
+        ASTEROID_MAX_ANG_VEL, 
+        ASTEROID_MIN_ANG_VEL)
+        );
 
     // Asteroids should move forever
     entity->GetComponent<Body2>().SetAngularDamping(0);
@@ -110,25 +121,26 @@ shared_ptr<Entity> GameManager::CreateBigAsteroid()
         entity->AddComponent( make_shared<Mesh2>(Node2Builder()
             .AttachChild( Polyline2Builder()
                 .Color(WebColors::Orange)
-                .VertexBuffer( Shape2Generator().GenCircle(BIG_ASTEROID_RADIUS) )
+                .VertexBuffer( Shape2Generator().GenCircle(radius) )
                 .Build())
             .AttachChild( Polyline2Builder()
                 .Color(WebColors::Green)
-                .VertexBuffer( Shape2Generator().GenCircle(BIG_ASTEROID_RADIUS * 0.05f) )
+                .VertexBuffer( Shape2Generator().GenCircle(radius * 0.05f) )
                 .Build())
             .AttachChild( Polyline2Builder()
                 .Color(WebColors::Black)
-                .VertexBuffer( CreateAsteroidMesh(BIG_ASTEROID_RADIUS) )
+                .VertexBuffer( CreateAsteroidMesh(radius) )
                 .Build())
             .Build() ));
     } else {
         entity->AddComponent( make_shared<Mesh2>(Polyline2Builder()
-            .VertexBuffer( CreateAsteroidMesh(BIG_ASTEROID_RADIUS) )
+            .VertexBuffer( CreateAsteroidMesh(radius) )
             .Color(WebColors::Black)
             .Build()) );
     }
 
     return entity;
+
 }
 
 shared_ptr<Entity> GameManager::CreatePlayerShip()
@@ -186,7 +198,6 @@ shared_ptr<Entity> GameManager::CreateBullet()
     entity->AddComponent( make_shared<Wrap>() );
     entity->AddComponent( make_shared<Bullet>(BULLET_TTL) );
 
-
     if (DEBUG_VISUALS) {
         entity->AddComponent( make_shared<Mesh2>(Node2Builder()
             .AttachChild( Polyline2Builder()
@@ -208,8 +219,6 @@ shared_ptr<Entity> GameManager::CreateBullet()
             .VertexBuffer( Shape2Generator().GenRectangle(BULLET_WIDTH, BULLET_HEIGHT) )
             .Build()) );
     }
-
-
 
     return entity;
 }
@@ -234,28 +243,28 @@ void GameManager::SpawnPlayer()
 void GameManager::SpawnAsteroids()
 {
     for (int i = 0; i < MIN_NUM_ASTEROIDS + curLevel; ++i) {
-        auto entity = ASTU_SERVICE(EntityFactoryService)
-            .CreateEntity("BitAsteroid");
-
-        // Set random position.
-        entity->GetComponent<Pose2>()
-            .transform.SetTranslation(
-                GetRandomFloat(-WORLD_VIEW_WIDTH * 0.5, WORLD_VIEW_HEIGHT * 0.5), 
-                GetRandomFloat(-WORLD_VIEW_HEIGHT * 0.5, WORLD_VIEW_HEIGHT * 0.5)
-            );
-
-        // Set random linear velocity.
-        auto & body = entity->GetComponent<Body2>();
-        Vector2f v(0, GetRandomFloat(ASTEROID_MIN_VEL, ASTEROID_MAX_VEL));
-        v.RotateDeg(GetRandomFloat(0, 360));
-        body.SetLinearVelocity(v);
-
-        // Set random angular velocity.        
-        body.SetAngularVelocity( 
-            GetRandomFloat(ASTEROID_MIN_ANG_VEL, ASTEROID_MAX_ANG_VEL));
-
-        ASTU_SERVICE(EntityService).AddEntity(entity);
+        Vector2f p;
+        p.x = -WORLD_VIEW_WIDTH * 0.5, WORLD_VIEW_HEIGHT * 0.5;
+        p.y = -WORLD_VIEW_WIDTH * 0.5, WORLD_VIEW_HEIGHT * 0.5;
+        SpawnAsteroid(p);
     }
+
+}
+
+void GameManager::SpawnAsteroid(const astu::Vector2f & p)
+{
+    auto entity = ASTU_SERVICE(EntityFactoryService)
+        .CreateEntity("BigAsteroid");
+
+    // Set position.
+    entity->GetComponent<Pose2>().transform.SetTranslation(p);
+
+    // Add entity to game world.
+    ASTU_SERVICE(EntityService).AddEntity(entity);
+
+    // Emit game event
+    ASTU_SERVICE(SignalService<GameEvent>)
+        .QueueSignal(GameEvent(GameEvent::BIG_ASTEROID_SPAWNED, p));
 
 }
 
@@ -282,9 +291,10 @@ std::shared_ptr<astu::VertexBuffer2> GameManager::CreateAsteroidMesh(float r)
     vbBuilder.Reset();
 
     Vector2f v;
-    float da = 360.0f / NUM_ASTEROID_SEGMENTS;
+    const float deformFactor = 0.2f;
+    const float da = 360.0f / NUM_ASTEROID_SEGMENTS;
     for (int i = 0; i < NUM_ASTEROID_SEGMENTS; ++i) {
-        v.Set(0, GetRandomFloat(r * 0.9f, r * 1.1f));
+        v.Set(0, GetRandomFloat(r * (1.0f - deformFactor), r * (1.0f + deformFactor)));
         v.RotateDeg(da * i);
         vbBuilder.AddVertex( v );
     }
@@ -295,3 +305,28 @@ std::shared_ptr<astu::VertexBuffer2> GameManager::CreateAsteroidMesh(float r)
     return vbBuilder.Build();
 }
 
+bool GameManager::OnSignal(const GameEvent & signal)
+{
+    switch (signal.type) {
+
+        case GameEvent::BIG_ASTEROID_SPAWNED:
+        case GameEvent::MEDIUM_ASTEROID_SPAWNED:
+        case GameEvent::SMALL_ASTEROID_SPAWNED:
+            ++numAsteroids;
+            break;
+
+        case GameEvent::BIG_ASTEROID_DESTROYED:
+        case GameEvent::MEDIUM_ASTEROID_DESTROYED:
+        case GameEvent::SMALL_ASTEROID_DESTROYED:
+            --numAsteroids;
+            break;
+    }
+
+    if (numAsteroids <= 0) {
+        numAsteroids = 0;
+        ++curLevel;
+        cout << "level " << curLevel << endl;
+        SpawnAsteroids();
+    }
+    return false;
+}
