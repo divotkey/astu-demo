@@ -57,8 +57,8 @@ void ShipSystem::ProcessEntity(Entity & entity)
 
 float ShipSystem::GetAxis(int ctrl, int axis)
 {
-    // This dummy functions does not realy use a game controller
-    // and ignors the controller index as well.
+    // This dummy functions does not really use a game controller
+    // and ignores the controller index as well.
 
     Keyboard kb;
     switch (axis) {

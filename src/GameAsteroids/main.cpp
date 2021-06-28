@@ -126,6 +126,7 @@ void AddCustomServices()
     ASTU_CREATE_AND_ADD_SERVICE( SdlVertexBuffer2BuilderService );
     ASTU_CREATE_AND_ADD_SERVICE( EntityService );
     ASTU_CREATE_AND_ADD_SERVICE( EntityFactoryService );
+    
     ASTU_CREATE_AND_ADD_SERVICE( Mesh2System );    
     ASTU_CREATE_AND_ADD_SERVICE( PhysicsSystem );
     ASTU_CREATE_AND_ADD_SERVICE( CollisionSystem );
