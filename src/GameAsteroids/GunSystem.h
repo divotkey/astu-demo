@@ -7,6 +7,7 @@
 #pragma once
 
 // AST Utilities includes
+#include <InputMapperService.h>
 #include <UpdateService.h>
 #include <EntitySystems.h>
 #include <ITimeManager.h>
@@ -29,6 +30,9 @@ public:
 private:
     /** The entity family this system processes. */
     static const astu::EntityFamily FAMILY;
+
+    /** The binding to the fire action. */
+    std::shared_ptr<astu::ActionBinding> fireAction;
 
     // Inherited via Service
     virtual void OnStartup() override;

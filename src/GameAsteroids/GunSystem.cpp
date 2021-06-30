@@ -6,6 +6,7 @@
 
 // C++ Standard Library includes
 #include <algorithm>
+#include <iostream>
 
 // AST Utilities includes 
 #include <Keyboard.h>
@@ -34,12 +35,13 @@ GunSystem::GunSystem(int updatePriority)
 
 void GunSystem::OnStartup()
 {
-    // Intentionally left empty.
+    fireAction = ASTU_SERVICE(InputMapperService)
+        .BindAction("Fire");
 }
 
 void GunSystem::OnShutdown()
 {
-    // Intentionally left empty.
+    ASTU_SERVICE(InputMapperService).RemoveActionBinding(fireAction);
 }
 
 void GunSystem::OnUpdate()
@@ -55,7 +57,7 @@ void GunSystem::ProcessEntity(Entity & entity)
     }
 
     auto & ship = entity.GetComponent<Ship>();
-    if (gun.cooldown == 0 && IsFirePressed(ship.playerId)) {
+    if (gun.cooldown == 0 && fireAction->IsPressed()) {
         // Fire bullet.
         ++gun.bulletsFired;
 
@@ -98,5 +100,4 @@ bool GunSystem::IsFirePressed(int ctrl) const
 
     return Keyboard().IsPressed(Keyboard::KEY_SPACE);
 }
-
 

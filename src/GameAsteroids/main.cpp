@@ -21,6 +21,8 @@
 #include <IWindowManager.h>
 #include <Events.h>
 
+#include <Keys.h>
+#include <InputMapperService.h>
 #include <EntityFactoryService.h>
 #include <SdlSceneGraph2.h>
 #include <Camera2Service.h>
@@ -97,6 +99,9 @@ void AddCoreServices()
 
     // Receives and distributes resize events.
     ASTU_CREATE_AND_ADD_SERVICE( ResizeEventService );
+
+    // Mapps game actions and input axis.
+    ASTU_CREATE_AND_ADD_SERVICE( InputMapperService );
 }
 
 // Adds services required to run SDL-based interactive applications.
@@ -150,6 +155,10 @@ void ConfigureApplication()
 
     // Configure background color
     ASTU_SERVICE(IRenderService).SetBackgroundColor(backgroundColor);
+
+    // Add Action mappings
+    ASTU_SERVICE(InputMapperService).AddActionMapping("Fire", Keys::SpaceBar);
+    ASTU_SERVICE(InputMapperService).AddActionMapping("Fire", Keys::Return);
 }
 
 // Starts all services, runs the main loop and shuts down all services.

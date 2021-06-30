@@ -34,6 +34,9 @@ private:
     /** The entity family this system processes. */
     static const astu::EntityFamily FAMILY;
 
+    /** Whether the gun should fire bullets. */
+    bool firing;
+
     // Inherited via Service
     virtual void OnStartup() override;
     virtual void OnShutdown() override;

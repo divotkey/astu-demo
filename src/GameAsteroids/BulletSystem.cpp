@@ -4,16 +4,17 @@
  * Copyright (c) 2021 Roman Divotkey. All rights reserved.
  */
 
+// Local includes
+#include "BulletSystem.h"
+#include "Bullet.h"
+#include "Pose2.h"
+
 // C++ Standard Library includes
 #include <iostream>
 
 // AST Utilities includes
+#include <InputMapperService.h>
 #include <Keyboard.h>
-
-// Local includes
-#include "Bullet.h"
-#include "Pose2.h"
-#include "BulletSystem.h"
 
 using namespace astu;
 using namespace std;
@@ -31,6 +32,11 @@ BulletSystem::BulletSystem(int updatePriority)
 void BulletSystem::OnStartup()
 {
     // Intentionally left empty.
+    // Get Action Binding for fire action.
+    // ASTU_SERVICE(InputMapperService).BindAction("Fire", []
+
+
+    firing = false;
 }
 
 void BulletSystem::OnShutdown()
