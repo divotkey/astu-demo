@@ -30,12 +30,14 @@ ShipSystem::ShipSystem(int updatePriority)
 
 void ShipSystem::OnStartup()
 {
-    // Intentionally left empty.
+    thrustAxis = ASTU_SERVICE(InputMappingService).BindAxis("Thrust");
+    steerAxis = ASTU_SERVICE(InputMappingService).BindAxis("Steer");
 }
 
 void ShipSystem::OnShutdown()
 {
-    // Intentionally left empty.
+    ASTU_SERVICE(InputMappingService).RemoveAxisBinding(thrustAxis);
+    ASTU_SERVICE(InputMappingService).RemoveAxisBinding(steerAxis);
 }
 
 void ShipSystem::OnUpdate()
@@ -48,7 +50,9 @@ void ShipSystem::ProcessEntity(Entity & entity)
     auto& body = entity.GetComponent<Body2>();
     auto& ship = entity.GetComponent<Ship>();
 
-    body.ApplyTorque(ship.torque * GetAxis(ship.playerId, 0));
+    
+    // cout << "steerAxis: " << steerAxis->GetValue() << endl;
+    body.ApplyTorque(ship.torque * steerAxis->GetValue());
 
     body.ApplyForce(body.GetWorldVector(0, GetAxis(ship.playerId, 1) * ship.thrust));
 

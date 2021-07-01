@@ -35,13 +35,13 @@ GunSystem::GunSystem(int updatePriority)
 
 void GunSystem::OnStartup()
 {
-    fireAction = ASTU_SERVICE(InputMapperService)
+    fireAction = ASTU_SERVICE(InputMappingService)
         .BindAction("Fire");
 }
 
 void GunSystem::OnShutdown()
 {
-    ASTU_SERVICE(InputMapperService).RemoveActionBinding(fireAction);
+    ASTU_SERVICE(InputMappingService).RemoveActionBinding(fireAction);
 }
 
 void GunSystem::OnUpdate()

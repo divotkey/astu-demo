@@ -9,6 +9,10 @@
 // AST Utilities includes
 #include <UpdateService.h>
 #include <EntitySystems.h>
+#include <InputMappingService.h>
+
+// C++ Standard Library includes
+#include <memory>
 
 class ShipSystem 
     : public astu::Updatable
@@ -26,6 +30,12 @@ public:
 private:
     /** The entity family this system processes. */
     static const astu::EntityFamily FAMILY;
+
+    /** The axis used to accelerate the space ship. */
+    std::shared_ptr<astu::AxisBinding> thrustAxis;
+
+    /** The axis used to steer the space ship. */
+    std::shared_ptr<astu::AxisBinding> steerAxis;
 
     // Inherited via Service
     virtual void OnStartup() override;

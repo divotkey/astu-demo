@@ -13,7 +13,7 @@
 #include <iostream>
 
 // AST Utilities includes
-#include <InputMapperService.h>
+#include <InputMappingService.h>
 #include <Keyboard.h>
 
 using namespace astu;
@@ -33,7 +33,7 @@ void BulletSystem::OnStartup()
 {
     // Intentionally left empty.
     // Get Action Binding for fire action.
-    // ASTU_SERVICE(InputMapperService).BindAction("Fire", []
+    // ASTU_SERVICE(InputMappingService).BindAction("Fire", []
 
 
     firing = false;

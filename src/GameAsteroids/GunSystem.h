@@ -7,7 +7,7 @@
 #pragma once
 
 // AST Utilities includes
-#include <InputMapperService.h>
+#include <InputMappingService.h>
 #include <UpdateService.h>
 #include <EntitySystems.h>
 #include <ITimeManager.h>

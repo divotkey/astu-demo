@@ -17,12 +17,13 @@
 #include <SdlEventService.h>
 #include <SdlRenderService.h>
 #include <SdlTimeService.h>
+#include <SdlJoystickService.h>
 #include <IRenderService.h>
 #include <IWindowManager.h>
 #include <Events.h>
 
 #include <Keys.h>
-#include <InputMapperService.h>
+#include <InputMappingService.h>
 #include <EntityFactoryService.h>
 #include <SdlSceneGraph2.h>
 #include <Camera2Service.h>
@@ -101,7 +102,7 @@ void AddCoreServices()
     ASTU_CREATE_AND_ADD_SERVICE( ResizeEventService );
 
     // Mapps game actions and input axis.
-    ASTU_CREATE_AND_ADD_SERVICE( InputMapperService );
+    ASTU_CREATE_AND_ADD_SERVICE( InputMappingService );
 }
 
 // Adds services required to run SDL-based interactive applications.
@@ -115,6 +116,9 @@ void AddSdlServices()
 
     // Offers an layer-based 2D graphics facility based on SDL render mechanism.
     ASTU_CREATE_AND_ADD_SERVICE( SdlRenderService );
+
+    // Enables the use of gamepads etc.
+    ASTU_CREATE_AND_ADD_SERVICE( SdlJoystickService );
 
     // Empties the SDL-Event queue and distributes events.
     ASTU_CREATE_AND_ADD_SERVICE( SdlEventService );
@@ -157,8 +161,10 @@ void ConfigureApplication()
     ASTU_SERVICE(IRenderService).SetBackgroundColor(backgroundColor);
 
     // Add Action mappings
-    ASTU_SERVICE(InputMapperService).AddActionMapping("Fire", Keys::SpaceBar);
-    ASTU_SERVICE(InputMapperService).AddActionMapping("Fire", Keys::Return);
+    ASTU_SERVICE(InputMappingService).AddActionMapping("Fire", Keys::SpaceBar);
+    ASTU_SERVICE(InputMappingService).AddActionMapping("Fire", Keys::Return);
+    ASTU_SERVICE(InputMappingService).AddAxisMapping("Steer", Keys::Left, -1);
+    ASTU_SERVICE(InputMappingService).AddAxisMapping("Steer", Keys::Right, 1);
 }
 
 // Starts all services, runs the main loop and shuts down all services.
