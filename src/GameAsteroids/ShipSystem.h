@@ -46,6 +46,4 @@ private:
 
     // Inherited via OneFamilyEntitySystem
     virtual void ProcessEntity(astu::Entity & entity) override;
-
-    float GetAxis(int ctrl, int axis);
 };

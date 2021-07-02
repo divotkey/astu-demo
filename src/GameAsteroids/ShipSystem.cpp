@@ -4,16 +4,15 @@
  * Copyright (c) 2021 Roman Divotkey. All rights reserved.
  */
 
-// C++ Standard Library includes
-#include <iostream>
-
-// AST Utilities includes
-#include <Keyboard.h>
-
 // Local includes
+#include "ShipSystem.h"
 #include "Ship.h"
 #include "Body2.h"
-#include "ShipSystem.h"
+
+// C++ Standard Library includes
+#include <algorithm>
+#include <iostream> // just for debugging
+
 
 using namespace astu;
 using namespace std;
@@ -50,42 +49,10 @@ void ShipSystem::ProcessEntity(Entity & entity)
     auto& body = entity.GetComponent<Body2>();
     auto& ship = entity.GetComponent<Ship>();
 
-    
-    // cout << "steerAxis: " << steerAxis->GetValue() << endl;
+
     body.ApplyTorque(ship.torque * steerAxis->GetValue());
 
-    body.ApplyForce(body.GetWorldVector(0, GetAxis(ship.playerId, 1) * ship.thrust));
-
-    // mesh.spatial->SetLocalTransform(pose.transform);
-}
-
-float ShipSystem::GetAxis(int ctrl, int axis)
-{
-    // This dummy functions does not really use a game controller
-    // and ignores the controller index as well.
-
-    Keyboard kb;
-    switch (axis) {
-    case 0:
-        if (kb.IsPressed(Keyboard::KEY_LEFT)) {
-            return -1.0f;
-        }
-        if (kb.IsPressed(Keyboard::KEY_RIGHT)) {
-            return 1.0f;
-        }
-        return 0;
-
-    case 1:
-        if (kb.IsPressed(Keyboard::KEY_UP)) {
-            return -1.0f;
-        }
-        if (kb.IsPressed(Keyboard::KEY_DOWN)) {
-            return 1.0f;
-        }
-        return 0;
-
-    default:
-        return 0;
-    }
-
+    // float curThrust = std::max(0.0f, thrustAxis->GetValue() * ship.thrust);
+    float curThrust = thrustAxis->GetValue() * ship.thrust;
+    body.ApplyForce( body.GetWorldVector(0, -curThrust) );
 }

@@ -4,20 +4,19 @@
  * Copyright (c) 2021 Roman Divotkey. All rights reserved.
  */
 
-// C++ Standard Library includes
-#include <algorithm>
-#include <iostream>
-
-// AST Utilities includes 
-#include <Keyboard.h>
-#include <EntityFactoryService.h>
-
 // Local includes
+#include "GunSystem.h"
 #include "Ship.h"
 #include "Gun.h"
 #include "Pose2.h"
 #include "Body2.h"
-#include "GunSystem.h"
+
+// AST Utilities includes 
+#include <EntityFactoryService.h>
+
+// C++ Standard Library includes
+#include <algorithm>
+#include <iostream>
 
 using namespace astu;
 using namespace std;
@@ -85,19 +84,4 @@ void GunSystem::ProcessEntity(Entity & entity)
         // Update cooldown.
         gun.cooldown = 1.0f / gun.roundsPerSecond;
     }
-
-    // if (body.GetLinearPosition().y < upperLeft.y) {
-    //     body.SetLinearPosition(body.GetLinearPosition().x, lowerRight.y);
-    // } else if (body.GetLinearPosition().y > lowerRight.y) {
-    //     body.SetLinearPosition(body.GetLinearPosition().x, upperLeft.y);
-    // }
 }
-
-bool GunSystem::IsFirePressed(int ctrl) const
-{
-    // This dummy functions does not realy use a game controller
-    // and ignors the controller index as well.
-
-    return Keyboard().IsPressed(Keyboard::KEY_SPACE);
-}
-

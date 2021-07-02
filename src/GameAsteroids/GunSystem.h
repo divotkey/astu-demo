@@ -43,6 +43,4 @@ private:
 
     // Inherited via OneFamilyEntitySystem
     virtual void ProcessEntity(astu::Entity & entity) override;
-
-    bool IsFirePressed(int ctrl) const;
 };

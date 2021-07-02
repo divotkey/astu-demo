@@ -3,6 +3,8 @@
 entries = [];
 maxCode = 257;
 
+specialEntries = [];
+
 AddKey(4, "A");
 AddKey(5, "B");
 AddKey(6, "C");
@@ -82,6 +84,18 @@ AddKey(229, "RightShift");
 AddKey(230, "RightAlt");
 AddKey(231, "RightGui");
 
+AddSpecialKey("Unknown", "Unknown key");
+AddSpecialKey("GamepadFaceButtonBottom", "Gamepad Face Button Bottom");
+AddSpecialKey("GamepadFaceButtonTop", "Gamepad Face Button Top");
+AddSpecialKey("GamepadFaceButtonRight", "Gamepad Face Button Right");
+AddSpecialKey("GamepadFaceButtonLeft", "Gamepad Face Button Left");
+
+AddSpecialKey("GamepadLeftThumbstickX", "Gamepad Left Thumbstick x-Achis");
+AddSpecialKey("GamepadLeftThumbstickY", "Gamepad Left Thumbstick Y-Achis");
+AddSpecialKey("GamepadRightThumbstickX", "Gamepad Right Thumbstick X-Achis");
+AddSpecialKey("GamepadRightThumbstickY", "Gamepad Right Thumbstick Y-Achis");
+AddSpecialKey("GamepadLeftShoulder", "Gamepad Keft Shoulder");
+AddSpecialKey("GamepadRightShoulder", "Gamepad Right Shoulder");
 
 //EmitTableCode();
 //EmitKeysHeaderCode();
@@ -90,6 +104,11 @@ EmitKeysCode();
 function AddKey(scancode, keyname)
 {
 	entries.push([scancode, keyname]);
+}
+
+function AddSpecialKey(keyname, comment)
+{
+	specialEntries.push([keyname, comment]);
 }
 
 function FindEntry(scancode) {
@@ -108,6 +127,14 @@ function EmitKeysHeaderCode()
 	§:
     class Keys {
     public:
+
+	:§
+
+	§:
+			/////////////////////////////////////////////////
+			/////// Keyboard Keys
+			/////////////////////////////////////////////////
+
 	:§
 
 
@@ -123,14 +150,32 @@ function EmitKeysHeaderCode()
 	}
 
 	§:
+			/////////////////////////////////////////////////
+			/////// Special Keys
+			/////////////////////////////////////////////////
+
+	:§
+
+	for (i = 0; i < specialEntries.length; ++i) {
+		§:
+				/** Constant for '§{specialEntries[i][1]}' */
+				static const Key §{specialEntries[i][0]};
+
+		:§
+	}
+
+	§:
 		};
 	:§
 
 }
 
-
 function EmitKeysCode()
 {
+	§:
+
+			// Keyboard keys.
+	:§
 	for (i = 0; i < maxCode; ++i) {
 		entry = FindEntry(i);
 		if (entry != "UNKNOWN") {
@@ -139,6 +184,17 @@ function EmitKeysCode()
 			:§
 		}
 	}
+
+	§:
+
+			// Special keys.
+	:§
+	for (i = 0; i < specialEntries.length; ++i) {
+		§:
+				const Key Keys::§{specialEntries[i][0]} = Key("§{specialEntries[i][0]}");
+		:§
+	}
+
 
 }
 

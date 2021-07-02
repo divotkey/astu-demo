@@ -163,8 +163,15 @@ void ConfigureApplication()
     // Add Action mappings
     ASTU_SERVICE(InputMappingService).AddActionMapping("Fire", Keys::SpaceBar);
     ASTU_SERVICE(InputMappingService).AddActionMapping("Fire", Keys::Return);
-    ASTU_SERVICE(InputMappingService).AddAxisMapping("Steer", Keys::Left, -1);
-    ASTU_SERVICE(InputMappingService).AddAxisMapping("Steer", Keys::Right, 1);
+    ASTU_SERVICE(InputMappingService).AddActionMapping("Fire", Keys::GamepadFaceButtonBottom);
+
+    ASTU_SERVICE(InputMappingService).AddAxisMapping("Steer", Keys::Left, -0.7f);
+    ASTU_SERVICE(InputMappingService).AddAxisMapping("Steer", Keys::Right, 0.7f);
+    ASTU_SERVICE(InputMappingService).AddAxisMapping("Steer", Keys::GamepadLeftThumbstickX);
+
+    // ASTU_SERVICE(InputMappingService).AddAxisMapping("Thrust", Keys::Down, -1);
+    ASTU_SERVICE(InputMappingService).AddAxisMapping("Thrust", Keys::Up, 1);
+    ASTU_SERVICE(InputMappingService).AddAxisMapping("Thrust", Keys::GamepadRightShoulder);
 }
 
 // Starts all services, runs the main loop and shuts down all services.
