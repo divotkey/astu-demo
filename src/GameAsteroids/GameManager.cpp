@@ -9,6 +9,8 @@
 #include <EntityFactoryService.h>
 #include <Shape2Generator.h>
 #include <Camera2Service.h>
+#include <TaskService.h>
+#include <Tasks.h>
 
 // Local includes
 #include "Ship.h"
@@ -26,8 +28,12 @@
 using namespace astu;
 using namespace std;
 
+#define TASK_NAME               "GameManagerTask"
+#define SPAWN_ASTEROIDS_DELAY   5
+
 // Set to true for debug visualization
-#define DEBUG_VISUALS   false
+#define DEBUG_VISUALS           false
+
 
 // Game Mechanics Constants
 #define WORLD_VIEW_WIDTH        16
@@ -55,6 +61,7 @@ using namespace std;
 #define MEDIUM_ASTEROID_RADIUS  (BIG_ASTEROID_RADIUS * 0.618f)
 #define SMALL_ASTEROID_RADIUS  (MEDIUM_ASTEROID_RADIUS * 0.618f)
 
+
 GameManager::GameManager()
     : BaseService("Game Manager")
 {
@@ -73,11 +80,18 @@ void GameManager::OnStartup()
     curLevel = 0;
     numAsteroids = 0;
     SpawnPlayer();
-    SpawnAsteroids();
+
+    ASTU_SERVICE(TaskService).AddTask(DelegateTaskBuilder()
+        .Name(TASK_NAME)
+        .Delegate([this](){ SpawnAsteroids(); } )
+        .Delay(SPAWN_ASTEROIDS_DELAY)
+        .Build()
+        );
 }
 
 void GameManager::OnShutdown()
 {
+    ASTU_SERVICE(TaskService).RemoveAll(TASK_NAME);    
     DeregisterEntityPrototypes();
 }
 
@@ -326,7 +340,12 @@ bool GameManager::OnSignal(const GameEvent & signal)
         numAsteroids = 0;
         ++curLevel;
         cout << "level " << curLevel << endl;
-        SpawnAsteroids();
+        ASTU_SERVICE(TaskService).AddTask(DelegateTaskBuilder()
+            .Name(TASK_NAME)
+            .Delegate([this](){ SpawnAsteroids(); } )
+            .Delay(SPAWN_ASTEROIDS_DELAY)
+            .Build()
+            );
     }
     return false;
 }

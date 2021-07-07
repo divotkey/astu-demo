@@ -12,6 +12,7 @@
 #include <AstUtils.h>
 #include <ServiceManager.h>
 #include <UpdateService.h>
+#include <TaskService.h>
 #include <SdlService.h>
 #include <SdlVideoService.h>
 #include <SdlEventService.h>
@@ -85,6 +86,9 @@ void AddCoreServices()
     // (services, systems, etc) that need to be updated once within the 
     // main application loop.
     ASTU_CREATE_AND_ADD_SERVICE( UpdateService );
+
+    // Responsible for executing small tasks.
+    ASTU_CREATE_AND_ADD_SERVICE( TaskService );
 
     // Receives and distributes mouse button events.
     ASTU_CREATE_AND_ADD_SERVICE( MouseButtonEventService );
