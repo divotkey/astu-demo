@@ -75,7 +75,7 @@ std::string GetApplicationTitle() {
 // Output some information about this application.
 void PrintHeader()
 {
-    cout << GetApplicationTitle << endl << endl;
+    cout << GetApplicationTitle() << endl << endl;
     SayVersion();
     SayCopyright(true);
 }

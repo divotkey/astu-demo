@@ -37,7 +37,7 @@ public:
     virtual void OnUpdate() override;
 
     // Inherited via KeystrokeListener
-    virtual bool OnKeyPressed(int keycode);
+    virtual bool OnKeyPressed(int keycode) override;
 
     // Inherited via MouseButtonListener
     virtual bool OnMouseButtonPressed(int button, int x, int y) override;
