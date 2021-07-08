@@ -35,7 +35,7 @@ public:
     virtual void OnShutdown() override;
 
     // Inherited via KeystrokeListener
-    virtual bool OnKeyPressed(int keycode);
+    virtual bool OnKeyPressed(int keycode) override;
 
 private:
     enum Mode {Screen, FixedWidth, FixedHeight, Fitting, Filling, Streched};

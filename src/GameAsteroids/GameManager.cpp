@@ -334,6 +334,9 @@ bool GameManager::OnSignal(const GameEvent & signal)
         case GameEvent::SMALL_ASTEROID_DESTROYED:
             --numAsteroids;
             break;
+
+        default:
+            break;
     }
 
     if (numAsteroids <= 0) {
