@@ -40,6 +40,7 @@
 #include "BulletSystem.h"
 #include "AsteroidSystem.h"
 #include "GameManager.h"
+#include "HudService.h"
 #include "GameEvents.h"
 
 using namespace astu;
@@ -149,8 +150,10 @@ void AddCustomServices()
     ASTU_CREATE_AND_ADD_SERVICE( GunSystem );
     ASTU_CREATE_AND_ADD_SERVICE( BulletSystem );
     ASTU_CREATE_AND_ADD_SERVICE( AsteroidSystem );
+    ASTU_CREATE_AND_ADD_SERVICE( HudService, kAppTitle + " - Version " + kAppVersion );
     ASTU_CREATE_AND_ADD_SERVICE( SignalService<CollisionEvent> );
     ASTU_CREATE_AND_ADD_SERVICE( SignalService<GameEvent> );
+    ASTU_CREATE_AND_ADD_SERVICE( SignalService<PlayerEvent> );
 }
 
 // Configures services according to application specific settings and configurations.
@@ -158,7 +161,7 @@ void ConfigureApplication()
 {
     // Configure application main window.
     auto & wm = ASTU_SERVICE(IWindowManager);
-    wm.SetTitle(kAppTitle + " - Version " + kAppVersion);
+    // wm.SetTitle(kAppTitle + " - Version " + kAppVersion);
     wm.SetSize(kResolutions.at(kRes)[0], kResolutions.at(kRes)[1]);
 
     // Configure background color

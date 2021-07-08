@@ -33,3 +33,13 @@ public:
     GameEvent(Type type, const astu::Vector2f p = {0, 0})
         : type(type), pos(p) {}
 };
+
+class PlayerEvent {
+public:
+    int level;
+    int asteroids;
+    int score;
+
+    PlayerEvent(int inLevel, int inAsteroids, int inScore)
+        : level(inLevel), asteroids(inAsteroids), score(inScore) {}
+};

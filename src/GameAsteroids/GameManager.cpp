@@ -70,6 +70,8 @@ GameManager::GameManager()
 
 void GameManager::OnStartup()
 {
+    playerEvents = ASTU_GET_SERVICE(SignalService<PlayerEvent>);
+
     ASTU_SERVICE(WrapSystem)
         .SetWrapSize(
             WORLD_VIEW_WIDTH + SHIP_RADIUS * 2, 
@@ -87,12 +89,15 @@ void GameManager::OnStartup()
         .Delay(SPAWN_ASTEROIDS_DELAY)
         .Build()
         );
+
+    FirePlayerEvent();
 }
 
 void GameManager::OnShutdown()
 {
     ASTU_SERVICE(TaskService).RemoveAll(TASK_NAME);    
     DeregisterEntityPrototypes();
+    playerEvents = nullptr;
 }
 
 void GameManager::RegisterEntityPrototypes()
@@ -339,7 +344,7 @@ bool GameManager::OnSignal(const GameEvent & signal)
     if (numAsteroids <= 0) {
         numAsteroids = 0;
         ++curLevel;
-        cout << "level " << curLevel << endl;
+
         ASTU_SERVICE(TaskService).AddTask(DelegateTaskBuilder()
             .Name(TASK_NAME)
             .Delegate([this](){ SpawnAsteroids(); } )
@@ -347,5 +352,13 @@ bool GameManager::OnSignal(const GameEvent & signal)
             .Build()
             );
     }
+
+    FirePlayerEvent();
+
     return false;
+}
+
+void GameManager::FirePlayerEvent()
+{
+    playerEvents->QueueSignal(PlayerEvent(curLevel, numAsteroids, 0));
 }

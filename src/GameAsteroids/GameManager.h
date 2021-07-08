@@ -41,6 +41,9 @@ private:
     /** The current number of asteroids left. */
     int numAsteroids;
 
+    /** Used to signal palyer event. */
+    std::shared_ptr<astu::SignalService<PlayerEvent>> playerEvents;
+
     void RegisterEntityPrototypes();
     void DeregisterEntityPrototypes();
     void ConfigureGameWorld();
@@ -52,6 +55,8 @@ private:
     std::shared_ptr<astu::Entity> CreateBullet();
     std::shared_ptr<astu::VertexBuffer2> CreateShipMesh();
     std::shared_ptr<astu::VertexBuffer2> CreateAsteroidMesh(float r);
+
+    void FirePlayerEvent();
 
     // Inherited via SignalListener<GameEvent>
     virtual bool OnSignal(const GameEvent & signal) override;        
