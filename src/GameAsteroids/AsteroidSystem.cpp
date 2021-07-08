@@ -23,6 +23,9 @@ using namespace std;
 
 #define DEFAULT_NUM_DEBRIS_ASTEROIDS 2
 
+// This macro signals a game event; helps to improve readability.
+#define GAME_EVENT(type, pos) ASTU_SERVICE(SignalService<GameEvent>).QueueSignal(GameEvent(type, pos))
+
 const EntityFamily AsteroidSystem::FAMILY = EntityFamily::Create<Asteroid, Pose2, Body2>();
 
 AsteroidSystem::AsteroidSystem(int updatePriority)
@@ -82,25 +85,24 @@ void AsteroidSystem::HandleCollision(Entity& asteroidEntity, Entity & opponent)
     auto &asteroid = asteroidEntity.GetComponent<Asteroid>();
     switch (asteroid.type) {
     case Asteroid::BIG:
-        ASTU_SERVICE(SignalService<GameEvent>)
-            .QueueSignal(GameEvent(GameEvent::BIG_ASTEROID_DESTROYED, pos));
 
         for (unsigned int i = 0; i < numDebrisAsteroids; ++i) {
             SpawnAsteroid(pos, Asteroid::MEDIUM);
         }
+
+        GAME_EVENT(GameEvent::BIG_ASTEROID_DESTROYED, pos);
         break;
 
     case Asteroid::MEDIUM:
-        ASTU_SERVICE(SignalService<GameEvent>)
-            .QueueSignal(GameEvent(GameEvent::MEDIUM_ASTEROID_DESTROYED, pos));
         for (unsigned int i = 0; i < numDebrisAsteroids; ++i) {
             SpawnAsteroid(pos, Asteroid::SMALL);
         }
+
+        GAME_EVENT(GameEvent::MEDIUM_ASTEROID_DESTROYED, pos);
         break;
         
     case Asteroid::SMALL:
-        ASTU_SERVICE(SignalService<GameEvent>)
-            .QueueSignal(GameEvent(GameEvent::SMALL_ASTEROID_DESTROYED, pos));
+        GAME_EVENT(GameEvent::SMALL_ASTEROID_DESTROYED, pos);
         break;
     }
 
@@ -114,28 +116,25 @@ void AsteroidSystem::SpawnAsteroid(const astu::Vector2f & p, Asteroid::Type type
     switch (type) {
 
     case Asteroid::BIG:
-        ASTU_SERVICE(SignalService<GameEvent>)
-            .QueueSignal(GameEvent(GameEvent::BIG_ASTEROID_SPAWNED, p));
+        GAME_EVENT(GameEvent::BIG_ASTEROID_SPAWNED, p);
         entity = ASTU_SERVICE(EntityFactoryService)
             .CreateEntity("BigAsteroid");
         break;
 
     case Asteroid::MEDIUM:
-        ASTU_SERVICE(SignalService<GameEvent>)
-            .QueueSignal(GameEvent(GameEvent::MEDIUM_ASTEROID_SPAWNED, p));
+        GAME_EVENT(GameEvent::MEDIUM_ASTEROID_SPAWNED, p);
         entity = ASTU_SERVICE(EntityFactoryService)
             .CreateEntity("MediumAsteroid");
         break;
 
     case Asteroid::SMALL:
-        ASTU_SERVICE(SignalService<GameEvent>)
-            .QueueSignal(GameEvent(GameEvent::SMALL_ASTEROID_SPAWNED, p));
+        GAME_EVENT(GameEvent::SMALL_ASTEROID_SPAWNED, p);
         entity = ASTU_SERVICE(EntityFactoryService)
             .CreateEntity("SmallAsteroid");
         break;
 
     default:
-        throw std::logic_error("Ateroid type unknown");
+        throw std::logic_error("Asteroid type unknown: " + std::to_string(type));
     }
 
     // Set position.

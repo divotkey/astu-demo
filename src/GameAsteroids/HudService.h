@@ -24,6 +24,11 @@ class HudService
 {
 public:
 
+    /**
+     * Constructor.
+     * 
+     * @param title the title of the application window
+     */
     HudService(const std::string & title = "");
 
     // Inherited via BaseService
@@ -36,8 +41,6 @@ public:
 private:
     /** The main title of the window. */
     const std::string windowTitle;
-
-    int numUpdates;
 
     /** Used to update the window title. */
     std::shared_ptr<astu::IWindowManager> windowManager;

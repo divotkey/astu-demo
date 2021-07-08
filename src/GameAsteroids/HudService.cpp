@@ -20,7 +20,6 @@ HudService::HudService(const std::string & title)
 void HudService::OnStartup()
 {
     windowManager = ASTU_GET_SERVICE(IWindowManager);
-    numUpdates = 0;
 }
 
 void HudService::OnShutdown()
@@ -28,11 +27,10 @@ void HudService::OnShutdown()
     windowManager = nullptr;
 }
 
-
 bool HudService::OnSignal(const PlayerEvent & event)
 {
     windowManager->SetTitle(windowTitle 
-        + " | Updates " + to_string(++numUpdates)
+        + " | Score " + to_string(event.score)
         + " | Level " + to_string(event.level)
         + " | Asteroids " + to_string(event.asteroids));
     

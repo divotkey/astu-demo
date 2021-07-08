@@ -55,6 +55,7 @@ private:
     std::shared_ptr<astu::Entity> CreateBullet();
     std::shared_ptr<astu::VertexBuffer2> CreateShipMesh();
     std::shared_ptr<astu::VertexBuffer2> CreateAsteroidMesh(float r);
+    astu::Vector2f GetRandomSafePosition();
 
     void FirePlayerEvent();
 

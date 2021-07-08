@@ -28,30 +28,25 @@
 using namespace astu;
 using namespace std;
 
-#define TASK_NAME               "GameManagerTask"
-#define SPAWN_ASTEROIDS_DELAY   5
-
 // Set to true for debug visualization
-#define DEBUG_VISUALS           false
-
+#define DEBUG_VISUALS           true
 
 // Game Mechanics Constants
-#define WORLD_VIEW_WIDTH        16
-#define WORLD_VIEW_HEIGHT       9
+#define SPAWN_ASTEROIDS_DELAY   2
 
 #define SHIP_RADIUS             0.35f
 #define SHIP_TORQUE             60.0f
 #define SHIP_THRUST             7.0f
 #define SHIP_ANGULAR_DAMPING    10.0f
 #define SHIP_LINEAR_DAMPING     1.0f
-#define GUN_FIRERATE            5.0f
+#define GUN_FIRERATE            1.5f
 #define GUN_MUZZLE_VELOCITY     15.0f
 
 #define BULLET_WIDTH            0.025f
 #define BULLET_HEIGHT           0.15f
 #define BULLET_TTL              1.0f
 
-#define NUM_ASTEROID_SEGMENTS   13
+#define NUM_ASTEROID_SEGMENTS   17
 #define MIN_NUM_ASTEROIDS       3
 #define ASTEROID_MIN_VEL        0.05f
 #define ASTEROID_MAX_VEL        1.5f
@@ -59,8 +54,15 @@ using namespace std;
 #define ASTEROID_MAX_ANG_VEL    1.0f
 #define BIG_ASTEROID_RADIUS     0.7f
 #define MEDIUM_ASTEROID_RADIUS  (BIG_ASTEROID_RADIUS * 0.618f)
-#define SMALL_ASTEROID_RADIUS  (MEDIUM_ASTEROID_RADIUS * 0.618f)
+#define SMALL_ASTEROID_RADIUS   (MEDIUM_ASTEROID_RADIUS * 0.618f)
 
+#define WORLD_VIEW_WIDTH        16
+#define WORLD_VIEW_HEIGHT       9
+#define WORLD_WIDTH             (WORLD_VIEW_WIDTH + BIG_ASTEROID_RADIUS * 2)
+#define WORLD_HEIGHT            (WORLD_VIEW_HEIGHT + BIG_ASTEROID_RADIUS * 2)
+
+// Some additional constants
+#define TASK_NAME               "GameManagerTask"
 
 GameManager::GameManager()
     : BaseService("Game Manager")
@@ -73,9 +75,7 @@ void GameManager::OnStartup()
     playerEvents = ASTU_GET_SERVICE(SignalService<PlayerEvent>);
 
     ASTU_SERVICE(WrapSystem)
-        .SetWrapSize(
-            WORLD_VIEW_WIDTH + SHIP_RADIUS * 2, 
-            WORLD_VIEW_HEIGHT + SHIP_RADIUS * 2);
+        .SetWrapSize(WORLD_WIDTH, WORLD_HEIGHT);
 
     RegisterEntityPrototypes();
     ConfigureGameWorld();
@@ -262,12 +262,50 @@ void GameManager::SpawnPlayer()
 void GameManager::SpawnAsteroids()
 {
     for (int i = 0; i < MIN_NUM_ASTEROIDS + curLevel; ++i) {
-        Vector2f p;
-        p.x = -WORLD_VIEW_WIDTH * 0.5, WORLD_VIEW_HEIGHT * 0.5;
-        p.y = -WORLD_VIEW_WIDTH * 0.5, WORLD_VIEW_HEIGHT * 0.5;
+        // Spawn asteroid on one of the four sides in order to avoid hitting
+        // the player's ship and hide the sudden popping up of the asteriods.
+
+        Vector2f p = GetRandomSafePosition();
         SpawnAsteroid(p);
     }
+}
 
+astu::Vector2f GameManager::GetRandomSafePosition()
+{
+        Vector2f p;
+        switch ( GetRandomInt(0, 4) ) {
+        case 0:
+            // Create random position on left side.
+            return Vector2f(
+                -WORLD_WIDTH / 2, 
+                GetRandomFloat(WORLD_HEIGHT / 2, -WORLD_HEIGHT / 2)
+            );
+
+        case 1:
+            // Create random position on right side.
+            return Vector2f(
+                WORLD_WIDTH / 2, 
+                GetRandomFloat(WORLD_HEIGHT / 2, -WORLD_HEIGHT / 2)
+            );
+
+        case 2:
+            // Create random position at top.
+            return Vector2f(
+                GetRandomFloat(WORLD_WIDTH / 2, -WORLD_WIDTH / 2), 
+                -WORLD_HEIGHT / 2
+            );
+
+        case 3:
+            // Create random position at bottom.
+            return Vector2f(
+                GetRandomFloat(WORLD_WIDTH / 2, -WORLD_WIDTH / 2), 
+                WORLD_HEIGHT / 2
+            );
+
+        default:
+            // Fall-back, should never happen
+            return Vector2f(0, 0);
+        }
 }
 
 void GameManager::SpawnAsteroid(const astu::Vector2f & p)
@@ -304,28 +342,85 @@ shared_ptr<astu::VertexBuffer2> GameManager::CreateShipMesh()
 
 std::shared_ptr<astu::VertexBuffer2> GameManager::CreateAsteroidMesh(float r)
 {
-    // return Shape2Generator().GenCircle(r);
-
     auto & vbBuilder = ASTU_SERVICE(VertexBuffer2Builder);
     vbBuilder.Reset();
 
+    const float maxDeform = 0.3f;   // max deformation +/- %
+
+    // First step: create circular asteroid
+    const float deltaAngle = 360.0f / NUM_ASTEROID_SEGMENTS;
     Vector2f v;
-    const float deformFactor = 0.2f;
-    const float da = 360.0f / NUM_ASTEROID_SEGMENTS;
     for (int i = 0; i < NUM_ASTEROID_SEGMENTS; ++i) {
-        v.Set(0, GetRandomFloat(r * (1.0f - deformFactor), r * (1.0f + deformFactor)));
-        v.RotateDeg(da * i);
-        vbBuilder.AddVertex( v );
+        v.Set(0, r);
+        v.RotateDeg(deltaAngle * i);
+        vbBuilder.AddVertex(v);
+    }
+
+    // Second step: deform vertices
+    const int n = NUM_ASTEROID_SEGMENTS;
+    const int stepSize = NUM_ASTEROID_SEGMENTS / 3;
+    const float influence = 0.5f;  // the amount neighbors get influenced
+    const float numNeighbors = 3;   // the number of neighbors to influence
+
+    for (int i = 0; i < n; i += stepSize) {
+        float deform = GetRandomFloat(-maxDeform, maxDeform);
+
+        Vector2f v = vbBuilder.GetVertex(i);
+        Vector2f delta(v);
+        delta.SetLength(v.Length() * deform);
+        vbBuilder.SetVertex(i, v + delta);
+
+        float infl = influence;
+        for (int j = 1; j <= numNeighbors; ++j) {
+            int idx = ((i - j) % n + n) % n;
+            v = vbBuilder.GetVertex(idx);
+            vbBuilder.SetVertex(idx, v + (delta * infl));
+
+            idx = ((i + j) % n + n) % n;
+            v = vbBuilder.GetVertex(idx);
+            vbBuilder.SetVertex(idx, v + (delta * infl));
+
+            infl *= infl;
+        }
     }
 
     // Close polygon.
     vbBuilder.AddVertex( vbBuilder.GetVertex(0) );
 
+    // Build and return vertex buffer of asteroid shape.
     return vbBuilder.Build();
+
+
+    // auto & vbBuilder = ASTU_SERVICE(VertexBuffer2Builder);
+    // vbBuilder.Reset();
+
+    // const float deformFactor = 0.3f;
+    // const float stepDeform = 0.1f;
+    // const float minR = r * (1.0f - deformFactor);
+    // const float maxR = r * (1.0f + deformFactor);
+    // const float da = 360.0f / NUM_ASTEROID_SEGMENTS;
+    // float lastR = r;
+
+    // Vector2f v;
+    // for (int i = 0; i < NUM_ASTEROID_SEGMENTS; ++i) {
+    //     const float low = std::max(minR, lastR * (1.0f - stepDeform));
+    //     const float hi = std::min(maxR, lastR * (1.0f + stepDeform));
+
+    //     lastR = GetRandomFloat(low, hi);
+    //     v.Set(0, lastR);
+    //     v.RotateDeg(da * i);
+    //     vbBuilder.AddVertex( v );
+    // }
+
+    // // Close polygon.
+    // vbBuilder.AddVertex( vbBuilder.GetVertex(0) );
+
+    // return vbBuilder.Build();
 }
 
 bool GameManager::OnSignal(const GameEvent & signal)
 {
+    // Take care of the current number of asteroids.
     switch (signal.type) {
 
         case GameEvent::BIG_ASTEROID_SPAWNED:
@@ -345,6 +440,7 @@ bool GameManager::OnSignal(const GameEvent & signal)
     }
 
     if (numAsteroids <= 0) {
+        // All asteroids have been cleard; proceed to the next level.
         numAsteroids = 0;
         ++curLevel;
 
