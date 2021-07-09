@@ -11,6 +11,7 @@
 
 // C++ Standard Library includes
 #include <algorithm>
+#include <cmath>
 #include <iostream> // just for debugging
 
 
@@ -49,10 +50,24 @@ void ShipSystem::ProcessEntity(Entity & entity)
     auto& body = entity.GetComponent<Body2>();
     auto& ship = entity.GetComponent<Ship>();
 
+    // Calc desired torque based on current user input.
+    const float targetTorque = steerAxis->GetValue() * ship.maxTorque;
 
-    body.ApplyTorque(ship.torque * steerAxis->GetValue());
+    // Calc difference (error) between current torque and user applied torque.
+    const float e = targetTorque - ship.curTorque;
 
-    // float curThrust = std::max(0.0f, thrustAxis->GetValue() * ship.thrust);
-    float curThrust = thrustAxis->GetValue() * ship.thrust;
+    // Determine velocity of torque change.
+    float v = (e == 0.0) ? 0.0f : std::copysignf(ship.torqueSpeed, e);
+
+    // Update and current torque.
+    ship.curTorque += v * GetElapsedTimeF();
+
+    // cout << "e = " << e << " | " << ship.curTorque << " | " << targetTorque << endl;
+
+    // Apply current torque.
+    body.ApplyTorque(ship.curTorque);
+
+    // Apply current thrust.
+    float curThrust = thrustAxis->GetValue() * ship.maxThrust;
     body.ApplyForce( body.GetWorldVector(0, -curThrust) );
 }

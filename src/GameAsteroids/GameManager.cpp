@@ -29,29 +29,30 @@ using namespace astu;
 using namespace std;
 
 // Set to true for debug visualization
-#define DEBUG_VISUALS           true
+#define DEBUG_VISUALS           false
 
 // Game Mechanics Constants
 #define SPAWN_ASTEROIDS_DELAY   2
 
 #define SHIP_RADIUS             0.35f
-#define SHIP_TORQUE             60.0f
+#define SHIP_TORQUE             80.0f
+#define SHIP_TORQUE_SPEED       300.0f
 #define SHIP_THRUST             7.0f
-#define SHIP_ANGULAR_DAMPING    10.0f
+#define SHIP_ANGULAR_DAMPING    15.0f
 #define SHIP_LINEAR_DAMPING     1.0f
-#define GUN_FIRERATE            1.5f
+#define GUN_FIRERATE            2.5f
 #define GUN_MUZZLE_VELOCITY     15.0f
 
 #define BULLET_WIDTH            0.025f
 #define BULLET_HEIGHT           0.15f
 #define BULLET_TTL              1.0f
 
-#define NUM_ASTEROID_SEGMENTS   17
+#define NUM_ASTEROID_SEGMENTS   27
 #define MIN_NUM_ASTEROIDS       3
-#define ASTEROID_MIN_VEL        0.05f
+#define ASTEROID_MIN_VEL        0.1f
 #define ASTEROID_MAX_VEL        1.5f
-#define ASTEROID_MIN_ANG_VEL    -1.5f
-#define ASTEROID_MAX_ANG_VEL    1.0f
+#define ASTEROID_MIN_ANG_VEL    0.5f
+#define ASTEROID_MAX_ANG_VEL    1.5f
 #define BIG_ASTEROID_RADIUS     0.7f
 #define MEDIUM_ASTEROID_RADIUS  (BIG_ASTEROID_RADIUS * 0.618f)
 #define SMALL_ASTEROID_RADIUS   (MEDIUM_ASTEROID_RADIUS * 0.618f)
@@ -167,7 +168,7 @@ shared_ptr<Entity> GameManager::CreatePlayerShip()
     const float kColliderRadius = SHIP_RADIUS * 0.8f;
 
     auto entity = make_shared<Entity>();
-    entity->AddComponent( make_shared<Ship>(0, SHIP_TORQUE, SHIP_THRUST) );
+    entity->AddComponent( make_shared<Ship>(SHIP_THRUST, SHIP_TORQUE, SHIP_TORQUE_SPEED) );
     entity->AddComponent( make_shared<Wrap>() );
     entity->AddComponent( make_shared<Pose2>() );
     entity->AddComponent( make_shared<Body2>() );
@@ -253,8 +254,6 @@ void GameManager::SpawnPlayer()
     auto entity = ASTU_SERVICE(EntityFactoryService).CreateEntity("Ship");
     entity->GetComponent<Pose2>()
         .transform.SetTranslation(0, 0).SetRotation(0);
-
-    entity->GetComponent<Ship>().playerId = 0;
 
     ASTU_SERVICE(EntityService).AddEntity(entity);
 }
@@ -345,8 +344,6 @@ std::shared_ptr<astu::VertexBuffer2> GameManager::CreateAsteroidMesh(float r)
     auto & vbBuilder = ASTU_SERVICE(VertexBuffer2Builder);
     vbBuilder.Reset();
 
-    const float maxDeform = 0.3f;   // max deformation +/- %
-
     // First step: create circular asteroid
     const float deltaAngle = 360.0f / NUM_ASTEROID_SEGMENTS;
     Vector2f v;
@@ -358,8 +355,9 @@ std::shared_ptr<astu::VertexBuffer2> GameManager::CreateAsteroidMesh(float r)
 
     // Second step: deform vertices
     const int n = NUM_ASTEROID_SEGMENTS;
-    const int stepSize = NUM_ASTEROID_SEGMENTS / 3;
-    const float influence = 0.5f;  // the amount neighbors get influenced
+    const int stepSize = NUM_ASTEROID_SEGMENTS / 5;
+    const float maxDeform = 0.3f;   // max deformation +/- %
+    const float influence = 0.9f;   // the amount neighbors get influenced
     const float numNeighbors = 3;   // the number of neighbors to influence
 
     for (int i = 0; i < n; i += stepSize) {

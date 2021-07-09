@@ -10,6 +10,7 @@
 #include <UpdateService.h>
 #include <EntitySystems.h>
 #include <InputMappingService.h>
+#include <ITimeManager.h>
 
 // C++ Standard Library includes
 #include <memory>
@@ -17,6 +18,7 @@
 class ShipSystem 
     : public astu::Updatable
     , private astu::OneFamilyEntitySystem
+    , private astu::TimeClient
 {
 public:
 

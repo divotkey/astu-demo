@@ -58,7 +58,11 @@ void AsteroidSystem::OnEntityAdded(std::shared_ptr<astu::Entity> entity)
     body.SetLinearVelocity(v);
 
     // Set random angular velocity.
-    body.SetAngularVelocity(GetRandomFloat(asteroid.maxAngVel, asteroid.minAngVel));
+    float av = GetRandomFloat(asteroid.maxAngVel, asteroid.minAngVel);
+    if (GetRandomBool()) {
+        av = -av;
+    }
+    body.SetAngularVelocity(av);
 }
 
 bool AsteroidSystem::OnSignal(const CollisionEvent & signal)

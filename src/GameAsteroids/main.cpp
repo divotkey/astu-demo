@@ -172,8 +172,8 @@ void ConfigureApplication()
     ASTU_SERVICE(InputMappingService).AddActionMapping("Fire", Keys::Return);
     ASTU_SERVICE(InputMappingService).AddActionMapping("Fire", Keys::GamepadFaceButtonBottom);
 
-    ASTU_SERVICE(InputMappingService).AddAxisMapping("Steer", Keys::Left, -0.7f);
-    ASTU_SERVICE(InputMappingService).AddAxisMapping("Steer", Keys::Right, 0.7f);
+    ASTU_SERVICE(InputMappingService).AddAxisMapping("Steer", Keys::Left, -1.0f);
+    ASTU_SERVICE(InputMappingService).AddAxisMapping("Steer", Keys::Right, 1.0f);
     ASTU_SERVICE(InputMappingService).AddAxisMapping("Steer", Keys::GamepadLeftThumbstickX);
 
     // ASTU_SERVICE(InputMappingService).AddAxisMapping("Thrust", Keys::Down, -1);

@@ -15,24 +15,30 @@
 
 class Ship : public astu::EntityComponent {
 public:
-    /** Identifies the player (useful in multiplayer mode). */
-    int playerId;
+    /** The maximum torque to be applied when rotating the ship. */
+    float maxTorque;
 
-    /** The torque to be applied when rotating the ship. */
-    float torque;
+    /** The maximum thrust force used to move the ship. */
+    float maxThrust;
 
-    /** The thrust force used to move the ship. */
-    float thrust;
+    /** The current torque. */
+    float curTorque;
+
+    /** The velocity used to reach the target torque. */
+    float torqueSpeed;
 
     /**
      * Constructor.
      * 
-     * @param spatial   the scene node branch represending the entity
+     * @param thrust        the maximum thurst used for acceleration
+     * @param torque        the maximum torque used for steering
+     * @param torqueSpeed   the velocity used to reach the target torque
      */
-    Ship(int playerId, float torque, float thrust)
-        : playerId(playerId)
-        , torque(torque)
-        , thrust(thrust)
+    Ship(float thrust, float torque, float torqueSpeed)
+        : maxTorque(torque)
+        , maxThrust(thrust)
+        , torqueSpeed(torqueSpeed)
+        , curTorque(0)
     {
         // Intentionally left empty.
     }
