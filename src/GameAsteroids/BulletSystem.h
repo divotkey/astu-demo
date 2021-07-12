@@ -34,8 +34,8 @@ private:
     /** The entity family this system processes. */
     static const astu::EntityFamily FAMILY;
 
-    /** Whether the gun should fire bullets. */
-    bool firing;
+    void OnCollision(astu::Entity & e);
+    void EmitDebris(const astu::Vector2f& p);
 
     // Inherited via Service
     virtual void OnStartup() override;

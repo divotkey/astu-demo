@@ -3,38 +3,39 @@
  * Requires AST Utilities 0.9
  */
 
-// C++ Standard Library includes
-#include <iostream>
-#include <stdexcept>
-
 // AST Utilities includes
 #include <AstUtils.h>
 #include <ServiceManager.h>
 #include <UpdateService.h>
+#include <InputMappingService.h>
+#include <IRenderService.h>
+#include <IWindowManager.h>
+#include <Events.h>
 #include <SdlService.h>
 #include <SdlVideoService.h>
 #include <SdlEventService.h>
 #include <SdlRenderService.h>
 #include <SdlTimeService.h>
-#include <IRenderService.h>
-#include <IWindowManager.h>
-#include <Events.h>
-
+#include <SdlJoystickService.h>
 
 // Uncomment if 2D scene graph is used.
 // #include <SdlSceneGraph2.h>
 // #include <Camera2Service.h>
 
-// Uncomment if ECS (Entoty Component System) is used
+// Uncomment if ECS (Entity Component System) is used
+// #include <EntityFactoryService.h>
 // #include <EntityService.h>
+
+// C++ Standard Library includes
+#include <iostream>
+#include <stdexcept>
 
 using namespace astu;
 using namespace std;
 
-
 // Constants to be adapted to the requirements of this application
 const string kAppTitle = "Boilerplate Code for SDL/ASTU Applications";
-const string kAppVersion = "1.5.0";
+const string kAppVersion = "1.6.0";
 const Color4f backgroundColor = WebColors::Black;
 
 // Change this value to let the application window have one of the 
@@ -51,7 +52,6 @@ const std::array<std::array<int, 2>, 6> kResolutions = {
     1920, 1080      // res 5    FHD (1080)  Aspect Ratio 16:9
     };   
 
-
 // Concatenates some meta-information about the application to assemble a title.
 std::string GetApplicationTitle() {
     return kAppTitle + " - Version " + kAppVersion;
@@ -60,7 +60,7 @@ std::string GetApplicationTitle() {
 // Output some information about this application.
 void PrintHeader()
 {
-    cout << GetApplicationTitle << endl << endl;
+    cout << GetApplicationTitle() << endl << endl;
     SayVersion();
     SayCopyright(true);
 }
@@ -87,6 +87,12 @@ void AddCoreServices()
 
     // Receives and distributes resize events.
     ASTU_CREATE_AND_ADD_SERVICE( ResizeEventService );
+
+    // Mapps game actions and input axis.
+    ASTU_CREATE_AND_ADD_SERVICE( InputMappingService );
+
+    // Mapps game actions and input axis.
+    ASTU_CREATE_AND_ADD_SERVICE( InputMappingService );
 }
 
 // Adds services required to run SDL-based interactive applications.
@@ -101,6 +107,9 @@ void AddSdlServices()
     // Offers an layer-based 2D graphics facility based on SDL render mechanism.
     ASTU_CREATE_AND_ADD_SERVICE( SdlRenderService );
 
+    // Enables the use of gamepads etc.
+    ASTU_CREATE_AND_ADD_SERVICE( SdlJoystickService );
+
     // Empties the SDL-Event queue and distributes events.
     ASTU_CREATE_AND_ADD_SERVICE( SdlEventService );
 
@@ -111,7 +120,14 @@ void AddSdlServices()
 // Adds application specific services.
 void AddCustomServices()
 {
-    // TODO add custom services.
+    // Uncomment if 2D scene graph is used.
+    // ASTU_CREATE_AND_ADD_SERVICE( Camera2Service );
+    // ASTU_CREATE_AND_ADD_SERVICE( SdlSceneGraph2 );    
+    // ASTU_CREATE_AND_ADD_SERVICE( SdlVertexBuffer2BuilderService );
+
+    // Uncomment if ECS is used.
+    // ASTU_CREATE_AND_ADD_SERVICE( EntityService );
+    // ASTU_CREATE_AND_ADD_SERVICE( EntityFactoryService );
 }
 
 // Configures services according to application specific settings and configurations.

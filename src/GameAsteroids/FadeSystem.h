@@ -7,14 +7,15 @@
 #pragma once
 
 // AST Utilities includes
+#include <InputMappingService.h>
 #include <UpdateService.h>
 #include <EntitySystems.h>
-#include <Scene2.h>
+#include <ITimeManager.h>
 
-class Mesh2System 
+class FadeSystem 
     : public astu::Updatable
     , private astu::OneFamilyEntitySystem
-    , private astu::EntityListener
+    , private astu::TimeClient
 {
 public:
 
@@ -23,7 +24,7 @@ public:
      * 
      * @param updatePriority    the priority used to update this system
      */
-    Mesh2System(int updatePriority = 0);
+    FadeSystem(int updatePriority = 0);
 
 private:
     /** The entity family this system processes. */
@@ -38,11 +39,4 @@ private:
 
     // Inherited via OneFamilyEntitySystem
     virtual void ProcessEntity(astu::Entity & entity) override;
-
-    // Inherited via EntityListener
-    virtual void OnEntityAdded(std::shared_ptr<astu::Entity> entity) override;
-    virtual void OnEntityRemoved(std::shared_ptr<astu::Entity> entity) override;
-
-    /** The root node where to attach the entities. */
-    std::shared_ptr<astu::Node2> root;
 };

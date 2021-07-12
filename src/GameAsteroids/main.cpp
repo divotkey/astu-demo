@@ -4,32 +4,6 @@
  * Copyright (c) 2021 Roman Divotkey. All rights reserved.
  */
 
-// C++ Standard Library includes
-#include <iostream>
-#include <stdexcept>
-
-// AST Utilities includes
-#include <AstUtils.h>
-#include <ServiceManager.h>
-#include <UpdateService.h>
-#include <TaskService.h>
-#include <SdlService.h>
-#include <SdlVideoService.h>
-#include <SdlEventService.h>
-#include <SdlRenderService.h>
-#include <SdlTimeService.h>
-#include <SdlJoystickService.h>
-#include <IRenderService.h>
-#include <IWindowManager.h>
-#include <Events.h>
-
-#include <Keys.h>
-#include <InputMappingService.h>
-#include <EntityFactoryService.h>
-#include <SdlSceneGraph2.h>
-#include <Camera2Service.h>
-#include <EntityService.h>
-
 // Local includes
 #include "PhysicsSystem.h"
 #include "CollisionSystem.h"
@@ -39,13 +13,41 @@
 #include "GunSystem.h"
 #include "BulletSystem.h"
 #include "AsteroidSystem.h"
+#include "FadeSystem.h"
 #include "GameManager.h"
 #include "HudService.h"
 #include "GameEvents.h"
 
+// AST Utilities includes (general)
+#include <AstUtils.h>
+#include <ServiceManager.h>
+#include <UpdateService.h>
+#include <TaskService.h>
+#include <IRenderService.h>
+#include <IWindowManager.h>
+#include <Events.h>
+#include <Keys.h>
+#include <InputMappingService.h>
+#include <EntityFactoryService.h>
+#include <SdlSceneGraph2.h>
+#include <Camera2Service.h>
+#include <EntityService.h>
+
+// AST Utilities includes (SDL2 specific)
+#include <SdlService.h>
+#include <SdlVideoService.h>
+#include <SdlEventService.h>
+#include <SdlRenderService.h>
+#include <SdlTimeService.h>
+#include <SdlJoystickService.h>
+#include <SdlLineRenderer.h>
+
+// C++ Standard Library includes
+#include <iostream>
+#include <stdexcept>
+
 using namespace astu;
 using namespace std;
-
 
 // Constants to be adapted to the requirements of this application
 const string kAppTitle = "Asteroids Clone";
@@ -140,6 +142,7 @@ void AddCustomServices()
     ASTU_CREATE_AND_ADD_SERVICE( SdlVertexBuffer2BuilderService );
     ASTU_CREATE_AND_ADD_SERVICE( EntityService );
     ASTU_CREATE_AND_ADD_SERVICE( EntityFactoryService );
+    ASTU_CREATE_AND_ADD_SERVICE( SdlLineRenderer );
     
     ASTU_CREATE_AND_ADD_SERVICE( Mesh2System );    
     ASTU_CREATE_AND_ADD_SERVICE( PhysicsSystem );
@@ -150,6 +153,7 @@ void AddCustomServices()
     ASTU_CREATE_AND_ADD_SERVICE( GunSystem );
     ASTU_CREATE_AND_ADD_SERVICE( BulletSystem );
     ASTU_CREATE_AND_ADD_SERVICE( AsteroidSystem );
+    ASTU_CREATE_AND_ADD_SERVICE( FadeSystem );
     ASTU_CREATE_AND_ADD_SERVICE( HudService, kAppTitle + " - Version " + kAppVersion );
     ASTU_CREATE_AND_ADD_SERVICE( SignalService<CollisionEvent> );
     ASTU_CREATE_AND_ADD_SERVICE( SignalService<GameEvent> );

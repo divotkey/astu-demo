@@ -23,6 +23,7 @@
 #include "Gun.h"
 #include "Bullet.h"
 #include "Asteroid.h"
+#include "Fadable.h"
 #include "GameManager.h"
 
 using namespace astu;
@@ -35,17 +36,18 @@ using namespace std;
 #define SPAWN_ASTEROIDS_DELAY   2
 
 #define SHIP_RADIUS             0.35f
-#define SHIP_TORQUE             80.0f
-#define SHIP_TORQUE_SPEED       300.0f
+#define SHIP_TORQUE             70.0f
+#define SHIP_STEER_SPEED        3.0f
 #define SHIP_THRUST             7.0f
+#define SHIP_THRUST_SPEED       SHIP_STEER_SPEED
 #define SHIP_ANGULAR_DAMPING    15.0f
 #define SHIP_LINEAR_DAMPING     1.0f
-#define GUN_FIRERATE            2.5f
-#define GUN_MUZZLE_VELOCITY     15.0f
+#define GUN_FIRERATE            3.5f
+#define GUN_MUZZLE_VELOCITY     12.0f
 
 #define BULLET_WIDTH            0.025f
 #define BULLET_HEIGHT           0.15f
-#define BULLET_TTL              1.0f
+#define BULLET_TTL              1.5f
 
 #define NUM_ASTEROID_SEGMENTS   27
 #define MIN_NUM_ASTEROIDS       3
@@ -57,10 +59,17 @@ using namespace std;
 #define MEDIUM_ASTEROID_RADIUS  (BIG_ASTEROID_RADIUS * 0.618f)
 #define SMALL_ASTEROID_RADIUS   (MEDIUM_ASTEROID_RADIUS * 0.618f)
 
+#define DEBRIS_RADIUS           0.05f
+
 #define WORLD_VIEW_WIDTH        16
 #define WORLD_VIEW_HEIGHT       9
 #define WORLD_WIDTH             (WORLD_VIEW_WIDTH + BIG_ASTEROID_RADIUS * 2)
 #define WORLD_HEIGHT            (WORLD_VIEW_HEIGHT + BIG_ASTEROID_RADIUS * 2)
+
+// Collision Categories
+#define BULLET_CAT      1 << 0
+#define ASTEROID_CAT    1 << 1
+#define SHIP_CAT        1 << 2
 
 // Some additional constants
 #define TASK_NAME               "GameManagerTask"
@@ -109,6 +118,7 @@ void GameManager::RegisterEntityPrototypes()
     entityFactory.RegisterPrototype("MediumAsteroid", CreateAsteroid(Asteroid::MEDIUM, MEDIUM_ASTEROID_RADIUS));    
     entityFactory.RegisterPrototype("SmallAsteroid", CreateAsteroid(Asteroid::SMALL, SMALL_ASTEROID_RADIUS));    
     entityFactory.RegisterPrototype("Bullet", CreateBullet());    
+    entityFactory.RegisterPrototype("Debris", CreateDebris());    
 }
 
 void GameManager::DeregisterEntityPrototypes()
@@ -124,7 +134,7 @@ shared_ptr<Entity> GameManager::CreateAsteroid(Asteroid::Type type, float radius
     entity->AddComponent( make_shared<Pose2>() );
     entity->AddComponent( make_shared<Wrap>() );
     entity->AddComponent( make_shared<Body2>() );
-    entity->AddComponent( make_shared<Collider>(radius) );
+    entity->AddComponent( make_shared<Collider>(radius, ASTEROID_CAT, BULLET_CAT | SHIP_CAT) );
     entity->AddComponent( make_shared<Asteroid>(
         type, 
         ASTEROID_MAX_VEL, 
@@ -168,11 +178,11 @@ shared_ptr<Entity> GameManager::CreatePlayerShip()
     const float kColliderRadius = SHIP_RADIUS * 0.8f;
 
     auto entity = make_shared<Entity>();
-    entity->AddComponent( make_shared<Ship>(SHIP_THRUST, SHIP_TORQUE, SHIP_TORQUE_SPEED) );
+    entity->AddComponent( make_shared<Ship>(SHIP_THRUST, SHIP_TORQUE, SHIP_STEER_SPEED, SHIP_THRUST_SPEED) );
     entity->AddComponent( make_shared<Wrap>() );
     entity->AddComponent( make_shared<Pose2>() );
     entity->AddComponent( make_shared<Body2>() );
-    entity->AddComponent( make_shared<Collider>(kColliderRadius) );
+    entity->AddComponent( make_shared<Collider>(kColliderRadius, SHIP_CAT, ASTEROID_CAT) );
     entity->AddComponent( make_shared<Gun>(
         GUN_FIRERATE, 
         GUN_MUZZLE_VELOCITY, 
@@ -214,7 +224,7 @@ shared_ptr<Entity> GameManager::CreateBullet()
     auto entity = make_shared<Entity>();
     entity->AddComponent( make_shared<Pose2>() );
     entity->AddComponent( make_shared<Body2>() );
-    entity->AddComponent( make_shared<Collider>(kColliderRadius) );
+    entity->AddComponent( make_shared<Collider>(kColliderRadius, BULLET_CAT, ASTEROID_CAT) );
     entity->AddComponent( make_shared<Wrap>() );
     entity->AddComponent( make_shared<Bullet>(BULLET_TTL) );
 
@@ -239,6 +249,22 @@ shared_ptr<Entity> GameManager::CreateBullet()
             .VertexBuffer( Shape2Generator().GenRectangle(BULLET_WIDTH, BULLET_HEIGHT) )
             .Build()) );
     }
+
+    return entity;
+}
+
+shared_ptr<astu::Entity> GameManager::CreateDebris()
+{
+    auto entity = make_shared<Entity>();
+    entity->AddComponent( make_shared<Pose2>() );
+    entity->AddComponent( make_shared<Body2>() );
+    entity->AddComponent( make_shared<Wrap>() );
+    entity->AddComponent( make_shared<Fadable>(0.5f) );
+
+    entity->AddComponent( make_shared<Mesh2>(Polyline2Builder()
+        .Color(WebColors::Black)
+        .VertexBuffer( Shape2Generator().GenStar(DEBRIS_RADIUS))
+        .Build()) );
 
     return entity;
 }

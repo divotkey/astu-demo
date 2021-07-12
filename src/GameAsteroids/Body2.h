@@ -69,9 +69,28 @@ public:
         return moi;
     }
 
+    /**
+     * Specifies the linear damping of this body.
+     * 
+     * @param d the linear damping
+     */
     void SetLinearDamping(float d);
 
+    /**
+     * Specifies the angular damping of this body.
+     * 
+     * @param d the linear damping
+     */
     void SetAngularDamping(float d);
+
+    /**
+     * Sets the position of this body's center of mass.
+     * 
+     * @param p the position in world space
+     */
+    void SetLinearPosition(const astu::Vector2f& p) {
+        SetLinearPosition(p.x, p.y);
+    }
 
     /**
      * Sets the position of this body's center of mass.
@@ -180,22 +199,61 @@ public:
      */
     void ApplyForce(float fx, float fy);
 
+    /**
+     * Converts a vector from world space to local space.
+     * 
+     * @param v the vector in world space
+     * @return the vector in local space
+     */
     astu::Vector2f GetLocalVector(const astu::Vector2f& v) {
         return GetLocalVector(v.x, v.y);
     }
 
+    /**
+     * Converts a vector from world space to local space.
+     * 
+     * @param vx    the x-coordinate of the vector in world space
+     * @param vy    the y-coordinate of the vector in world space
+     * @return the vector in local space
+     */
     astu::Vector2f GetLocalVector(float vx, float vy);
 
+    /**
+     * Converts a vector from local space to world space.
+     * 
+     * @param v the vector in local space
+     * @return the vector in world space
+     */
     astu::Vector2f GetWorldVector(const astu::Vector2f& v) {
         return GetWorldVector(v.x, v.y);
     }
 
-    astu::Vector2f GetWorldVector(float vx, float vy);
+    /**
+     * Converts a vector from local space to world space.
+     * 
+     * @param px    the x-coordinate of the vector in local space
+     * @param py    the y-coordinate of the vector in local space
+     * @return the vector in world space
+     */
+    astu::Vector2f GetWorldVector(float px, float py);
 
+    /**
+     * Converts a point from local space to world space.
+     * 
+     * @param p the point in world space
+     * @return the point in local space
+     */
     astu::Vector2f GetWorldPoint(const astu::Vector2f& p) {
         return GetWorldPoint(p.x, p.y);
     }
 
+    /**
+     * Converts a point from local space to world space.
+     * 
+     * @param px    the x-coordinate of the point in world space
+     * @param py    the y-coordinate of the point in world space
+     * @return the point in local space
+     */
     astu::Vector2f GetWorldPoint(float px, float py);
 
     // Inherited via EntityComponent

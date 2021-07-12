@@ -50,11 +50,17 @@ void CollisionSystem::OnUpdate()
             auto & poseB = entityB->GetComponent<Pose2>();
             auto & collB = entityB->GetComponent<Collider>();
 
-            // Check for collision (interpenetration)
-            if (IsColliding(poseA, collA, poseB, collB)) {
-                // Report collision
-                collisionEvents->FireSignal(CollisionEvent(entityA, entityB));
+            // Check collision categories and masks.
+            if ( (collA.categoryBits & collB.collisionMask) 
+                 && (collB.categoryBits & collA.collisionMask))
+            {
+                // Check for collision (interpenetration).
+                if (IsColliding(poseA, collA, poseB, collB)) {
+                    // Report collision
+                    collisionEvents->FireSignal(CollisionEvent(entityA, entityB));
+                }
             }
+
         }
     }
  }

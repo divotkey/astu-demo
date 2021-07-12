@@ -12,6 +12,7 @@
 // AST Utilities includes
 #include <Scene2.h>
 #include <EntityService.h>
+#include <Interpolator.h>
 
 class Ship : public astu::EntityComponent {
 public:
@@ -21,24 +22,25 @@ public:
     /** The maximum thrust force used to move the ship. */
     float maxThrust;
 
-    /** The current torque. */
-    float curTorque;
-
-    /** The velocity used to reach the target torque. */
-    float torqueSpeed;
+    /** Used to ease thrust input. */
+    astu::LinearInterpolator1f thrustInput;
+    
+    /** Used to ease steering input. */
+    astu::LinearInterpolator1f steeringInput;
 
     /**
      * Constructor.
      * 
      * @param thrust        the maximum thurst used for acceleration
      * @param torque        the maximum torque used for steering
-     * @param torqueSpeed   the velocity used to reach the target torque
+     * @param steerSpeed    controls the ease of steering input
+     * @param thrustSpeed   controls the ease of thrust input
      */
-    Ship(float thrust, float torque, float torqueSpeed)
+    Ship(float thrust, float torque, float steerSpeed, float thrustSpeed)
         : maxTorque(torque)
         , maxThrust(thrust)
-        , torqueSpeed(torqueSpeed)
-        , curTorque(0)
+        , steeringInput(steerSpeed)
+        , thrustInput(thrustSpeed)
     {
         // Intentionally left empty.
     }

@@ -53,6 +53,7 @@ private:
     std::shared_ptr<astu::Entity> CreateAsteroid(Asteroid::Type type, float radius);
     std::shared_ptr<astu::Entity> CreatePlayerShip();
     std::shared_ptr<astu::Entity> CreateBullet();
+    std::shared_ptr<astu::Entity> CreateDebris();
     std::shared_ptr<astu::VertexBuffer2> CreateShipMesh();
     std::shared_ptr<astu::VertexBuffer2> CreateAsteroidMesh(float r);
     astu::Vector2f GetRandomSafePosition();

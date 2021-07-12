@@ -3,39 +3,42 @@
  * Requires AST Utilities 0.9
  */
 
-// C++ Standard Library includes
-#include <iostream>
-#include <stdexcept>
-
-// AST Utilities includes
-#include <AstUtils.h>
-#include <ServiceManager.h>
-#include <UpdateService.h>
-#include <SdlService.h>
-#include <SdlVideoService.h>
-#include <SdlEventService.h>
-#include <SdlRenderService.h>
-#include <SdlTimeService.h>
-#include <IRenderService.h>
-#include <IWindowManager.h>
-#include <Events.h>
-
-#include <SdlSceneGraph2.h>
-#include <Camera2Service.h>
-#include <EntityService.h>
-
 // Local includes
 #include "CameraModeChangerService.h"
 #include "StatusIndicatorService.h"
 #include "CameraControlService.h"
 #include "SceneGraphTestService.h"
 
+// AST Utilities includes (general)
+#include <AstUtils.h>
+#include <ServiceManager.h>
+#include <UpdateService.h>
+#include <Camera2Service.h>
+#include <EntityFactoryService.h>
+#include <EntityService.h>
+#include <IRenderService.h>
+#include <IWindowManager.h>
+#include <Events.h>
+
+// AST Utilities includes (SDL2 specific)
+#include <SdlService.h>
+#include <SdlVideoService.h>
+#include <SdlEventService.h>
+#include <SdlRenderService.h>
+#include <SdlTimeService.h>
+#include <SdlSceneGraph2.h>
+#include <SdlJoystickService.h>
+
+// C++ Standard Library includes
+#include <iostream>
+#include <stdexcept>
+
 using namespace astu;
 using namespace std;
 
 // Constants to be adapted to the requirements of this application
 const string kAppTitle = "AST Utilities, 2D Scene Graph Demo";
-const string kAppVersion = "1.0.0";
+const string kAppVersion = "1.1.0";
 const Color4f backgroundColor = WebColors::Black;
 
 // Change this value to let the application window have one of the 
@@ -57,10 +60,10 @@ std::string GetApplicationTitle() {
     return kAppTitle + " - Version " + kAppVersion;
 }
 
-// Outputs some meta-information about this application.
+// Output some information about this application.
 void PrintHeader()
 {
-    cout << kAppTitle << " - Version " << kAppVersion << endl << endl;
+    cout << GetApplicationTitle() << endl << endl;
     SayVersion();
     SayCopyright(true);
 }
@@ -87,7 +90,14 @@ void AddCoreServices()
 
     // Receives and distributes resize events.
     ASTU_CREATE_AND_ADD_SERVICE( ResizeEventService );
+
+    // Mapps game actions and input axis.
+    ASTU_CREATE_AND_ADD_SERVICE( InputMappingService );
+
+    // Mapps game actions and input axis.
+    ASTU_CREATE_AND_ADD_SERVICE( InputMappingService );
 }
+
 
 // Adds services required to run SDL-based interactive applications.
 void AddSdlServices()
@@ -100,6 +110,9 @@ void AddSdlServices()
 
     // Offers an layer-based 2D graphics facility based on SDL render mechanism.
     ASTU_CREATE_AND_ADD_SERVICE( SdlRenderService );
+
+    // Enables the use of gamepads etc.
+    ASTU_CREATE_AND_ADD_SERVICE( SdlJoystickService );
 
     // Empties the SDL-Event queue and distributes events.
     ASTU_CREATE_AND_ADD_SERVICE( SdlEventService );
@@ -161,8 +174,8 @@ void ConfigureApplication()
     // Configure application main window.
     auto & wm = ASTU_SERVICE(IWindowManager);
 
-    // We do not need to set the wintow title, hence the window title is hanled
-    // by the StatusIndicatorService service.
+    // We do not need to set the wintow title, hence the window title is
+    // handled by the StatusIndicatorService service.
     // wm.SetTitle(kAppTitle + " - Version " + kAppVersion);
 
     // Set initial size of main application window and make it resizeable.

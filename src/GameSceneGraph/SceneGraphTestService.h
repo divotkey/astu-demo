@@ -1,15 +1,16 @@
 #pragma once
 
-// C++ Standard Libray includes
-#include <memory>
-#include <vector>
-
 // AST Utilities includes
 #include <Camera2Service.h>
 #include <VertexBuffer2.h>
 #include <Vector2.h>
 #include <Service.h>
 #include <Events.h>
+#include <Color.h>
+
+// C++ Standard Libray includes
+#include <memory>
+#include <vector>
 
 
 // This service will add some graphical elements to the scene graph

@@ -8,6 +8,7 @@
 
 // C++ Standard Library includes.
 #include <cmath>
+#include <cstdint>
 
 // AST Utilities includes
 #include <EntityService.h>
@@ -21,13 +22,23 @@ public:
     /* The radius of this circle collider. */
     float radius;
 
+    /** The collision categories of this collider. */
+    int_fast16_t categoryBits;
+
+    /** The collision mask of this collider. */
+    int_fast16_t collisionMask;
+
     /**
      * Constructor.
      * 
-     * @param r   the radius
+     * @param r             the radius
+     * @param categories    the collision category bits
+     * @param mask          the collision mask bits
      */
-    Collider(float r) 
+    Collider(float r, int_fast16_t categories = 0x0001, int_fast16_t mask = 0xffff) 
         : radius(r)
+        , categoryBits(categories)
+        , collisionMask(mask)
     {
         // Intentionally left empty.
     }

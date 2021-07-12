@@ -1,5 +1,15 @@
 # Changes
 
+## Version 1.6.0
+*2021-07-11*
+- Fixed bug in `PrintHeader()`. 
+- Added input mapping and SDL gamepad support.
+- Added suggestings for custom services in case ECS or scene graph is used.
+
+## Version 1.5.0
+- Entirely relies on macros instead of using `ServiceManager` directly.
+- Added `GetApplicationTitle` to assemble application title.
+
 ## Version 1.4.0
 - Entirely relies on macros instead of using `ServiceManager` directly.
 - Added `GetApplicationTitle` to assemble application title.

@@ -9,6 +9,9 @@
 #include "Ship.h"
 #include "Body2.h"
 
+// AST Utilities includes.
+#include <IWindowManager.h>
+
 // C++ Standard Library includes
 #include <algorithm>
 #include <cmath>
@@ -32,10 +35,14 @@ void ShipSystem::OnStartup()
 {
     thrustAxis = ASTU_SERVICE(InputMappingService).BindAxis("Thrust");
     steerAxis = ASTU_SERVICE(InputMappingService).BindAxis("Steer");
+    entityFactory = ASTU_GET_SERVICE(EntityFactoryService);
+
+    thrustInput.Reset(0);
 }
 
 void ShipSystem::OnShutdown()
 {
+    entityFactory = nullptr;
     ASTU_SERVICE(InputMappingService).RemoveAxisBinding(thrustAxis);
     ASTU_SERVICE(InputMappingService).RemoveAxisBinding(steerAxis);
 }
@@ -50,24 +57,46 @@ void ShipSystem::ProcessEntity(Entity & entity)
     auto& body = entity.GetComponent<Body2>();
     auto& ship = entity.GetComponent<Ship>();
 
-    // Calc desired torque based on current user input.
-    const float targetTorque = steerAxis->GetValue() * ship.maxTorque;
-
-    // Calc difference (error) between current torque and user applied torque.
-    const float e = targetTorque - ship.curTorque;
-
-    // Determine velocity of torque change.
-    float v = (e == 0.0) ? 0.0f : std::copysignf(ship.torqueSpeed, e);
-
-    // Update and current torque.
-    ship.curTorque += v * GetElapsedTimeF();
-
-    // cout << "e = " << e << " | " << ship.curTorque << " | " << targetTorque << endl;
+    // Update thrust and steering input.
+    ship.steeringInput.SetTargetValue(steerAxis->GetValue());
+    ship.steeringInput.Update(GetElapsedTimeF());
+    ship.thrustInput.SetTargetValue(thrustAxis->GetValue());
+    ship.thrustInput.Update(GetElapsedTimeF());
 
     // Apply current torque.
-    body.ApplyTorque(ship.curTorque);
+    body.ApplyTorque(ship.steeringInput.GetCurrentValue() * ship.maxTorque);
 
     // Apply current thrust.
-    float curThrust = thrustAxis->GetValue() * ship.maxThrust;
+    float curThrust =  ship.thrustInput.GetCurrentValue() * ship.maxThrust;
     body.ApplyForce( body.GetWorldVector(0, -curThrust) );
+
+    // Draw axes state for debugging purpose.
+    DrawAxesState(ship.steeringInput, ship.thrustInput);
+}
+
+void ShipSystem::DrawAxesState(LinearInterpolator1f & hAxis, LinearInterpolator1f & vAxis)
+{
+    auto & windowMngr = ASTU_SERVICE(IWindowManager);
+    const float ox = windowMngr.GetWidth() / 2.0f;
+    const float oy = windowMngr.GetHeight() / 2.0f;
+    const float w = 100.0f;
+    const float h = 100.0f;
+
+    SetDrawColor(WebColors::Black);
+    DrawLine(ox + -w/2, oy + 0, ox + w/2, oy + 0);
+    DrawLine(ox + 0, oy + -h/2, ox + 0, oy + h/2);
+
+    float x = hAxis.GetTargetValue() * w / 2;
+    float y = vAxis.GetTargetValue() * h / 2;
+
+    SetDrawColor(WebColors::Yellow);
+    DrawLine(ox + x, oy + -w * 0.1f, ox + x, oy + w * 0.1f);
+    DrawLine(ox - w * 0.1f, oy + y, ox + w * 0.1f, oy + y);
+
+    x = hAxis.GetCurrentValue() * w / 2;
+    y = vAxis.GetCurrentValue() * h / 2;
+
+    SetDrawColor(WebColors::Red);
+    DrawLine(ox + x, oy + -w * 0.1f, ox + x, oy + w * 0.1f);
+    DrawLine(ox - w * 0.1f, oy + y, ox + w * 0.1f, oy + y);
 }

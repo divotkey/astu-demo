@@ -8,13 +8,14 @@
 #include "BulletSystem.h"
 #include "Bullet.h"
 #include "Pose2.h"
+#include "Body2.h"
+
+// AST Utilities includes
+#include <AstUtils.h>
+#include <EntityFactoryService.h>
 
 // C++ Standard Library includes
 #include <iostream>
-
-// AST Utilities includes
-#include <InputMappingService.h>
-#include <Keyboard.h>
 
 using namespace astu;
 using namespace std;
@@ -32,11 +33,6 @@ BulletSystem::BulletSystem(int updatePriority)
 void BulletSystem::OnStartup()
 {
     // Intentionally left empty.
-    // Get Action Binding for fire action.
-    // ASTU_SERVICE(InputMappingService).BindAction("Fire", []
-
-
-    firing = false;
 }
 
 void BulletSystem::OnShutdown()
@@ -64,14 +60,43 @@ void BulletSystem::ProcessEntity(Entity & entity)
 bool BulletSystem::OnSignal(const CollisionEvent & signal)
 {
     if (signal.entityA->HasComponent<Bullet>()) {
-        GetEntityService().RemoveEntity(signal.entityA);
+        OnCollision(*signal.entityA);
     }
 
     if (signal.entityB->HasComponent<Bullet>()) {
-        GetEntityService().RemoveEntity(signal.entityB);
+        OnCollision(*signal.entityB);
     }
 
     // Do not consume collision events.
     return false;
 }
 
+void BulletSystem::OnCollision(Entity & e)
+{
+    GetEntityService().RemoveEntity(e);
+    const auto &p = e.GetComponent<Pose2>().transform.GetTranslation();
+    for (int i = 0; i < GetRandomInt(3, 7); ++i) {
+        EmitDebris(p);
+    }
+}
+
+void BulletSystem::EmitDebris(const astu::Vector2f& p)
+{
+    auto entity = ASTU_SERVICE(EntityFactoryService).CreateEntity("Debris");
+    entity->GetComponent<Pose2>().transform.SetTranslation(p);
+    auto &body = entity->GetComponent<Body2>();
+
+    // Set random angular velocity.
+    float av = GetRandomFloat(0.25, 2.0);
+    if (GetRandomBool()) {
+        av *= -1;
+    }
+    body.SetAngularVelocity(av);
+
+    // Set random linear velocity.
+    Vector2f v(0, GetRandomFloat(1, 2));
+    v.Rotate(GetRandomFloat(0, MathUtils::PI2f));
+    body.SetLinearVelocity(v);
+    
+    GetEntityService().AddEntity(entity);
+}

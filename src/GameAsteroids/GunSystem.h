@@ -11,7 +11,6 @@
 #include <UpdateService.h>
 #include <EntitySystems.h>
 #include <ITimeManager.h>
-#include <SignalService.h>
 
 class GunSystem 
     : public astu::Updatable
