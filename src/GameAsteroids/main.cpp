@@ -29,8 +29,7 @@
 #include <Keys.h>
 #include <InputMappingService.h>
 #include <EntityFactoryService.h>
-#include <SdlSceneGraph2.h>
-#include <Camera2Service.h>
+#include <CameraService2D.h>
 #include <EntityService.h>
 
 // AST Utilities includes (SDL2 specific)
@@ -39,8 +38,10 @@
 #include <SdlEventService.h>
 #include <SdlRenderService.h>
 #include <SdlTimeService.h>
-#include <SdlJoystickService.h>
+#include <SdlSceneGraph2D.h>
 #include <SdlLineRenderer.h>
+#include <SdlJoystickService.h>
+
 
 // C++ Standard Library includes
 #include <iostream>
@@ -137,9 +138,9 @@ void AddSdlServices()
 // Adds application specific services.
 void AddCustomServices()
 {
-    ASTU_CREATE_AND_ADD_SERVICE( Camera2Service );
-    ASTU_CREATE_AND_ADD_SERVICE( SdlSceneGraph2 );
-    ASTU_CREATE_AND_ADD_SERVICE( SdlVertexBuffer2BuilderService );
+    ASTU_CREATE_AND_ADD_SERVICE( CameraService2D );
+    ASTU_CREATE_AND_ADD_SERVICE( SdlSceneGraph2D );
+    ASTU_CREATE_AND_ADD_SERVICE( SdlVertexBufferBuilderService2D );
     ASTU_CREATE_AND_ADD_SERVICE( EntityService );
     ASTU_CREATE_AND_ADD_SERVICE( EntityFactoryService );
     ASTU_CREATE_AND_ADD_SERVICE( SdlLineRenderer );

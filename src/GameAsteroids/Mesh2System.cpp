@@ -28,7 +28,7 @@ Mesh2System::Mesh2System(int updatePriority)
 
 void Mesh2System::OnStartup()
 {
-    root = ASTU_SERVICE(SceneGraph2).GetRoot();
+    root = ASTU_SERVICE(SceneGraph2D).GetRoot();
 }
 
 void Mesh2System::OnShutdown()

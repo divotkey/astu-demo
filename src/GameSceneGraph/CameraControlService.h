@@ -4,7 +4,7 @@
 #include <string>
 
 // AST Utilities includes
-#include <Camera2Service.h>
+#include <CameraService2D.h>
 #include <UpdateService.h>
 #include <Vector2.h>
 #include <Events.h>
@@ -12,13 +12,13 @@
 // This service lets the user change the camera mode while the application 
 // is running.
 
-class CameraControlService 
+class CameraControlService2D 
     : public astu::BaseService
     , public astu::Updatable
     , public astu::KeystrokeListener
     , public astu::MouseButtonListener
     , public astu::MouseWheelListener
-    , public astu::Camera2Client
+    , public astu::CameraClient2D
 {
 public:
 
@@ -27,7 +27,7 @@ public:
      * 
      * @param updatePriority the priority used to update this service
      */
-    CameraControlService(int updatePriority = astu::Priority::Normal);
+    CameraControlService2D(int updatePriority = astu::Priority::Normal);
 
     // Inherited via BaseService
     virtual void OnStartup() override;
@@ -45,7 +45,6 @@ public:
 
     // Inherited via MouseWheelListener
     virtual bool OnMouseWheel(int amount) override;
-
 
 private:
     /** The mouse button used to control the camera position. */

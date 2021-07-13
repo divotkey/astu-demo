@@ -6,24 +6,24 @@
 
 #pragma once
 
+// AST Utilities includes
+#include <Scene2D.h>
+#include <EntityService.h>
+
 // C++ Standard Library includes
 #include <memory>
-
-// AST Utilities includes
-#include <Scene2.h>
-#include <EntityService.h>
 
 class Mesh2 : public astu::EntityComponent {
 public:
     /** Branch of the scene graph representing this component's entity. */
-    std::shared_ptr<astu::Spatial2> spatial;
+    std::shared_ptr<astu::Spatial2D> spatial;
 
     /**
      * Constructor.
      * 
      * @param spatial   the scene node branch represending the entity
      */
-    Mesh2(std::shared_ptr<astu::Spatial2> spatial)
+    Mesh2(std::shared_ptr<astu::Spatial2D> spatial)
         : spatial(spatial)
     {
         // Intentionally left empty.

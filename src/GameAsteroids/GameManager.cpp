@@ -4,15 +4,8 @@
  * Copyright (c) 2021 Roman Divotkey. All rights reserved.
  */
 
-// AST Utilities includes
-#include <AstUtils.h>
-#include <EntityFactoryService.h>
-#include <Shape2Generator.h>
-#include <Camera2Service.h>
-#include <TaskService.h>
-#include <Tasks.h>
-
 // Local includes
+#include "GameManager.h"
 #include "Ship.h"
 #include "Pose2.h"
 #include "Body2.h"
@@ -24,7 +17,14 @@
 #include "Bullet.h"
 #include "Asteroid.h"
 #include "Fadable.h"
-#include "GameManager.h"
+
+// AST Utilities includes
+#include <AstUtils.h>
+#include <EntityFactoryService.h>
+#include <ShapeGenerator2D.h>
+#include <CameraService2D.h>
+#include <TaskService.h>
+#include <Tasks.h>
 
 using namespace astu;
 using namespace std;
@@ -148,22 +148,22 @@ shared_ptr<Entity> GameManager::CreateAsteroid(Asteroid::Type type, float radius
     entity->GetComponent<Body2>().SetLinearDamping(0);
 
     if (DEBUG_VISUALS) {
-        entity->AddComponent( make_shared<Mesh2>(Node2Builder()
-            .AttachChild( Polyline2Builder()
+        entity->AddComponent( make_shared<Mesh2>(NodeBuilder2D()
+            .AttachChild( PolylineBuilder2D()
                 .Color(WebColors::Orange)
-                .VertexBuffer( Shape2Generator().GenCircle(radius) )
+                .VertexBuffer( ShapeGenerator2D().GenCircle(radius) )
                 .Build())
-            .AttachChild( Polyline2Builder()
+            .AttachChild( PolylineBuilder2D()
                 .Color(WebColors::Green)
-                .VertexBuffer( Shape2Generator().GenCircle(radius * 0.05f) )
+                .VertexBuffer( ShapeGenerator2D().GenCircle(radius * 0.05f) )
                 .Build())
-            .AttachChild( Polyline2Builder()
+            .AttachChild( PolylineBuilder2D()
                 .Color(WebColors::Black)
                 .VertexBuffer( CreateAsteroidMesh(radius) )
                 .Build())
             .Build() ));
     } else {
-        entity->AddComponent( make_shared<Mesh2>(Polyline2Builder()
+        entity->AddComponent( make_shared<Mesh2>(PolylineBuilder2D()
             .VertexBuffer( CreateAsteroidMesh(radius) )
             .Color(WebColors::Black)
             .Build()) );
@@ -193,22 +193,22 @@ shared_ptr<Entity> GameManager::CreatePlayerShip()
     entity->GetComponent<Body2>().SetLinearDamping(SHIP_LINEAR_DAMPING);
 
     if (DEBUG_VISUALS) {
-        entity->AddComponent( make_shared<Mesh2>(Node2Builder()
-            .AttachChild( Polyline2Builder()
+        entity->AddComponent( make_shared<Mesh2>(NodeBuilder2D()
+            .AttachChild( PolylineBuilder2D()
                 .Color(WebColors::Orange)
-                .VertexBuffer( Shape2Generator().GenCircle(kColliderRadius) )
+                .VertexBuffer( ShapeGenerator2D().GenCircle(kColliderRadius) )
                 .Build())
-            .AttachChild( Polyline2Builder()
+            .AttachChild( PolylineBuilder2D()
                 .Color(WebColors::Green)
-                .VertexBuffer( Shape2Generator().GenCircle(SHIP_RADIUS * 0.05f) )
+                .VertexBuffer( ShapeGenerator2D().GenCircle(SHIP_RADIUS * 0.05f) )
                 .Build())
-            .AttachChild( Polyline2Builder()
+            .AttachChild( PolylineBuilder2D()
                 .Color(WebColors::Black)
                 .VertexBuffer( CreateShipMesh() )
                 .Build())
             .Build() ));
     } else {
-        entity->AddComponent( make_shared<Mesh2>(Polyline2Builder()
+        entity->AddComponent( make_shared<Mesh2>(PolylineBuilder2D()
             .VertexBuffer( CreateShipMesh() )
             .Color(WebColors::Black)
             .Build()) );
@@ -229,24 +229,24 @@ shared_ptr<Entity> GameManager::CreateBullet()
     entity->AddComponent( make_shared<Bullet>(BULLET_TTL) );
 
     if (DEBUG_VISUALS) {
-        entity->AddComponent( make_shared<Mesh2>(Node2Builder()
-            .AttachChild( Polyline2Builder()
+        entity->AddComponent( make_shared<Mesh2>(NodeBuilder2D()
+            .AttachChild( PolylineBuilder2D()
                 .Color(WebColors::Orange)
-                .VertexBuffer( Shape2Generator().GenCircle(kColliderRadius) )
+                .VertexBuffer( ShapeGenerator2D().GenCircle(kColliderRadius) )
                 .Build())
-            .AttachChild( Polyline2Builder()
+            .AttachChild( PolylineBuilder2D()
                 .Color(WebColors::Green)
-                .VertexBuffer( Shape2Generator().GenCircle(kColliderRadius * 0.05f) )
+                .VertexBuffer( ShapeGenerator2D().GenCircle(kColliderRadius * 0.05f) )
                 .Build())
-            .AttachChild( Polyline2Builder()
+            .AttachChild( PolylineBuilder2D()
                 .Color(WebColors::Black)
-                .VertexBuffer( Shape2Generator().GenRectangle(BULLET_WIDTH, BULLET_HEIGHT) )
+                .VertexBuffer( ShapeGenerator2D().GenRectangle(BULLET_WIDTH, BULLET_HEIGHT) )
                 .Build())
             .Build() ));
     } else {
-        entity->AddComponent( make_shared<Mesh2>(Polyline2Builder()
+        entity->AddComponent( make_shared<Mesh2>(PolylineBuilder2D()
             .Color(WebColors::Black)
-            .VertexBuffer( Shape2Generator().GenRectangle(BULLET_WIDTH, BULLET_HEIGHT) )
+            .VertexBuffer( ShapeGenerator2D().GenRectangle(BULLET_WIDTH, BULLET_HEIGHT) )
             .Build()) );
     }
 
@@ -261,9 +261,9 @@ shared_ptr<astu::Entity> GameManager::CreateDebris()
     entity->AddComponent( make_shared<Wrap>() );
     entity->AddComponent( make_shared<Fadable>(0.5f) );
 
-    entity->AddComponent( make_shared<Mesh2>(Polyline2Builder()
+    entity->AddComponent( make_shared<Mesh2>(PolylineBuilder2D()
         .Color(WebColors::Black)
-        .VertexBuffer( Shape2Generator().GenStar(DEBRIS_RADIUS))
+        .VertexBuffer( ShapeGenerator2D().GenStar(DEBRIS_RADIUS))
         .Build()) );
 
     return entity;
@@ -271,8 +271,7 @@ shared_ptr<astu::Entity> GameManager::CreateDebris()
 
 void GameManager::ConfigureGameWorld()
 {
-    ASTU_SERVICE( Camera2Service )
-        .GetCamera()->ShowFitting(WORLD_VIEW_WIDTH, WORLD_VIEW_HEIGHT);
+    GetCamera().ShowFitting(WORLD_VIEW_WIDTH, WORLD_VIEW_HEIGHT);
 }
 
 void GameManager::SpawnPlayer()
@@ -350,9 +349,9 @@ void GameManager::SpawnAsteroid(const astu::Vector2f & p)
 
 }
 
-shared_ptr<astu::VertexBuffer2> GameManager::CreateShipMesh()
+shared_ptr<astu::VertexBuffer2D> GameManager::CreateShipMesh()
 {
-    auto & vbBuilder = ASTU_SERVICE(VertexBuffer2Builder);
+    auto & vbBuilder = ASTU_SERVICE(VertexBufferBuilder2D);
     vbBuilder.Reset();
 
     Vector2f v;
@@ -365,9 +364,9 @@ shared_ptr<astu::VertexBuffer2> GameManager::CreateShipMesh()
     return vbBuilder.Build();
 }
 
-std::shared_ptr<astu::VertexBuffer2> GameManager::CreateAsteroidMesh(float r)
+std::shared_ptr<astu::VertexBuffer2D> GameManager::CreateAsteroidMesh(float r)
 {
-    auto & vbBuilder = ASTU_SERVICE(VertexBuffer2Builder);
+    auto & vbBuilder = ASTU_SERVICE(VertexBufferBuilder2D);
     vbBuilder.Reset();
 
     // First step: create circular asteroid
@@ -415,7 +414,7 @@ std::shared_ptr<astu::VertexBuffer2> GameManager::CreateAsteroidMesh(float r)
     return vbBuilder.Build();
 
 
-    // auto & vbBuilder = ASTU_SERVICE(VertexBuffer2Builder);
+    // auto & vbBuilder = ASTU_SERVICE(VertexBufferBuilder2D);
     // vbBuilder.Reset();
 
     // const float deformFactor = 0.3f;

@@ -6,22 +6,24 @@
 
 #pragma once
 
-// C++ Standard Library includes
-#include <memory>
-
-// AST Utilities includes
-#include <EntityService.h>
-#include <VertexBuffer2.h>
-#include <Service.h>
-#include <SignalService.h>
-
 // Local includes
 #include "GameEvents.h"
 #include "Asteroid.h"
 
+// AST Utilities includes
+#include <EntityService.h>
+#include <VertexBuffer2D.h>
+#include <Service.h>
+#include <SignalService.h>
+#include <CameraService2D.h>
+
+// C++ Standard Library includes
+#include <memory>
+
 class GameManager 
     : public astu::BaseService
     , private astu::SignalListener<GameEvent>
+    , private astu::CameraClient2D
 {
 public:
 
@@ -54,8 +56,8 @@ private:
     std::shared_ptr<astu::Entity> CreatePlayerShip();
     std::shared_ptr<astu::Entity> CreateBullet();
     std::shared_ptr<astu::Entity> CreateDebris();
-    std::shared_ptr<astu::VertexBuffer2> CreateShipMesh();
-    std::shared_ptr<astu::VertexBuffer2> CreateAsteroidMesh(float r);
+    std::shared_ptr<astu::VertexBuffer2D> CreateShipMesh();
+    std::shared_ptr<astu::VertexBuffer2D> CreateAsteroidMesh(float r);
     astu::Vector2f GetRandomSafePosition();
 
     void FirePlayerEvent();

@@ -15,7 +15,7 @@ using namespace std;
 
 #define ZOOM_STEP 1.1f
 
-CameraControlService::CameraControlService(int updatePriority)
+CameraControlService2D::CameraControlService2D(int updatePriority)
     : Service("Camera Control Service")
     , Updatable(updatePriority)
     , mouseButton(Mouse::Button::RIGHT)
@@ -24,18 +24,18 @@ CameraControlService::CameraControlService(int updatePriority)
     // Intentionally left empty.
 }
 
-void CameraControlService::OnStartup()
+void CameraControlService2D::OnStartup()
 {
     dragging = false;
     zoomLevel = 0;
 }
 
-void CameraControlService::OnShutdown()
+void CameraControlService2D::OnShutdown()
 {
     // Intentionally left empty.
 }
 
-void CameraControlService::OnUpdate()
+void CameraControlService2D::OnUpdate()
 {
     if (!dragging) {
         return;
@@ -45,7 +45,7 @@ void CameraControlService::OnUpdate()
     UpdateCamera(mouse.GetCursorX(), mouse.GetCursorY());
 }
 
-bool CameraControlService::OnKeyPressed(int keycode)
+bool CameraControlService2D::OnKeyPressed(int keycode)
 {
     if (keycode == homeKey) {
         GetCamera().SetPosition(0, 0);
@@ -57,7 +57,7 @@ bool CameraControlService::OnKeyPressed(int keycode)
     return false;
 }
 
-bool CameraControlService::OnMouseButtonPressed(int button, int x, int y)
+bool CameraControlService2D::OnMouseButtonPressed(int button, int x, int y)
 {
     if (button != mouseButton) {
         return false;
@@ -70,7 +70,7 @@ bool CameraControlService::OnMouseButtonPressed(int button, int x, int y)
     return true;
 }
 
-bool CameraControlService::OnMouseButtonReleased(int button, int x, int y)
+bool CameraControlService2D::OnMouseButtonReleased(int button, int x, int y)
 {
     if (button != mouseButton || !dragging) {
         return false;
@@ -81,15 +81,14 @@ bool CameraControlService::OnMouseButtonReleased(int button, int x, int y)
     return true;
 }
 
-bool CameraControlService::OnMouseWheel(int amount)
+bool CameraControlService2D::OnMouseWheel(int amount)
 {
     zoomLevel += amount;
     GetCamera().SetZoom( std::pow(ZOOM_STEP, zoomLevel) );
     return true;
 }
 
-
-void CameraControlService::UpdateCamera(int screenX, int screenY)
+void CameraControlService2D::UpdateCamera(int screenX, int screenY)
 {
     auto curScreenPos 
         = Vector2f(static_cast<float>(screenX), static_cast<float>(screenY));
@@ -100,4 +99,3 @@ void CameraControlService::UpdateCamera(int screenX, int screenY)
 
     GetCamera().SetPosition(startWorldPos + deltaWorld);
 }
-

@@ -9,7 +9,7 @@
 // AST Utilities includes
 #include <UpdateService.h>
 #include <EntitySystems.h>
-#include <Scene2.h>
+#include <Scene2D.h>
 
 class Mesh2System 
     : public astu::Updatable
@@ -44,5 +44,5 @@ private:
     virtual void OnEntityRemoved(std::shared_ptr<astu::Entity> entity) override;
 
     /** The root node where to attach the entities. */
-    std::shared_ptr<astu::Node2> root;
+    std::shared_ptr<astu::Node2D> root;
 };

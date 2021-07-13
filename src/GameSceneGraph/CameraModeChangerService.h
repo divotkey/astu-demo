@@ -5,7 +5,7 @@
 
 // AST Utilities includes
 #include <Events.h>
-#include <Camera2Service.h>
+#include <CameraService2D.h>
 
 // This service lets the user change the camera mode while the application 
 // is running.
@@ -13,7 +13,7 @@
 class CameraModeChangerService 
     : public astu::BaseService
     , public astu::KeystrokeListener
-    , public astu::Camera2Client
+    , public astu::CameraClient2D
 {
 public:
 

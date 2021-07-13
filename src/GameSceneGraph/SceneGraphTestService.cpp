@@ -1,15 +1,15 @@
 // C++ Standard Library includes
 #include <stdexcept>
 
+// Local includes
+#include "SceneGraphTestService.h"
+#include "Mouse.h"
+
 // AST Utilities includes
 #include <IWindowManager.h>
-
-// Local includes
-#include "Mouse.h"
-#include "Scene2.h"
-#include "VertexBuffer2.h"
-#include "Shape2Generator.h"
-#include "SceneGraphTestService.h"
+#include <Scene2D.h>
+#include <VertexBuffer2D.h>
+#include <ShapeGenerator2D.h>
 
 using namespace astu;
 using namespace std;
@@ -73,7 +73,7 @@ void SceneGraphTestService::CreateVertexBuffersAndColors()
     // Make the objects ca. 2% of the average world size dimensions.
     const float size = 0.05f * (worldSize.x + worldSize.y) / 2;
 
-    Shape2Generator generator;
+    ShapeGenerator2D generator;
     objectShapes.push_back( generator.GenStar(size / 2) );
     objectShapes.push_back( generator.GenCross(size) );
     objectShapes.push_back( generator.GenArrow(size) );
@@ -88,8 +88,8 @@ void SceneGraphTestService::CreateVertexBuffersAndColors()
 
 void SceneGraphTestService::AddTestObject(const astu::Vector2f p)
 {
-    ASTU_SERVICE(SceneGraph2)
-        .GetRoot()->AttachChild(Polyline2Builder()
+    ASTU_SERVICE(SceneGraph2D)
+        .GetRoot()->AttachChild(PolylineBuilder2D()
         .Color(objectColors[curColor++])
         .Translation(p)
         .VertexBuffer(objectShapes[curShape++])
@@ -118,7 +118,7 @@ void SceneGraphTestService::MarkWorldDimensions()
     const float cs = 0.02f * (width + height) * 0.5f;
 
     // Generate and resuse the vertex buffer for visualizing the corners points.
-    auto cornerVb = Shape2Generator().GenSquare(cs);
+    auto cornerVb = ShapeGenerator2D().GenSquare(cs);
 
     // For the sake of readability let's use some contants.
     const float left = -width / 2;
@@ -131,73 +131,73 @@ void SceneGraphTestService::MarkWorldDimensions()
     // readability a bit (at least for inexperienced developers), but
     // increasing the development speed reduces the time needed to
     // write the code. 
-    auto branch = Node2Builder()
+    auto branch = NodeBuilder2D()
         .Name("WORLD_BOUNDARIES")
         // Add Maineframe
-        .AttachChild(Polyline2Builder()
+        .AttachChild(PolylineBuilder2D()
             .Name("WORLD_FRAME")
             .Color(markerColor)
-            .VertexBuffer(Shape2Generator()
+            .VertexBuffer(ShapeGenerator2D()
                 .GenRectangle(width, height))
             .Build())
         // Add center marker
-        .AttachChild(Polyline2Builder()
+        .AttachChild(PolylineBuilder2D()
             .Name("CENTER")
             .Color(markerColor)
             .Translation(0, 0)
-            .VertexBuffer(Shape2Generator().GenCross(cs))
+            .VertexBuffer(ShapeGenerator2D().GenCross(cs))
             .Build())
         // Add upper left corner maker
-        .AttachChild(Polyline2Builder()
+        .AttachChild(PolylineBuilder2D()
             .Name("UPPER_LEFT")
             .Color(markerColor)
             .Translation(left + cs / 2, top + cs / 2)
             .VertexBuffer(cornerVb)
             .Build())
         // Add upper right corner maker
-        .AttachChild(Polyline2Builder()
+        .AttachChild(PolylineBuilder2D()
             .Name("UPPER_RIGHT")
             .Color(markerColor)
             .Translation(right - cs / 2, top + cs / 2)
             .VertexBuffer(cornerVb)
             .Build())
         // Add lower left corner maker
-        .AttachChild(Polyline2Builder()
+        .AttachChild(PolylineBuilder2D()
             .Name("LOWER_LEFT")
             .Color(markerColor)
             .Translation(left + cs / 2, bottom - cs / 2)
             .VertexBuffer(cornerVb)
             .Build())
         // Add lower right corner maker
-        .AttachChild(Polyline2Builder()
+        .AttachChild(PolylineBuilder2D()
             .Name("LOWER_RIGHT")
             .Color(markerColor)
             .Translation(right - cs / 2, bottom - cs / 2)
             .VertexBuffer(cornerVb)
             .Build())
         // Add top center marker
-        .AttachChild(Polyline2Builder()
+        .AttachChild(PolylineBuilder2D()
             .Name("TOP_CENTER")
             .Color(markerColor)
             .Translation(0, top + cs / 2)
             .VertexBuffer(cornerVb)
             .Build())
         // Add bottom center marker
-        .AttachChild(Polyline2Builder()
+        .AttachChild(PolylineBuilder2D()
             .Name("BOTTOM_CENTER")
             .Color(markerColor)
             .Translation(0, bottom - cs / 2)
             .VertexBuffer(cornerVb)
             .Build())
         // Add left center marker
-        .AttachChild(Polyline2Builder()
+        .AttachChild(PolylineBuilder2D()
             .Name("LEFT_CENTER")
             .Color(markerColor)
             .Translation(left + cs / 2, 0)
             .VertexBuffer(cornerVb)
             .Build())
         // Add right center marker
-        .AttachChild(Polyline2Builder()
+        .AttachChild(PolylineBuilder2D()
             .Name("RIGHT_CENTER")
             .Color(markerColor)
             .Translation(right - cs / 2, 0)
@@ -206,6 +206,6 @@ void SceneGraphTestService::MarkWorldDimensions()
         .Build();
 
     // Add branch.
-    ASTU_SERVICE(SceneGraph2).GetRoot()->AttachChild(branch);
+    ASTU_SERVICE(SceneGraph2D).GetRoot()->AttachChild(branch);
 }
 

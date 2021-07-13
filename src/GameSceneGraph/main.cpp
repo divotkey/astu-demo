@@ -13,12 +13,15 @@
 #include <AstUtils.h>
 #include <ServiceManager.h>
 #include <UpdateService.h>
-#include <Camera2Service.h>
-#include <EntityFactoryService.h>
-#include <EntityService.h>
+#include <TaskService.h>
 #include <IRenderService.h>
 #include <IWindowManager.h>
 #include <Events.h>
+#include <Keys.h>
+#include <InputMappingService.h>
+#include <EntityFactoryService.h>
+#include <CameraService2D.h>
+#include <EntityService.h>
 
 // AST Utilities includes (SDL2 specific)
 #include <SdlService.h>
@@ -26,8 +29,10 @@
 #include <SdlEventService.h>
 #include <SdlRenderService.h>
 #include <SdlTimeService.h>
-#include <SdlSceneGraph2.h>
+#include <SdlSceneGraph2D.h>
+#include <SdlLineRenderer.h>
 #include <SdlJoystickService.h>
+
 
 // C++ Standard Library includes
 #include <iostream>
@@ -141,15 +146,15 @@ void AddCustomServices()
     // game world. Beside that we need the camera to carry out a 
     // screen-to-world transformation to place graphical elements via 
     // mouse click.
-    ASTU_CREATE_AND_ADD_SERVICE( Camera2Service );
+    ASTU_CREATE_AND_ADD_SERVICE( CameraService2D );
 
     // The SDL vertex buffer builder is used to create vertex buffer that
     // work with the SDL-based implementation of the scene graph.
-    ASTU_CREATE_AND_ADD_SERVICE( SdlVertexBuffer2BuilderService );
+    ASTU_CREATE_AND_ADD_SERVICE( SdlVertexBufferBuilderService2D );
 
     // This service provides an SDL-based implementation of the 2D
     // scene graph.
-    ASTU_CREATE_AND_ADD_SERVICE( SdlSceneGraph2 );
+    ASTU_CREATE_AND_ADD_SERVICE( SdlSceneGraph2D );
 
     // This application's own service, which is used to add create and
     // some leafes and branches to the scene graph.
@@ -165,7 +170,7 @@ void AddCustomServices()
     ASTU_CREATE_AND_ADD_SERVICE( StatusIndicatorService, GetApplicationTitle());
 
     // Add service which let the user controll the camera with the mouse. */
-    ASTU_CREATE_AND_ADD_SERVICE( CameraControlService );    
+    ASTU_CREATE_AND_ADD_SERVICE( CameraControlService2D );    
 }
 
 // Configures services according to application specific settings and configurations.

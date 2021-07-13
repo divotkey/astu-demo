@@ -3,7 +3,7 @@
  * Requires AST Utilities 0.9
  */
 
-// AST Utilities includes
+// AST Utilities includes (general)
 #include <AstUtils.h>
 #include <ServiceManager.h>
 #include <UpdateService.h>
@@ -11,6 +11,8 @@
 #include <IRenderService.h>
 #include <IWindowManager.h>
 #include <Events.h>
+
+// AST Utilities includes (SDL2 specific)
 #include <SdlService.h>
 #include <SdlVideoService.h>
 #include <SdlEventService.h>

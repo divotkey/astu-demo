@@ -1,8 +1,8 @@
 #pragma once
 
 // AST Utilities includes
-#include <Camera2Service.h>
-#include <VertexBuffer2.h>
+#include <CameraService2D.h>
+#include <VertexBuffer2D.h>
 #include <Vector2.h>
 #include <Service.h>
 #include <Events.h>
@@ -18,7 +18,7 @@
 class SceneGraphTestService 
     : public astu::BaseService
     , public astu::MouseButtonListener
-    , public astu::Camera2Client
+    , public astu::CameraClient2D
 {
 public:
 
@@ -47,7 +47,7 @@ private:
     astu::Color4f markerColor;
 
     /** List with vertex buffer used to add objects by mouse click. */
-    std::vector<std::shared_ptr<astu::VertexBuffer2>> objectShapes;
+    std::vector<std::shared_ptr<astu::VertexBuffer2D>> objectShapes;
 
     /** List with colors used to add objects by mouse click. */
     std::vector<astu::Color4f> objectColors;

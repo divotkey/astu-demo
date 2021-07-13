@@ -6,13 +6,13 @@
 
 #pragma once
 
-// C++ Standard Library includes
-#include <memory>
-
 // AST Utilities includes
-#include <Scene2.h>
+#include <Scene2D.h>
 #include <EntityService.h>
 #include <Interpolator.h>
+
+// C++ Standard Library includes
+#include <memory>
 
 class Ship : public astu::EntityComponent {
 public:
