@@ -1,11 +1,12 @@
 #pragma once
 
-// C++ Standard Libraries
-#include <string>
 
 // AST Utilities includes
-#include <Events.h>
-#include <CameraService2D.h>
+#include <AstuInput.h>
+#include <Suite2D.h>
+
+// C++ Standard Libraries
+#include <string>
 
 // This service lets the user change the camera mode while the application 
 // is running.
@@ -13,7 +14,7 @@
 class CameraModeChangerService 
     : public astu::BaseService
     , public astu::KeystrokeListener
-    , public astu::CameraClient2D
+    , public astu2d::CameraClient
 {
 public:
 

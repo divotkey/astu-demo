@@ -1,11 +1,10 @@
-// C++ Standard Library includes
-#include <stdexcept>
-
-// AST Utilities includes
-#include <IWindowManager.h>
-
 // Local includes
 #include "StatusIndicatorService.h"
+
+// AST Utilities includes
+
+// C++ Standard Library includes
+#include <stdexcept>
 
 using namespace astu;
 using namespace std;
@@ -48,11 +47,11 @@ void StatusIndicatorService::UpdateTitle()
 {
     if (status.empty()) {
         if (!title.empty()) {
-            ASTU_SERVICE(IWindowManager).SetTitle(title);   
+            ASTU_SERVICE(WindowService).SetTitle(title);   
         }
     } else if (title.empty()) {
-        ASTU_SERVICE(IWindowManager).SetTitle(status);   
+        ASTU_SERVICE(WindowService).SetTitle(status);   
     } else {
-        ASTU_SERVICE(IWindowManager).SetTitle(title + " | " + status);   
+        ASTU_SERVICE(WindowService).SetTitle(title + " | " + status);   
     }
 }

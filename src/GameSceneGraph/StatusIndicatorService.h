@@ -1,12 +1,10 @@
 #pragma once
 
+// AST Utilities includes
+#include <Services.h>
+
 // C++ Standard Libray includes
 #include <string>
-
-// AST Utilities includes
-#include <SignalService.h>
-#include <Service.h>
-
 
 class StatusIndicatorService 
     : public astu::BaseService

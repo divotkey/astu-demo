@@ -6,45 +6,26 @@
 // Local includes
 #include "CameraModeChangerService.h"
 #include "StatusIndicatorService.h"
-#include "CameraControlService.h"
 #include "SceneGraphTestService.h"
 
-// AST Utilities includes (general)
+// AST Utilities includes
 #include <AstUtils.h>
-#include <ServiceManager.h>
-#include <UpdateService.h>
-#include <TaskService.h>
-#include <IRenderService.h>
-#include <IWindowManager.h>
-#include <Events.h>
-#include <Keys.h>
-#include <InputMappingService.h>
-#include <EntityFactoryService.h>
-#include <CameraService2D.h>
-#include <EntityService.h>
-
-// AST Utilities includes (SDL2 specific)
-#include <SdlService.h>
-#include <SdlVideoService.h>
-#include <SdlEventService.h>
-#include <SdlRenderService.h>
-#include <SdlTimeService.h>
-#include <SdlSceneGraph2D.h>
-#include <SdlLineRenderer.h>
-#include <SdlJoystickService.h>
-
+#include <Services.h>
+#include <AstuInput.h>
+#include <SuiteSDL.h>
 
 // C++ Standard Library includes
 #include <iostream>
 #include <stdexcept>
 
+using namespace astu2d;
 using namespace astu;
 using namespace std;
 
 // Constants to be adapted to the requirements of this application
 const string kAppTitle = "AST Utilities, 2D Scene Graph Demo";
-const string kAppVersion = "1.1.0";
-const Color4f backgroundColor = WebColors::Black;
+const string kAppVersion = "1.2.0";
+const Color4f backgroundColor = RalColors::TrafficBlack;
 
 // Change this value to let the application window have one of the 
 // standard dimentions specified in the kResolutions array.
@@ -146,7 +127,7 @@ void AddCustomServices()
     // game world. Beside that we need the camera to carry out a 
     // screen-to-world transformation to place graphical elements via 
     // mouse click.
-    ASTU_CREATE_AND_ADD_SERVICE( CameraService2D );
+    ASTU_CREATE_AND_ADD_SERVICE( CameraService );
 
     // The SDL vertex buffer builder is used to create vertex buffer that
     // work with the SDL-based implementation of the scene graph.
@@ -170,25 +151,25 @@ void AddCustomServices()
     ASTU_CREATE_AND_ADD_SERVICE( StatusIndicatorService, GetApplicationTitle());
 
     // Add service which let the user controll the camera with the mouse. */
-    ASTU_CREATE_AND_ADD_SERVICE( CameraControlService2D );    
+    ASTU_CREATE_AND_ADD_SERVICE( CameraControlService );    
 }
 
 // Configures services according to application specific settings and configurations.
 void ConfigureApplication()
 {
     // Configure application main window.
-    auto & wm = ASTU_SERVICE(IWindowManager);
+    auto & wndSrv = ASTU_SERVICE(WindowService);
 
     // We do not need to set the wintow title, hence the window title is
     // handled by the StatusIndicatorService service.
     // wm.SetTitle(kAppTitle + " - Version " + kAppVersion);
 
     // Set initial size of main application window and make it resizeable.
-    wm.SetSize(kResolutions.at(kRes)[0], kResolutions.at(kRes)[1]);
-    wm.SetResizeable(true);
+    wndSrv.SetSize(kResolutions.at(kRes)[0], kResolutions.at(kRes)[1]);
+    wndSrv.SetResizeable(true);
 
     // Configure background color
-    ASTU_SERVICE(IRenderService).SetBackgroundColor(backgroundColor);
+    ASTU_SERVICE(RenderService).SetBackgroundColor(backgroundColor);
 
     /////// Uncomment experiment with different world sizes ///////
 

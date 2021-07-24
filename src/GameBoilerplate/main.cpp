@@ -1,32 +1,16 @@
 /*
- * Boilerplate Code for SDL/ASTU Applications - Version 1.2.0
- * Requires AST Utilities 0.9
+ * Boilerplate Code for SDL/ASTU Applications
+ * Requires AST Utilities 0.10
  */
 
 // AST Utilities includes (general)
 #include <AstUtils.h>
-#include <ServiceManager.h>
-#include <UpdateService.h>
-#include <InputMappingService.h>
-#include <IRenderService.h>
-#include <IWindowManager.h>
-#include <Events.h>
+#include <Services.h>
+#include <AstuInput.h>
+#include <Suite2D.h>
 
 // AST Utilities includes (SDL2 specific)
-#include <SdlService.h>
-#include <SdlVideoService.h>
-#include <SdlEventService.h>
-#include <SdlRenderService.h>
-#include <SdlTimeService.h>
-#include <SdlJoystickService.h>
-
-// Uncomment if 2D scene graph is used.
-// #include <SdlSceneGraph2.h>
-// #include <Camera2Service.h>
-
-// Uncomment if ECS (Entity Component System) is used
-// #include <EntityFactoryService.h>
-// #include <EntityService.h>
+#include <SuiteSDL.h>
 
 // C++ Standard Library includes
 #include <iostream>
@@ -37,8 +21,8 @@ using namespace std;
 
 // Constants to be adapted to the requirements of this application
 const string kAppTitle = "Boilerplate Code for SDL/ASTU Applications";
-const string kAppVersion = "1.6.0";
-const Color4f backgroundColor = WebColors::Black;
+const string kAppVersion = "1.7.0";
+const Color4f backgroundColor = RalColors::TrafficBlack;
 
 // Change this value to let the application window have one of the 
 // standard dimentions specified in the kResolutions array.
@@ -136,12 +120,12 @@ void AddCustomServices()
 void ConfigureApplication()
 {
     // Configure application main window.
-    auto & wm = ASTU_SERVICE(IWindowManager);
-    wm.SetTitle(kAppTitle + " - Version " + kAppVersion);
-    wm.SetSize(kResolutions.at(kRes)[0], kResolutions.at(kRes)[1]);
+    auto & wndSrv = ASTU_SERVICE(WindowService);
+    wndSrv.SetTitle(kAppTitle + " - Version " + kAppVersion);
+    wndSrv.SetSize(kResolutions.at(kRes)[0], kResolutions.at(kRes)[1]);
 
     // Configure background color
-    ASTU_SERVICE(IRenderService).SetBackgroundColor(backgroundColor);
+    ASTU_SERVICE(RenderService).SetBackgroundColor(backgroundColor);
 }
 
 // Starts all services, runs the main loop and shuts down all services.

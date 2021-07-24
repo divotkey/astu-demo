@@ -1,14 +1,13 @@
+// Local includes
+#include "CameraModeChangerService.h"
+
+// AST-Utilities includes
+#include <Services.h>
+
 // C++ Standard Library includes
 #include <iostream>
 #include <string>
 
-// AST Utilities includes
-#include <IWindowManager.h>
-#include <SignalService.h>
-#include <Keyboard.h>
-
-// Local includes
-#include "CameraModeChangerService.h"
 
 using namespace astu;
 using namespace std;
@@ -29,11 +28,11 @@ void CameraModeChangerService::OnStartup()
     // Fallback to screen dimensions if no view area is specified.
     if (viewWidth <= 0) {
         viewWidth = 
-            static_cast<float>( ASTU_SERVICE(IWindowManager).GetWidth() );
+            static_cast<float>( ASTU_SERVICE(WindowService).GetWidth() );
     }
     if (viewHeight <= 0) {
         viewHeight = 
-            static_cast<float>( ASTU_SERVICE(IWindowManager).GetHeight() );
+            static_cast<float>( ASTU_SERVICE(WindowService).GetHeight() );
     }
 
     UpdateCameraMode();

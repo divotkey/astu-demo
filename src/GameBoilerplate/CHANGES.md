@@ -1,5 +1,10 @@
 # Changes
 
+## Version 1.7.0
+*2021-07-24*
+
+- Adapted to version 0.10 of AST-Utilities.
+
 ## Version 1.6.0
 *2021-07-11*
 - Fixed bug in `PrintHeader()`. 
