@@ -6,13 +6,12 @@
 
 #pragma once
 
+// AST Utilities includes
+#include <AstuMath.h>
+#include <ECS.h>
+
 // C++ Standard Library includes.
 #include <array>
-
-// AST Utilities includes
-#include <EntityService.h>
-#include <Transform2.h>
-#include <Vector2.h>
 
 /**
  * An entity component which describes the physical properties of an entity.

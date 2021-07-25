@@ -7,10 +7,9 @@
 #pragma once
 
 // AST Utilities includes
-#include <InputMappingService.h>
-#include <UpdateService.h>
-#include <EntitySystems.h>
-#include <ITimeManager.h>
+#include <Services.h>
+#include <AstuInput.h>
+#include <ECS.h>
 
 class GunSystem 
     : public astu::Updatable

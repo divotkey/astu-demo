@@ -10,9 +10,7 @@
 #include "GameEvents.h"
 
 // AST Utilities include
-#include <Service.h>
-#include <SignalService.h>
-#include <IWindowManager.h>
+#include <Services.h>
 
 // C++ Standard Library includes
 #include <string>
@@ -43,5 +41,5 @@ private:
     const std::string windowTitle;
 
     /** Used to update the window title. */
-    std::shared_ptr<astu::IWindowManager> windowManager;
+    std::shared_ptr<astu::WindowService> windowService;
 };

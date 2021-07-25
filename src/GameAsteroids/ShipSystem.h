@@ -7,13 +7,11 @@
 #pragma once
 
 // AST Utilities includes
-#include <EntityFactoryService.h>
-#include <UpdateService.h>
-#include <EntitySystems.h>
-#include <InputMappingService.h>
-#include <ITimeManager.h>
-#include <ILineRenderer.h>
-#include <Interpolator.h>
+#include <AstuMath.h>
+#include <Services.h>
+#include <AstuInput.h>
+#include <Suite2D.h>
+#include <ECS.h>
 
 // C++ Standard Library includes
 #include <memory>
@@ -22,7 +20,7 @@ class ShipSystem
     : public astu::Updatable
     , private astu::OneFamilyEntitySystem
     , private astu::TimeClient
-    , private astu::LineRendererClient<float>
+    , private astu2d::LineRendererClient2f
 {
 public:
 
@@ -46,12 +44,7 @@ private:
     /** Used to create thrust particle entities. */
     std::shared_ptr<astu::EntityFactoryService> entityFactory;
 
-    /** Interpolator used to ease thrust input. */
-    astu::LinearInterpolator1f thrustInput;
-
-    /** Interpolator used to ease steering input. */
-    astu::LinearInterpolator1f steerInput;
-
+    /** Draws the current state of the input axis for debugging. */
     void DrawAxesState(astu::LinearInterpolator1f & hAxis, astu::LinearInterpolator1f & vAxis);
 
     // Inherited via Service

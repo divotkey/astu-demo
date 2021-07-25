@@ -8,21 +8,21 @@
 #include "GunSystem.h"
 #include "Ship.h"
 #include "Gun.h"
-#include "Pose2.h"
 #include "Body2.h"
 
 // AST Utilities includes 
-#include <EntityFactoryService.h>
+#include <Suite2D.h>
 
 // C++ Standard Library includes
 #include <algorithm>
 #include <iostream>
 
+using namespace astu2d;
 using namespace astu;
 using namespace std;
 
 const EntityFamily GunSystem::FAMILY 
-    = EntityFamily::Create<Pose2, Body2, Gun, Ship>();
+    = EntityFamily::Create<CPose, Body2, Gun, Ship>();
 
 GunSystem::GunSystem(int updatePriority)
     : Service("Gun System")
@@ -60,11 +60,11 @@ void GunSystem::ProcessEntity(Entity & entity)
         // Fire bullet.
         ++gun.bulletsFired;
 
-        auto & pose = entity.GetComponent<Pose2>();
+        auto & pose = entity.GetComponent<CPose>();
 
         auto bullet = ASTU_SERVICE(EntityFactoryService).CreateEntity("Bullet");
         auto & bulletBody = bullet->GetComponent<Body2>();
-        auto & bulletPose = bullet->GetComponent<Pose2>();
+        auto & bulletPose = bullet->GetComponent<CPose>();
 
         // bulletPose.transform.SetTranslation(body.GetWorldPoint(gun.offset));
         bulletPose.transform.SetTranslation(

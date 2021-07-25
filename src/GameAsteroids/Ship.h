@@ -7,9 +7,9 @@
 #pragma once
 
 // AST Utilities includes
-#include <Scene2D.h>
-#include <EntityService.h>
-#include <Interpolator.h>
+#include <ECS.h>
+#include <Suite2D.h>
+#include <AstuMath.h>
 
 // C++ Standard Library includes
 #include <memory>

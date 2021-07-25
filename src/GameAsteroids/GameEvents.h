@@ -7,7 +7,7 @@
 #pragma once
 
 // AST Utilities includes
-#include <Vector2.h>
+#include <AstuMath.h>
 
 class GameEvent {
 public:

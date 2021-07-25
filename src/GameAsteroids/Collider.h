@@ -6,13 +6,13 @@
 
 #pragma once
 
+// AST Utilities includes
+#include <ECS.h>
+
 // C++ Standard Library includes.
 #include <cmath>
 #include <cstdint>
 
-// AST Utilities includes
-#include <EntityService.h>
-#include <Vector2.h>
 
 /**
  * An entity component which makes an entity collide (circle collider).

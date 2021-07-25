@@ -7,8 +7,8 @@
 #pragma once
 
 // AST Utilities includes
-#include <UpdateService.h>
-#include <EntitySystems.h>
+#include <AstuMath.h>
+#include <ECS.h>
 
 class WrapSystem 
     : public astu::Updatable

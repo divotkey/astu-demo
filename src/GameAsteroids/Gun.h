@@ -7,7 +7,7 @@
 #pragma once
 
 // AST Utilities includes
-#include <EntityService.h>
+#include <ECS.h>
 
 /**
  * An entity component which fires projectiles (bullets).

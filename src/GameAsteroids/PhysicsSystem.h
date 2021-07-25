@@ -7,9 +7,8 @@
 #pragma once
 
 // AST Utilities includes
-#include <EntitySystems.h>
-#include <UpdateService.h>
-#include <ITimeManager.h>
+#include <Services.h>
+#include <ECS.h>
 
 class PhysicsSystem 
     : public astu::BaseService

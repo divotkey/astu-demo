@@ -6,14 +6,12 @@
 
 #pragma once
 
-// AST Utilities includes
-#include <UpdateService.h>
-#include <EntitySystems.h>
-#include <SignalService.h>
-
 // Local includes
-#include "Pose2.h"
 #include "Collider.h"
+
+// AST Utilities includes
+#include <ECS.h>
+#include <Suite2D.h>
 
 class CollisionEvent {
 public:
@@ -52,5 +50,5 @@ private:
     virtual void OnUpdate() override;    
 
 
-    bool IsColliding(Pose2 &poseA, Collider &colA, Pose2 &poseB, Collider &colB);
+    bool IsColliding(astu2d::CPose &poseA, Collider &colA, astu2d::CPose &poseB, Collider &colB);
 };

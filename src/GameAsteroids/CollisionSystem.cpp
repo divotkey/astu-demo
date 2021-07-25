@@ -7,16 +7,14 @@
 // C++ Standard Library includes
 #include <iostream>
 
-// AST Utilities includes
-#include <Keyboard.h>
-
 // Local includes
 #include "CollisionSystem.h"
 
+using namespace astu2d;
 using namespace astu;
 using namespace std;
 
-const EntityFamily CollisionSystem::FAMILY = EntityFamily::Create<Collider, Pose2>();
+const EntityFamily CollisionSystem::FAMILY = EntityFamily::Create<Collider, CPose>();
 
 CollisionSystem::CollisionSystem(int updatePriority)
     : Service("Collision System")
@@ -42,12 +40,12 @@ void CollisionSystem::OnUpdate()
 
     for (size_t j = 0; j < entities.size(); ++j) {
         auto & entityA = entities[j];
-        auto & poseA = entityA->GetComponent<Pose2>();
+        auto & poseA = entityA->GetComponent<CPose>();
         auto & collA = entityA->GetComponent<Collider>();
 
         for (size_t i = j + 1; i < entities.size(); ++i) {
             auto & entityB = entities[i];
-            auto & poseB = entityB->GetComponent<Pose2>();
+            auto & poseB = entityB->GetComponent<CPose>();
             auto & collB = entityB->GetComponent<Collider>();
 
             // Check collision categories and masks.
@@ -65,7 +63,7 @@ void CollisionSystem::OnUpdate()
     }
  }
 
-bool CollisionSystem::IsColliding(Pose2 &poseA, Collider &colA, Pose2 &poseB, Collider &colB)
+bool CollisionSystem::IsColliding(CPose &poseA, Collider &colA, CPose &poseB, Collider &colB)
 {
     auto delta = poseA.transform.GetTranslation() - poseB.transform.GetTranslation();
     return delta.LengthSquared() < (colA.radius + colB.radius) * (colA.radius + colB.radius);

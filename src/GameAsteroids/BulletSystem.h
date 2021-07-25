@@ -6,14 +6,13 @@
 
 #pragma once
 
-// AST Utilities includes
-#include <UpdateService.h>
-#include <EntitySystems.h>
-#include <ITimeManager.h>
 
 // Local includes
 #include "CollisionSystem.h"
 
+// AST Utilities includes
+#include <Services.h>
+#include <ECS.h>
 
 class BulletSystem 
     : public astu::Updatable

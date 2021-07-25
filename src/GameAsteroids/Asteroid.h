@@ -10,8 +10,8 @@
 #include <cmath>
 
 // AST Utilities includes
-#include <EntityService.h>
-#include <Vector2.h>
+#include <AstuMath.h>
+#include <ECS.h>
 
 /**
  * An entity component which makes an entity a bullet.

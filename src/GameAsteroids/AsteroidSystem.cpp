@@ -9,15 +9,16 @@
 
 // AST Utilities includes
 #include <AstUtils.h>
-#include <EntityFactoryService.h>
+#include <ECS.h>
+#include <Suite2D.h>
 
 // Local includes
-#include "Pose2.h"
 #include "Body2.h"
 #include "Bullet.h"
 #include "GameEvents.h"
 #include "AsteroidSystem.h"
 
+using namespace astu2d;
 using namespace astu;
 using namespace std;
 
@@ -26,7 +27,7 @@ using namespace std;
 // This macro signals a game event; helps to improve readability.
 #define GAME_EVENT(type, pos) ASTU_SERVICE(SignalService<GameEvent>).QueueSignal(GameEvent(type, pos))
 
-const EntityFamily AsteroidSystem::FAMILY = EntityFamily::Create<Asteroid, Pose2, Body2>();
+const EntityFamily AsteroidSystem::FAMILY = EntityFamily::Create<Asteroid, CPose, Body2>();
 
 AsteroidSystem::AsteroidSystem(int updatePriority)
     : Service("Asteroid System")
@@ -84,7 +85,7 @@ void AsteroidSystem::HandleCollision(Entity& asteroidEntity, Entity & opponent)
         return;
     }
 
-    const auto & pos = asteroidEntity.GetComponent<Pose2>().transform.GetTranslation();
+    const auto & pos = asteroidEntity.GetComponent<CPose>().transform.GetTranslation();
 
     auto &asteroid = asteroidEntity.GetComponent<Asteroid>();
     switch (asteroid.type) {
@@ -142,7 +143,7 @@ void AsteroidSystem::SpawnAsteroid(const astu::Vector2f & p, Asteroid::Type type
     }
 
     // Set position.
-    entity->GetComponent<Pose2>().transform.SetTranslation(p);
+    entity->GetComponent<CPose>().transform.SetTranslation(p);
 
     // Add entity to the game world.
     GetEntityService().AddEntity(entity);

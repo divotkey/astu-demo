@@ -5,14 +5,17 @@
  */
 
 // Local includes
-#include "Pose2.h"
 #include "Body2.h"
 #include "PhysicsSystem.h"
 
-using namespace std;
-using namespace astu;
+// AST Utilities includes
+#include <Suite2D.h>
 
-const EntityFamily PhysicsSystem::FAMILY = EntityFamily::Create<Pose2, Body2>();
+using namespace astu2d;
+using namespace astu;
+using namespace std;
+
+const EntityFamily PhysicsSystem::FAMILY = EntityFamily::Create<CPose, Body2>();
 
 PhysicsSystem::PhysicsSystem(int updatePriority)
     : BaseService("Physics System")
@@ -32,7 +35,7 @@ void PhysicsSystem::OnUpdate()
 
 void PhysicsSystem::OnEntityAdded(shared_ptr<Entity> entity)
 {
-    auto &pose = entity->GetComponent<Pose2>();
+    auto &pose = entity->GetComponent<CPose>();
     auto &body = entity->GetComponent<Body2>();
 
     // Copy initial position and orientation to physics body.
@@ -61,7 +64,7 @@ void PhysicsSystem::ClearForces()
 void PhysicsSystem::UpdateTransforms()
 {
     for (auto entity : GetEntityView()) {
-        auto &pose = entity->GetComponent<Pose2>();
+        auto &pose = entity->GetComponent<CPose>();
         auto &body = entity->GetComponent<Body2>();
         body.StoreToTransform(pose.transform);
     }

@@ -7,7 +7,6 @@
 // Local includes
 #include "PhysicsSystem.h"
 #include "CollisionSystem.h"
-#include "Mesh2System.h"
 #include "ShipSystem.h"
 #include "WrapSystem.h"
 #include "GunSystem.h"
@@ -18,35 +17,19 @@
 #include "HudService.h"
 #include "GameEvents.h"
 
-// AST Utilities includes (general)
+// AST Utilities includes
 #include <AstUtils.h>
-#include <ServiceManager.h>
-#include <UpdateService.h>
-#include <TaskService.h>
-#include <IRenderService.h>
-#include <IWindowManager.h>
-#include <Events.h>
-#include <Keys.h>
-#include <InputMappingService.h>
-#include <EntityFactoryService.h>
-#include <CameraService2D.h>
-#include <EntityService.h>
-
-// AST Utilities includes (SDL2 specific)
-#include <SdlService.h>
-#include <SdlVideoService.h>
-#include <SdlEventService.h>
-#include <SdlRenderService.h>
-#include <SdlTimeService.h>
-#include <SdlSceneGraph2D.h>
-#include <SdlLineRenderer.h>
-#include <SdlJoystickService.h>
-
+#include <Services.h>
+#include <AstuInput.h>
+#include <ECS.h>
+#include <SuiteSDL.h>
+#include <Suite2D.h>
 
 // C++ Standard Library includes
 #include <iostream>
 #include <stdexcept>
 
+using namespace astu::suite2d;
 using namespace astu;
 using namespace std;
 
@@ -138,14 +121,14 @@ void AddSdlServices()
 // Adds application specific services.
 void AddCustomServices()
 {
-    ASTU_CREATE_AND_ADD_SERVICE( CameraService2D );
+    ASTU_CREATE_AND_ADD_SERVICE( CameraService );
     ASTU_CREATE_AND_ADD_SERVICE( SdlSceneGraph2D );
     ASTU_CREATE_AND_ADD_SERVICE( SdlVertexBufferBuilderService2D );
     ASTU_CREATE_AND_ADD_SERVICE( EntityService );
     ASTU_CREATE_AND_ADD_SERVICE( EntityFactoryService );
     ASTU_CREATE_AND_ADD_SERVICE( SdlLineRenderer );
     
-    ASTU_CREATE_AND_ADD_SERVICE( Mesh2System );    
+    ASTU_CREATE_AND_ADD_SERVICE( SceneSystem );    
     ASTU_CREATE_AND_ADD_SERVICE( PhysicsSystem );
     ASTU_CREATE_AND_ADD_SERVICE( CollisionSystem );
     ASTU_CREATE_AND_ADD_SERVICE( ShipSystem );
@@ -165,12 +148,12 @@ void AddCustomServices()
 void ConfigureApplication()
 {
     // Configure application main window.
-    auto & wm = ASTU_SERVICE(IWindowManager);
-    // wm.SetTitle(kAppTitle + " - Version " + kAppVersion);
-    wm.SetSize(kResolutions.at(kRes)[0], kResolutions.at(kRes)[1]);
+    auto & winSrv = ASTU_SERVICE(WindowService);
+    // winSrv.SetTitle(kAppTitle + " - Version " + kAppVersion);
+    winSrv.SetSize(kResolutions.at(kRes)[0], kResolutions.at(kRes)[1]);
 
     // Configure background color
-    ASTU_SERVICE(IRenderService).SetBackgroundColor(backgroundColor);
+    ASTU_SERVICE(RenderService).SetBackgroundColor(backgroundColor);
 
     // Add Action mappings
     ASTU_SERVICE(InputMappingService).AddActionMapping("Fire", Keys::SpaceBar);

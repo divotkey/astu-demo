@@ -7,10 +7,8 @@
 // Local includes
 #include "GameManager.h"
 #include "Ship.h"
-#include "Pose2.h"
 #include "Body2.h"
 #include "Collider.h"
-#include "Mesh2.h"
 #include "Wrap.h"
 #include "WrapSystem.h"
 #include "Gun.h"
@@ -19,13 +17,8 @@
 #include "Fadable.h"
 
 // AST Utilities includes
-#include <AstUtils.h>
-#include <EntityFactoryService.h>
-#include <ShapeGenerator2D.h>
-#include <CameraService2D.h>
-#include <TaskService.h>
-#include <Tasks.h>
 
+using namespace astu2d;
 using namespace astu;
 using namespace std;
 
@@ -131,7 +124,7 @@ void GameManager::DeregisterEntityPrototypes()
 shared_ptr<Entity> GameManager::CreateAsteroid(Asteroid::Type type, float radius)
 {
     auto entity = make_shared<Entity>();
-    entity->AddComponent( make_shared<Pose2>() );
+    entity->AddComponent( make_shared<CPose>() );
     entity->AddComponent( make_shared<Wrap>() );
     entity->AddComponent( make_shared<Body2>() );
     entity->AddComponent( make_shared<Collider>(radius, ASTEROID_CAT, BULLET_CAT | SHIP_CAT) );
@@ -148,22 +141,22 @@ shared_ptr<Entity> GameManager::CreateAsteroid(Asteroid::Type type, float radius
     entity->GetComponent<Body2>().SetLinearDamping(0);
 
     if (DEBUG_VISUALS) {
-        entity->AddComponent( make_shared<Mesh2>(NodeBuilder2D()
-            .AttachChild( PolylineBuilder2D()
+        entity->AddComponent( make_shared<CScene>(NodeBuilder()
+            .AttachChild( PolylineBuilder()
                 .Color(WebColors::Orange)
-                .VertexBuffer( ShapeGenerator2D().GenCircle(radius) )
+                .VertexBuffer( ShapeGenerator().GenCircle(radius) )
                 .Build())
-            .AttachChild( PolylineBuilder2D()
+            .AttachChild( PolylineBuilder()
                 .Color(WebColors::Green)
-                .VertexBuffer( ShapeGenerator2D().GenCircle(radius * 0.05f) )
+                .VertexBuffer( ShapeGenerator().GenCircle(radius * 0.05f) )
                 .Build())
-            .AttachChild( PolylineBuilder2D()
+            .AttachChild( PolylineBuilder()
                 .Color(WebColors::Black)
                 .VertexBuffer( CreateAsteroidMesh(radius) )
                 .Build())
             .Build() ));
     } else {
-        entity->AddComponent( make_shared<Mesh2>(PolylineBuilder2D()
+        entity->AddComponent( make_shared<CScene>(PolylineBuilder()
             .VertexBuffer( CreateAsteroidMesh(radius) )
             .Color(WebColors::Black)
             .Build()) );
@@ -180,7 +173,7 @@ shared_ptr<Entity> GameManager::CreatePlayerShip()
     auto entity = make_shared<Entity>();
     entity->AddComponent( make_shared<Ship>(SHIP_THRUST, SHIP_TORQUE, SHIP_STEER_SPEED, SHIP_THRUST_SPEED) );
     entity->AddComponent( make_shared<Wrap>() );
-    entity->AddComponent( make_shared<Pose2>() );
+    entity->AddComponent( make_shared<CPose>() );
     entity->AddComponent( make_shared<Body2>() );
     entity->AddComponent( make_shared<Collider>(kColliderRadius, SHIP_CAT, ASTEROID_CAT) );
     entity->AddComponent( make_shared<Gun>(
@@ -193,22 +186,22 @@ shared_ptr<Entity> GameManager::CreatePlayerShip()
     entity->GetComponent<Body2>().SetLinearDamping(SHIP_LINEAR_DAMPING);
 
     if (DEBUG_VISUALS) {
-        entity->AddComponent( make_shared<Mesh2>(NodeBuilder2D()
-            .AttachChild( PolylineBuilder2D()
+        entity->AddComponent( make_shared<CScene>(NodeBuilder()
+            .AttachChild( PolylineBuilder()
                 .Color(WebColors::Orange)
-                .VertexBuffer( ShapeGenerator2D().GenCircle(kColliderRadius) )
+                .VertexBuffer( ShapeGenerator().GenCircle(kColliderRadius) )
                 .Build())
-            .AttachChild( PolylineBuilder2D()
+            .AttachChild( PolylineBuilder()
                 .Color(WebColors::Green)
-                .VertexBuffer( ShapeGenerator2D().GenCircle(SHIP_RADIUS * 0.05f) )
+                .VertexBuffer( ShapeGenerator().GenCircle(SHIP_RADIUS * 0.05f) )
                 .Build())
-            .AttachChild( PolylineBuilder2D()
+            .AttachChild( PolylineBuilder()
                 .Color(WebColors::Black)
                 .VertexBuffer( CreateShipMesh() )
                 .Build())
             .Build() ));
     } else {
-        entity->AddComponent( make_shared<Mesh2>(PolylineBuilder2D()
+        entity->AddComponent( make_shared<CScene>(PolylineBuilder()
             .VertexBuffer( CreateShipMesh() )
             .Color(WebColors::Black)
             .Build()) );
@@ -222,31 +215,31 @@ shared_ptr<Entity> GameManager::CreateBullet()
     const float kColliderRadius = (BULLET_WIDTH + BULLET_HEIGHT) * 0.5f;
 
     auto entity = make_shared<Entity>();
-    entity->AddComponent( make_shared<Pose2>() );
+    entity->AddComponent( make_shared<CPose>() );
     entity->AddComponent( make_shared<Body2>() );
     entity->AddComponent( make_shared<Collider>(kColliderRadius, BULLET_CAT, ASTEROID_CAT) );
     entity->AddComponent( make_shared<Wrap>() );
     entity->AddComponent( make_shared<Bullet>(BULLET_TTL) );
 
     if (DEBUG_VISUALS) {
-        entity->AddComponent( make_shared<Mesh2>(NodeBuilder2D()
-            .AttachChild( PolylineBuilder2D()
+        entity->AddComponent( make_shared<CScene>(NodeBuilder()
+            .AttachChild( PolylineBuilder()
                 .Color(WebColors::Orange)
-                .VertexBuffer( ShapeGenerator2D().GenCircle(kColliderRadius) )
+                .VertexBuffer( ShapeGenerator().GenCircle(kColliderRadius) )
                 .Build())
-            .AttachChild( PolylineBuilder2D()
+            .AttachChild( PolylineBuilder()
                 .Color(WebColors::Green)
-                .VertexBuffer( ShapeGenerator2D().GenCircle(kColliderRadius * 0.05f) )
+                .VertexBuffer( ShapeGenerator().GenCircle(kColliderRadius * 0.05f) )
                 .Build())
-            .AttachChild( PolylineBuilder2D()
+            .AttachChild( PolylineBuilder()
                 .Color(WebColors::Black)
-                .VertexBuffer( ShapeGenerator2D().GenRectangle(BULLET_WIDTH, BULLET_HEIGHT) )
+                .VertexBuffer( ShapeGenerator().GenRectangle(BULLET_WIDTH, BULLET_HEIGHT) )
                 .Build())
             .Build() ));
     } else {
-        entity->AddComponent( make_shared<Mesh2>(PolylineBuilder2D()
+        entity->AddComponent( make_shared<CScene>(PolylineBuilder()
             .Color(WebColors::Black)
-            .VertexBuffer( ShapeGenerator2D().GenRectangle(BULLET_WIDTH, BULLET_HEIGHT) )
+            .VertexBuffer( ShapeGenerator().GenRectangle(BULLET_WIDTH, BULLET_HEIGHT) )
             .Build()) );
     }
 
@@ -256,14 +249,14 @@ shared_ptr<Entity> GameManager::CreateBullet()
 shared_ptr<astu::Entity> GameManager::CreateDebris()
 {
     auto entity = make_shared<Entity>();
-    entity->AddComponent( make_shared<Pose2>() );
+    entity->AddComponent( make_shared<CPose>() );
     entity->AddComponent( make_shared<Body2>() );
     entity->AddComponent( make_shared<Wrap>() );
     entity->AddComponent( make_shared<Fadable>(0.5f) );
 
-    entity->AddComponent( make_shared<Mesh2>(PolylineBuilder2D()
+    entity->AddComponent( make_shared<CScene>(PolylineBuilder()
         .Color(WebColors::Black)
-        .VertexBuffer( ShapeGenerator2D().GenStar(DEBRIS_RADIUS))
+        .VertexBuffer( ShapeGenerator().GenStar(DEBRIS_RADIUS))
         .Build()) );
 
     return entity;
@@ -277,7 +270,7 @@ void GameManager::ConfigureGameWorld()
 void GameManager::SpawnPlayer()
 {
     auto entity = ASTU_SERVICE(EntityFactoryService).CreateEntity("Ship");
-    entity->GetComponent<Pose2>()
+    entity->GetComponent<CPose>()
         .transform.SetTranslation(0, 0).SetRotation(0);
 
     ASTU_SERVICE(EntityService).AddEntity(entity);
@@ -297,32 +290,32 @@ void GameManager::SpawnAsteroids()
 astu::Vector2f GameManager::GetRandomSafePosition()
 {
         Vector2f p;
-        switch ( GetRandomInt(0, 4) ) {
+        switch ( Random::GetInstance().NextInt(0, 4) ) {
         case 0:
             // Create random position on left side.
             return Vector2f(
                 -WORLD_WIDTH / 2, 
-                GetRandomFloat(WORLD_HEIGHT / 2, -WORLD_HEIGHT / 2)
+                Random::GetInstance().NextFloat(WORLD_HEIGHT / 2, -WORLD_HEIGHT / 2)
             );
 
         case 1:
             // Create random position on right side.
             return Vector2f(
                 WORLD_WIDTH / 2, 
-                GetRandomFloat(WORLD_HEIGHT / 2, -WORLD_HEIGHT / 2)
+                Random::GetInstance().NextFloat(WORLD_HEIGHT / 2, -WORLD_HEIGHT / 2)
             );
 
         case 2:
             // Create random position at top.
             return Vector2f(
-                GetRandomFloat(WORLD_WIDTH / 2, -WORLD_WIDTH / 2), 
+                Random::GetInstance().NextFloat(WORLD_WIDTH / 2, -WORLD_WIDTH / 2), 
                 -WORLD_HEIGHT / 2
             );
 
         case 3:
             // Create random position at bottom.
             return Vector2f(
-                GetRandomFloat(WORLD_WIDTH / 2, -WORLD_WIDTH / 2), 
+                Random::GetInstance().NextFloat(WORLD_WIDTH / 2, -WORLD_WIDTH / 2), 
                 WORLD_HEIGHT / 2
             );
 
@@ -338,7 +331,7 @@ void GameManager::SpawnAsteroid(const astu::Vector2f & p)
         .CreateEntity("BigAsteroid");
 
     // Set position.
-    entity->GetComponent<Pose2>().transform.SetTranslation(p);
+    entity->GetComponent<CPose>().transform.SetTranslation(p);
 
     // Add entity to game world.
     ASTU_SERVICE(EntityService).AddEntity(entity);
@@ -349,9 +342,9 @@ void GameManager::SpawnAsteroid(const astu::Vector2f & p)
 
 }
 
-shared_ptr<astu::VertexBuffer2D> GameManager::CreateShipMesh()
+shared_ptr<astu::VertexBuffer2f> GameManager::CreateShipMesh()
 {
-    auto & vbBuilder = ASTU_SERVICE(VertexBufferBuilder2D);
+    auto & vbBuilder = ASTU_SERVICE(VertexBufferBuilder2f);
     vbBuilder.Reset();
 
     Vector2f v;
@@ -364,9 +357,9 @@ shared_ptr<astu::VertexBuffer2D> GameManager::CreateShipMesh()
     return vbBuilder.Build();
 }
 
-std::shared_ptr<astu::VertexBuffer2D> GameManager::CreateAsteroidMesh(float r)
+std::shared_ptr<astu::VertexBuffer2f> GameManager::CreateAsteroidMesh(float r)
 {
-    auto & vbBuilder = ASTU_SERVICE(VertexBufferBuilder2D);
+    auto & vbBuilder = ASTU_SERVICE(VertexBufferBuilder2f);
     vbBuilder.Reset();
 
     // First step: create circular asteroid
@@ -386,7 +379,7 @@ std::shared_ptr<astu::VertexBuffer2D> GameManager::CreateAsteroidMesh(float r)
     const float numNeighbors = 3;   // the number of neighbors to influence
 
     for (int i = 0; i < n; i += stepSize) {
-        float deform = GetRandomFloat(-maxDeform, maxDeform);
+        float deform = Random::GetInstance().NextFloat(-maxDeform, maxDeform);
 
         Vector2f v = vbBuilder.GetVertex(i);
         Vector2f delta(v);

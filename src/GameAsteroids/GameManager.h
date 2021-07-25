@@ -11,11 +11,8 @@
 #include "Asteroid.h"
 
 // AST Utilities includes
-#include <EntityService.h>
-#include <VertexBuffer2D.h>
-#include <Service.h>
-#include <SignalService.h>
-#include <CameraService2D.h>
+#include <Services.h>
+#include <Suite2D.h>
 
 // C++ Standard Library includes
 #include <memory>
@@ -23,7 +20,7 @@
 class GameManager 
     : public astu::BaseService
     , private astu::SignalListener<GameEvent>
-    , private astu::CameraClient2D
+    , private astu::suite2d::CameraClient
 {
 public:
 
@@ -56,8 +53,8 @@ private:
     std::shared_ptr<astu::Entity> CreatePlayerShip();
     std::shared_ptr<astu::Entity> CreateBullet();
     std::shared_ptr<astu::Entity> CreateDebris();
-    std::shared_ptr<astu::VertexBuffer2D> CreateShipMesh();
-    std::shared_ptr<astu::VertexBuffer2D> CreateAsteroidMesh(float r);
+    std::shared_ptr<astu::VertexBuffer2f> CreateShipMesh();
+    std::shared_ptr<astu::VertexBuffer2f> CreateAsteroidMesh(float r);
     astu::Vector2f GetRandomSafePosition();
 
     void FirePlayerEvent();

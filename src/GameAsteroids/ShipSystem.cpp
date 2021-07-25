@@ -9,9 +9,6 @@
 #include "Ship.h"
 #include "Body2.h"
 
-// AST Utilities includes.
-#include <IWindowManager.h>
-
 // C++ Standard Library includes
 #include <algorithm>
 #include <cmath>
@@ -36,8 +33,6 @@ void ShipSystem::OnStartup()
     thrustAxis = ASTU_SERVICE(InputMappingService).BindAxis("Thrust");
     steerAxis = ASTU_SERVICE(InputMappingService).BindAxis("Steer");
     entityFactory = ASTU_GET_SERVICE(EntityFactoryService);
-
-    thrustInput.Reset(0);
 }
 
 void ShipSystem::OnShutdown()
@@ -76,9 +71,9 @@ void ShipSystem::ProcessEntity(Entity & entity)
 
 void ShipSystem::DrawAxesState(LinearInterpolator1f & hAxis, LinearInterpolator1f & vAxis)
 {
-    auto & windowMngr = ASTU_SERVICE(IWindowManager);
-    const float ox = windowMngr.GetWidth() / 2.0f;
-    const float oy = windowMngr.GetHeight() / 2.0f;
+    auto & wndSrv = ASTU_SERVICE(WindowService);
+    const float ox = wndSrv.GetWidth() / 2.0f;
+    const float oy = wndSrv.GetHeight() / 2.0f;
     const float w = 100.0f;
     const float h = 100.0f;
 

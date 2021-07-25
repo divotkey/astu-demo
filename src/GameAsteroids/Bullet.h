@@ -6,12 +6,12 @@
 
 #pragma once
 
+// AST Utilities includes
+#include <AstuMath.h>
+#include <ECS.h>
+
 // C++ Standard Library includes.
 #include <cmath>
-
-// AST Utilities includes
-#include <EntityService.h>
-#include <Vector2.h>
 
 /**
  * An entity component which makes an entity a bullet.
