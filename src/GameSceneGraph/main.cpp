@@ -10,9 +10,9 @@
 
 // AST Utilities includes
 #include <AstUtils.h>
-#include <Services.h>
+#include <AstuServices.h>
 #include <AstuInput.h>
-#include <SuiteSDL.h>
+#include <AstuSuiteSDL.h>
 
 // C++ Standard Library includes
 #include <iostream>
@@ -63,19 +63,19 @@ void AddCoreServices()
     ASTU_CREATE_AND_ADD_SERVICE( UpdateService );
 
     // Receives and distributes mouse button events.
-    ASTU_CREATE_AND_ADD_SERVICE( MouseButtonEventService );
+    ASTU_CREATE_AND_ADD_SERVICE( MouseButtonSignalService );
 
     // Receives and distributes mouse wheel events.
-    ASTU_CREATE_AND_ADD_SERVICE( MouseWheelEventService );
+    ASTU_CREATE_AND_ADD_SERVICE( MouseWheelSignalService );
 
     // Receives and distributes mouse move events.
-    ASTU_CREATE_AND_ADD_SERVICE( MouseMoveEventService );
+    ASTU_CREATE_AND_ADD_SERVICE( MouseMoveSignalService );
 
     // Receives and distributes keystroke events.
-    ASTU_CREATE_AND_ADD_SERVICE( KeystrokeEventService );
+    ASTU_CREATE_AND_ADD_SERVICE( KeystrokeSignalService );
 
     // Receives and distributes resize events.
-    ASTU_CREATE_AND_ADD_SERVICE( ResizeEventService );
+    ASTU_CREATE_AND_ADD_SERVICE( ResizeSignalService );
 
     // Mapps game actions and input axis.
     ASTU_CREATE_AND_ADD_SERVICE( InputMappingService );
@@ -166,7 +166,7 @@ void ConfigureApplication()
 
     // Set initial size of main application window and make it resizeable.
     wndSrv.SetSize(kResolutions.at(kRes)[0], kResolutions.at(kRes)[1]);
-    wndSrv.SetResizeable(true);
+    wndSrv.SetResizable(true);
 
     // Configure background color
     ASTU_SERVICE(RenderService).SetBackgroundColor(backgroundColor);

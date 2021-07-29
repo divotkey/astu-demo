@@ -5,10 +5,10 @@
 #include "SceneGraphTestService.h"
 
 // AST Utilities includes
-#include <Services.h>
+#include <AstuServices.h>
 
 
-using namespace astu2d;
+using namespace astu::suite2d;
 using namespace astu;
 using namespace std;
 

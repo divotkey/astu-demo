@@ -18,6 +18,18 @@ Some examples require to have Simple Direct Layer - Version 2 (SDL2) installed.
 Each subdirectory contains a standalone sample project and a corresponding
 README file that contains more detailed information.
 
+### Video Games and Interactive Applications
+This is a list of demo/sample applications that show how to make games and interactive applications using AST-Utilities.
+
+#### Smaller Example and Tutorials
+
+- Scene Graph Demo 1
+- Scene Graph Demo 2
+
+#### Playable Demo Games
+
+- Asteroids Clone (not ready yet)
+
 ## Disclaimer
 
 THIS SOURCE IS PROVIDED AS EDUCATIONAL MATERIAL AND NOT INTENDED TO ADDRESS ALL

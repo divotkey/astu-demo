@@ -1,9 +1,8 @@
 #pragma once
 
-
 // AST Utilities includes
 #include <AstuInput.h>
-#include <Suite2D.h>
+#include <AstuSuite2D.h>
 
 // C++ Standard Libraries
 #include <string>

@@ -1,7 +1,7 @@
 #pragma once
 
 // AST Utilities includes
-#include <Services.h>
+#include <AstuServices.h>
 
 // C++ Standard Libray includes
 #include <string>
@@ -26,14 +26,6 @@ public:
      */
     void SetWindowTitle(const std::string & title);
 
-    // Inherited via BaseService
-    virtual void OnStartup() override;
-    virtual void OnShutdown() override;
-
-
-    // Inherited via ISignalListener<std::string>
-    virtual bool OnSignal(const std::string & signal) override;
-
 private:
     /** The title of the application window. */
     std::string title;
@@ -45,4 +37,11 @@ private:
      * Updates the title of the application window.
      */
     void UpdateTitle();
+
+    // Inherited via BaseService
+    virtual void OnStartup() override;
+    virtual void OnShutdown() override;
+
+    // Inherited via ISignalListener<std::string>
+    virtual bool OnSignal(const std::string & signal) override;
 };
