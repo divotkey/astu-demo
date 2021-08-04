@@ -8,7 +8,8 @@ set(CMAKE_CXX_STANDARD 17)
 
 # add executable
 file(GLOB SOURCES "*.cpp")
-add_executable(GameBoilerplate_0_10 ${SOURCES})
+add_executable(EntityDemo1 ${SOURCES})
+target_link_libraries(EntityDemo1 astu)
 
 # specify required libraries
-target_link_libraries(GameBoilerplate_0_10 astu)
+target_link_libraries(EntityDemo1 astu)

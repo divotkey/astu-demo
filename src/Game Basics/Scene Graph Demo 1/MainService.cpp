@@ -22,7 +22,7 @@ void MainService::OnStartup()
     // geometry to be drawn as a VertexBuffer.    
     
     // Create triangle vertices using the convenient shape generator.
-    std::shared_ptr<VertexBuffer2f> vertices = ShapeGenerator().GenTriangle(100);
+    std::shared_ptr<VertexBuffer2f> vertices = ShapeGenerator().GenTriangleVb(100);
 
     // Create and initialize a new polyline scene graph element.
     std::shared_ptr<Polyline> poly = std::make_shared<Polyline>(vertices);

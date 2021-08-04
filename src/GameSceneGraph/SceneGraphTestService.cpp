@@ -72,9 +72,9 @@ void SceneGraphTestService::CreateVertexBuffersAndColors()
     const float size = 0.05f * (worldSize.x + worldSize.y) / 2;
 
     ShapeGenerator generator;
-    objectShapes.push_back( generator.GenStar(size / 2) );
-    objectShapes.push_back( generator.GenCross(size) );
-    objectShapes.push_back( generator.GenArrow(size) );
+    objectShapes.push_back( generator.GenStarVb(size / 2) );
+    objectShapes.push_back( generator.GenCrossVb(size) );
+    objectShapes.push_back( generator.GenArrowVb(size) );
 
     objectColors.push_back(WebColors::Orange);
     objectColors.push_back(WebColors::Green);

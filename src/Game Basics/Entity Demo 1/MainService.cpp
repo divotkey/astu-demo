@@ -18,64 +18,40 @@ MainService::MainService()
 
 void MainService::OnStartup()
 {
+    // Configure the default camera to show 16 by 9 meters of the game world.
     GetCamera().ShowFitting(16, 9);
-    InitSceneGraphElements();
+
+    // Add markers to visualize the outline of the game world.
+    ASTU_SERVICE(SceneGraph).GetRoot()->AttachChild( CreateWorldOutline() );
+
+    // Add some game entities.
+    AddEntity(0, 0, 0);
+    AddEntity(-5, -3, -1.0f);
+    AddEntity(5, -3, 2.5f);
+    AddEntity(0, 3, -5.0f);
 }
 
 void MainService::OnShutdown()
 {
-    // Cleanup
+    // Cleanup things we added directly to the scene graph.
+    // Note: Scene graph elements added via entities will be removed
+    // automatically by the SceneSystem.
     ASTU_SERVICE(SceneGraph).GetRoot()->DetachAll();
 }
 
-void MainService::OnUpdate()
-{    
-    // Rotate pivot node.
-    Transform2f tx = pivotNode->GetLocalTransform();
-    tx.Rotate(-SPEED * GetElapsedTimeF());
-    pivotNode->SetLocalTransform(tx);
-}
-
-void MainService::InitSceneGraphElements()
+void MainService::AddEntity(float x, float y, float av)
 {
-    shared_ptr<VertexBuffer2f> triangleShape = ShapeGenerator().GenTriangleVb(0.5f);
+    shared_ptr<Entity> entity = make_shared<Entity>();
+    entity->AddComponent( make_shared<CPose>(x, y));
+    entity->AddComponent( make_shared<CScene>(PolylineBuilder()
+        .Color(RalColors::TrafficWhite)
+        .VertexBuffer(ShapeGenerator().GenTriangle(0.5f))
+        .Build())
+    );
 
-    auto centerNode = NodeBuilder()
-        .Name("Center")
-        .Build();
+    entity->AddComponent( make_shared<CAutoRotate>(av) );
 
-    ASTU_SERVICE(SceneGraph).GetRoot()->AttachChild(centerNode);
-
-    pivotNode = NodeBuilder()
-        .Name("Pivot")
-        .Build();
-
-    centerNode->AttachChild(CreateWorldOutline());
-    centerNode->AttachChild(pivotNode);
-    
-    centerNode->AttachChild(PolylineBuilder()
-        .Name("Center Cross")
-        .Color(RalColors::TrafficRed)
-        .VertexBuffer( ShapeGenerator().GenCross(0.25f) )
-        .Build()
-        );
-
-    pivotNode->AttachChild(PolylineBuilder()
-        .Name("Triangle")
-        .Color(RalColors::TrafficYellow)
-        .Translation(1.5f, 0.0f)
-        .VertexBuffer( triangleShape )
-        .Build()
-        );
-
-    pivotNode->AttachChild(PolylineBuilder()
-        .Name("Triangle")
-        .Color(RalColors::TrafficGreen)
-        .Translation(-1.5f, 0.0f)
-        .RotationDeg(180)
-        .VertexBuffer( triangleShape )
-        .Build()
-        );
+    ASTU_SERVICE(EntityService).AddEntity(entity);
 }
 
 shared_ptr<Spatial> MainService::CreateWorldOutline()

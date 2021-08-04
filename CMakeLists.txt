@@ -18,6 +18,7 @@ add_subdirectory(${PROJECT_SOURCE_DIR}/src/Game\ Basics/Scene\ Graph\ Demo\ 1 sc
 add_subdirectory(${PROJECT_SOURCE_DIR}/src/Game\ Basics/Scene\ Graph\ Demo\ 2 scene_graph_demo2)
 add_subdirectory(${PROJECT_SOURCE_DIR}/src/Game\ Basics/Scene\ Graph\ Demo\ 3 scene_graph_demo3)
 add_subdirectory(${PROJECT_SOURCE_DIR}/src/Game\ Basics/Camera\ Demo camera_demo)
+add_subdirectory(${PROJECT_SOURCE_DIR}/src/Game\ Basics/Entity\ Demo\ 1 entity_demo1)
 
 # Playable Demo Games
 #add_subdirectory(${PROJECT_SOURCE_DIR}/src/GameAsteroids game_asteroids)

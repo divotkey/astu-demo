@@ -18,13 +18,13 @@ MainService::MainService()
 
 void MainService::OnStartup()
 {
-    // We will create two scene accounts that draw an identical triangle, so we
-    // can use the vertex data for both accounts to save some memory.   
-    shared_ptr<VertexBuffer2f> triangleShape = ShapeGenerator().GenTriangle(50);
+    // We will create two scene nodes that draw an identical triangle, so we
+    // can use the vertex data for both nodes to save some memory.   
+    shared_ptr<VertexBuffer2f> triangleShape = ShapeGenerator().GenTriangleVb(50);
 
     // We create a node that is placed exactly in the center of the screen and
-    // can contain other child accounts. It will be the only node we add to the
-    // scene graph. All other accounts will be child nodes of this node.
+    // can contain other child nodes. It will be the only node we add to the
+    // scene graph. All other nodes will be child nodes of this node.
     auto centerNode = NodeBuilder()
         .Name("Center")
         .Translation( GetCenter() )
@@ -41,11 +41,9 @@ void MainService::OnStartup()
         .Name("Pivot")
         .Build();
 
-
     // We also need to add this node indirectly to the scene graph by making it
     // a child node of the center node.
     centerNode->AttachChild(pivotNode);
-
 
     // Let's add a cross in the middle of the rotation elements.
     // Depending on whether we want the center cross to rotate or not, we need
