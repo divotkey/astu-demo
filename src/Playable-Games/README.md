@@ -1,3 +1,7 @@
-# Entity Demo 1
+# Playable Demo Games
 
-This directory will contain small, but fully playable games. The games will be added gradually.
+This directory contains playable (demo) games. New games will be added gradually.
+
+## Games
+
+- Asteroids Clone (Atari's classic arcage game)
