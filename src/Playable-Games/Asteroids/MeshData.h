@@ -30,7 +30,7 @@ public:
 	std::vector<astu::Vector2f> vertices;
 
 	/** The radius of this mesh. */
-	double radius;
+	float radius;
 
 	/**
 	 * Constructor.
@@ -39,7 +39,7 @@ public:
 	 * @param r			the radius
 	 * @param vtx		the vertices
 	 */
-	MeshData(const std::string & name, double r, const std::vector<astu::Vector2f>& vtx)
+	MeshData(const std::string & name, float r, const std::vector<astu::Vector2f>& vtx)
 		: name(name), vertices(vtx), radius(r) {}
 };
 
