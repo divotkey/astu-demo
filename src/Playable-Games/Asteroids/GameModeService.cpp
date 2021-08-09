@@ -66,7 +66,7 @@ void GameModeService::SpawnAsteroids(int n)
 void GameModeService::SpawnAsteroid()
 {
 	const auto& asteroidData = 
-		kBigAsteroids[Random::GetInstance().NextInt(0, kBigAsteroids.size())];	
+		kBigAsteroids[Random::GetInstance().NextInt(0, static_cast<int>(kBigAsteroids.size()))];	
 
 	Vector2f spawnPoint;
 	switch (Random::GetInstance().NextInt(0, 4)) {
@@ -103,7 +103,7 @@ void GameModeService::SpawnMediumAsteroids(int n, const Vector2f& p)
 {
 	for (int i = 0; i < n; ++i) {
 	const auto& asteroidData = 
-		kMediumAsteroids[Random::GetInstance().NextInt(0, kMediumAsteroids.size())];	
+		kMediumAsteroids[Random::GetInstance().NextInt(0, static_cast<int>(kMediumAsteroids.size()))];	
 
 		AddEntity(asteroidData.name, p);
 		++numAsteroidsAlive;

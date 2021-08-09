@@ -39,12 +39,30 @@ public:
      */
     TextRenderService();
 
+    /**
+     * Draws a text at a certain position using the current color and alignment.
+     * 
+     * @param p the position of the text
+     * @param s a string containing the text to draw
+     */
     void DrawString(const astu::Vector2f& p, const std::string& s) {
         DrawString(p.x, p.y, s);
     }
 
+    /**
+     * Draws a text at a certain position using the current color and alignment.
+     * 
+     * @param x the x-coordinate of the text
+     * @param y the y-coordinate of the text
+     * @param s a string containing the text to draw
+     */
     void DrawString(float x, float y, const std::string& s);
 
+    /**
+     * Sets the alignment of the text.
+     * 
+     * @param align the alingment
+     */
     void SetAlingment(Alignment align) {
         alignment = align;
     }
@@ -79,11 +97,6 @@ private:
 
     /** The horizontal text alignment. */
     Alignment alignment;
-
-    /**
-     * Renders all characters for debugging purpose.
-     */
-    void RenderAllCharacters();
 
     void DrawCharacter(const astu::Vector2f& p, const IndexedMeshData& mesh);
 

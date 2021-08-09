@@ -81,7 +81,7 @@ void HudService::OnUpdate()
     SetTranslation(LIFE_POS_X + kShip.radius / 2, LIFE_POS_Y);
     for (int i = 1; i < numLifes; ++i) {
         DrawPolygon(kShip.vertices);
-        Translate(-kShip.radius * 2, 0);
+        Translate(-kShip.radius * 2.0f, 0.0f);
     }
     PopTransform();
 

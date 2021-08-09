@@ -46,15 +46,6 @@ void TextRenderService::OnShutdown()
     charToMesh.clear();
 }
 
-void TextRenderService::RenderAllCharacters()
-{
-    Vector2f p(GetCamera().GetViewWidth() * -0.45, 5);
-    for(const auto & mesh : kFont) {
-        DrawCharacter(p, mesh);
-        p.x += characterSpacing;
-    }
-}
-
 void TextRenderService::DrawCharacter(const Vector2f& p, const IndexedMeshData& mesh)
 {
     assert(mesh.indices.size() % 2 == 0);
