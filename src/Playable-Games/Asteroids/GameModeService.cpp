@@ -21,6 +21,8 @@ using namespace astu2d;
 using namespace astu;
 using namespace std;
 
+#define RANDOM_ELEM(a) a[Random::GetInstance().NextInt(0, static_cast<int>(a.size()))]
+
 GameModeService::GameModeService()
 	: BaseService("Game Mode Service")
 {
@@ -65,8 +67,7 @@ void GameModeService::SpawnAsteroids(int n)
 
 void GameModeService::SpawnAsteroid()
 {
-	const auto& asteroidData = 
-		kBigAsteroids[Random::GetInstance().NextInt(0, static_cast<int>(kBigAsteroids.size()))];	
+	const auto& asteroidData = RANDOM_ELEM(kBigAsteroids);
 
 	Vector2f spawnPoint;
 	switch (Random::GetInstance().NextInt(0, 4)) {
@@ -102,8 +103,7 @@ void GameModeService::SpawnAsteroid()
 void GameModeService::SpawnMediumAsteroids(int n, const Vector2f& p)
 {
 	for (int i = 0; i < n; ++i) {
-	const auto& asteroidData = 
-		kMediumAsteroids[Random::GetInstance().NextInt(0, static_cast<int>(kMediumAsteroids.size()))];	
+	const auto& asteroidData = RANDOM_ELEM(kMediumAsteroids);
 
 		AddEntity(asteroidData.name, p);
 		++numAsteroidsAlive;
@@ -113,8 +113,7 @@ void GameModeService::SpawnMediumAsteroids(int n, const Vector2f& p)
 void GameModeService::SpawnSmallAsteroids(int n, const Vector2f& p)
 {
 	for (int i = 0; i < n; ++i) {
-	const auto& asteroidData = 
-		kSmallAsteroids[Random::GetInstance().NextInt(0, kSmallAsteroids.size())];	
+	const auto& asteroidData = RANDOM_ELEM(kSmallAsteroids);
 
 		AddEntity(asteroidData.name, p);
 		++numAsteroidsAlive;

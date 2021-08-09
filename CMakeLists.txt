@@ -22,4 +22,4 @@ add_subdirectory(${PROJECT_SOURCE_DIR}/src/Game-Basics/Camera\ Demo camera_demo)
 add_subdirectory(${PROJECT_SOURCE_DIR}/src/Game-Basics/Entity\ Demo\ 1 entity_demo1)
 
 # Playable Demo Games
-add_subdirectory(${PROJECT_SOURCE_DIR}/src/Playable-Games/Asteroids)
+add_subdirectory(${PROJECT_SOURCE_DIR}/src/Playable-Games/Asteroids asteroids)
