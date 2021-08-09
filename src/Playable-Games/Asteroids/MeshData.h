@@ -53,7 +53,7 @@ public:
 
 	IndexedMeshData(
 		const std::string & name,
-		double r, 
+		float r, 
 		const std::vector<astu::Vector2f>& vtx,
 		const std::vector<uint32_t>& idx
 	)
