@@ -1,0 +1,1066 @@
+//		Sword Script to generate Atari Asteroids Assets.
+//		Copyright 2021 (c) Roman Divotkey. All rights reserved.
+
+
+// A global scaling factor applied to all mesh data.
+GLOBAL_SCALE	= 	4.0;
+
+// Holds the list of different asteroids mesh data.
+asteroidsBig = [];
+asteroidsMedium = [];
+asteroidsSmall = [];
+
+// Holds the list of different entity mesh data.
+entities = [];
+
+// Holds indexed mesh data for the character meshes.
+characters = [];
+
+// Add the raw asteroids data collected from internet resources.
+AddBigAsteroid(
+	"AsteroidBig1",
+	[[3, -0], [4, -2], [2, -4], [0, -2], 
+	[-2, -4], [-4, -2], [-4, 2], [-2, 4], 
+	[1, 4], [4, 2]],
+	0.2
+);
+
+AddBigAsteroid(
+	"AsteroidBig2",
+	[[4, 1], [2, -1], [4, -2], [2, -4], 
+	[0, -3], [-2, -4], [-4, -2], [-3, 0], 
+	[-4, 2], [-2, 4], [-1, 3], [2, 4]],
+	0.2
+);
+
+AddBigAsteroid(
+	"AsteroidBig3",
+	[[4, 1], [4, -1], [2, -4], [-1, -4], 
+	[-4, -1], [-2, -1], [-4, 1], [-2, 4], 
+	[0, 1], [0, 4], [2, 4]],
+	0.2
+);
+
+AddBigAsteroid(
+	"AsteroidBig4",
+	[[1, -0], [4, -1], [4, -2], [1, -4],
+	[-2, -4], [-1, -2], [-4, -2], [-4, 1],
+	[-2, 4], [1, 3], [2, 4], [4, 2]],
+	0.2
+);
+
+AddMediumAsteroid("AsteroidBig1", "AsteroidMedium1", 0.62);
+AddMediumAsteroid("AsteroidBig2", "AsteroidMedium2", 0.62);
+AddMediumAsteroid("AsteroidBig3", "AsteroidMedium3", 0.62);
+AddMediumAsteroid("AsteroidBig4", "AsteroidMedium4", 0.62);
+
+AddSmallAsteroid("AsteroidBig1", "AsteroidSmall1", 0.62 * 0.5);
+AddSmallAsteroid("AsteroidBig2", "AsteroidSmall2", 0.62 * 0.5);
+AddSmallAsteroid("AsteroidBig3", "AsteroidSmall3", 0.62 * 0.5);
+AddSmallAsteroid("AsteroidBig4", "AsteroidSmall4", 0.62 * 0.5);
+
+// Add entity data collected from internet resources.
+AddEntity("Ship", [[56, 0], [-40, 32], [-24, 16], [-24, -16], [-40, -32]], -0.004, true);
+AddEntity("ShipCollider", [[56, 0], [-34, 30], [-34, 16], [-34, -16], [-34, -30]], -0.004, true);
+
+// Add font data.
+fontScale = 0.12;
+
+AddChar(
+	"0", 
+	// Use this to have a zero with diagonal stroke.
+	//[[1, -1.5], [-1, -1.5], [-1, 0], [-1, 1.5], [1, 1.5], [1, -0]],
+	//[0, 1,  1, 2,  2, 3,  3, 4,  4, 5,  5, 0, 4, 1],
+	[[1, -1.5], [-1, -1.5], [-1, 1.5], [1, 1.5]], 
+	[0, 1, 1, 2, 2, 3, 3, 0],
+	fontScale
+);
+
+
+
+AddChar(
+	"1", 
+	[[0, -1.5], [0, 1.5]], 
+	[0, 1],
+	fontScale
+);
+
+AddChar(
+	"2", 
+	[[-1, -1.5], [1, -1.5], [1, 0], [-1, 0], [-1, 1.5], [1, 1.5]], 
+	[0, 1,  1, 2,  2, 3,  3, 4,  4, 5],
+	fontScale
+);
+
+AddChar(
+	"3", 
+	[[-1, -1.5], [1, -1.5], [1, -0], [-1, -0], [1, 1.5], [-1, 1.5]], 
+	[0, 1,  1, 2,  2, 3,  2, 4,  4, 5],
+	fontScale
+);
+
+AddChar(
+	"4", 
+	[[-1, -1.5], [-1, -0], [1, -0], [1, -1.5], [1, 1.5]], 
+	[0, 1,  1, 2,  3, 4],
+	fontScale
+);
+
+AddChar(
+	"5", 
+	[[1, -1.5], [-1, -1.5], [-1, -0], [1, 0], [1, 1.5], [-1, 1.5]],
+	[0, 1,  1, 2,  2, 3,  3, 4,  4, 5],
+	fontScale
+);
+
+AddChar(
+	"6", 
+	[[-1, -1.5], [-1, 1.5], [1, 1.5], [1, -0], [-1, -0]],
+	[0, 1,  1, 2,  2, 3,  3, 4],
+	fontScale
+);
+
+AddChar(
+	"7", 
+	[[-1, -1.5], [1, -1.5], [1, 1.5]],
+	[0, 1,  1, 2],
+	fontScale
+);
+
+AddChar(
+	"8", 
+	[[1, -1.5], [-1, -1.5], [-1, 0], [-1, 1.5], [1, 1.5], [1, -0]],
+	[0, 1,  1, 2,  2, 3,  3, 4,  4, 5,  5, 0,  5, 2],
+	fontScale
+);
+
+AddChar(
+	"9", 
+	[[1, 1.5], [1, 0], [1, -1.5], [-1, -1.5], [-1, -0]],
+	[0, 1,  1, 2,  2, 3,  3, 4,  4, 1],
+	fontScale
+);
+
+AddChar(
+	"A", 
+	[[-1, 1.5], [-1, 0.5], [-1, -0.5], [0, -1.5], [1, -0.5], [1, 0.5], [1, 1.5]], 
+	[0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 1, 5],
+	fontScale
+);
+
+/*
+AddChar(
+	"B", 
+	[[-1, 1.5], [-1, -0], [-1, -1.5], [0.5, -1.5], [1, -1], [1, -0.5], [1, 1], [1, 0.5], [0.5, 1.5], [0.25, 0]], 
+	[2, 1, 1, 0, 0, 8, 8, 6, 6, 7, 7, 9, 9, 5, 5, 4, 4, 3, 3, 2],
+	fontScale
+);
+*/
+
+AddChar(
+	"B", 
+	[[0.5, -1.5], [-1, -1.5], [-1, 1.5], [0.5, 1.5], [1, 1], [1, 0.5], [0.5, -0], [1, -0.5], [1, -1]], 
+	[0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 0],
+	fontScale
+);
+
+
+AddChar(
+	"C", 
+	[[1, -1.5], [-1, -1.5], [-1, 1.5], [1, 1.5]], 
+	[0, 1, 1, 2, 2, 3],
+	fontScale
+);
+
+AddChar(
+	"D", 
+	[[-1, -1.5], [-1, 1.5], [0, 1.5], [1, 0.5], [1, -0.5], [-0, -1.5]], 
+	[0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 0],
+	fontScale
+);
+
+AddChar(
+	"E", 
+	[[1, -1.5], [-1, -1.5], [-1, -0], [-1, 1.5], [1, 1.5], [0.5, -0]], 
+	[0, 1, 1, 2, 2, 3, 3, 4, 2, 5],
+	fontScale
+);
+
+AddChar(
+	"F", 
+	[[1, -1.5], [-1, -1.5], [-1, 0], [-1, 1.5], [0.5, 0]], 
+	[0, 1, 1, 2, 2, 3, 2, 4],
+	fontScale
+);
+
+AddChar(
+	"G", 
+	[[0, 0.5], [1, 0.5], [1, 1.5], [-1, 1.5], [-1, -1.5], [1, -1.5], [1, -0.5]], 
+	[0, 1, 2, 2, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6],
+	fontScale
+);
+
+AddChar(
+	"H", 
+	[[-1, -1.5], [-1, 0], [-1, 1.5], [1, 1.5], [1, -0], [1, -1.5]], 
+	[0, 2, 3, 5, 1, 4],
+	fontScale
+);
+
+AddChar(
+	"I", 
+	[[-1, -1.5], [-0, -1.5], [1, -1.5], [1, 1.5], [-0, 1.5], [-1, 1.5]], 
+	[0, 2, 5, 3, 1, 4],
+	fontScale
+);
+
+AddChar(
+	"J", 
+	[[1, -1.5], [1, 1.5], [0, 1.5], [-1, 0.5]], 
+	[0, 1, 1, 2, 2, 3],
+	fontScale
+);
+
+AddChar(
+	"K", 
+	[[-1, -1.5], [-1, -0], [-1, 1.5], [0.5, -1.5], [0.5, 1.5]], 
+	[0, 2, 1, 3, 1, 4],
+	fontScale
+);
+
+AddChar(
+	"L", 
+	[[-1, -1.5], [-1, 1.5], [1, 1.5]], 
+	[0, 1, 1, 2],
+	fontScale
+);
+
+AddChar(
+	"M", 
+	[[-1, 1.5], [-1, -1.5], [0, -0.5], [1, -1.5], [1, 1.5]], 
+	[0, 1, 1, 2, 2, 3, 3, 4],
+	fontScale
+);
+
+AddChar(
+	"N", 
+	[[-1, 1.5], [-1, -1.5], [1, 1.5], [1, -1.5]], 
+	[0, 1, 1, 2, 2, 3],
+	fontScale
+);
+
+AddChar(
+	"O", 
+	[[1, -1.5], [-1, -1.5], [-1, 1.5], [1, 1.5]], 
+	[0, 1, 1, 2, 2, 3, 3, 0],
+	fontScale
+);
+
+AddChar(
+	"P", 
+	[[-1, 1.5], [-1, -0], [-1, -1.5], [1, -1.5], [1, 0]], 
+	[0, 1, 2, 2, 1, 2, 2, 3, 3, 4, 4, 1],
+	fontScale
+);
+
+AddChar(
+	"Q", 
+	[[1, -1.5], [-1, -1.5], [-1, 1.5], [0.5, 1.5], [1, 1], [1, 1.5], [0.5, 1]], 
+	[0, 1, 1, 2, 2, 3, 3, 4, 4, 0, 6, 5],
+	fontScale
+);
+
+AddChar(
+	"R", 
+	[[1, 0], [1, -1.5], [-1, -1.5], [-1, 0], [-1, 1.5], [1, 1.5]], 
+	[0, 1, 1, 2, 2, 3, 3, 4, 3, 0, 3, 5],
+	fontScale
+);
+
+AddChar(
+	"S", 
+	[[1, -1.5], [-1, -1.5], [-1, -0], [1, 0], [1, 1.5], [-1, 1.5]], 
+	[0, 1, 1, 2, 2, 3, 3, 4, 4, 5],
+	fontScale
+);
+
+AddChar(
+	"T", 
+	[[1, -1.5], [0, -1.5], [-1, -1.5], [0, 1.5]], 
+	[0, 2, 1, 3],
+	fontScale
+);
+
+AddChar(
+	"U", 
+	[[-1, -1.5], [-1, 1.5], [1, 1.5], [1, -1.5]], 
+	[0, 1, 1, 2, 2, 3],
+	fontScale
+);
+
+AddChar(
+	"V", 
+	[[-1, -1.5], [-0, 1.5], [1, -1.5]], 
+	[0, 1, 1, 2],
+	fontScale
+);
+
+AddChar(
+	"W", 
+	[[-1, -1.5], [-1, 1.5], [-0, 0.5], [1, 1.5], [1, -1.5]], 
+	[0, 1, 1, 2, 2, 3, 3, 4],
+	fontScale
+);
+
+AddChar(
+	"X", 
+	[[-1, -1.5], [-1, 1.5], [1, 1.5], [1, -1.5]], 
+	[0, 2, 3, 1],
+	fontScale
+);
+
+AddChar(
+	"Y", 
+	[[1, -1.5], [-0, -0.5], [-1, -1.5], [0, 1.5]], 
+	[0, 1, 2, 1, 1, 3],
+	fontScale
+);
+
+AddChar(
+	"Z", 
+	[[-1, -1.5], [1, -1.5], [-1, 1.5], [1, 1.5]], 
+	[0, 1, 1, 2, 2, 3],
+	fontScale
+);
+
+AddChar(
+	" ", 
+	[], 
+	[],
+	fontScale
+);
+
+AddChar(
+	"-", 
+	[[-0.5, -0], [0.5, 0]], 
+	[0, 1],
+	fontScale
+);
+
+AddChar(
+	"©", 
+	[[-0.5, -1.5], [-1, -1], [-1, 1], [-0.5, 1.5], [0.5, -1.5], [1, -1], [1, 1], [0.5, 1.5], [0.5, -0.75], [-0.5, -0.75], [-0.5, 0.75], [0.5, 0.75]], 
+	[0, 1, 1, 2, 2, 3, 4, 5, 5, 6, 6, 7, 8, 9, 9, 10, 10, 11],
+	fontScale
+);
+
+AddChar(
+	".", 
+	[[-0.25, 0.75], [-0.25, 1.25], [0.25, 1.25], [0.25, 0.75]], 
+	[3, 0, 0, 1, 1, 2, 2, 3],
+	fontScale
+);
+
+AddChar(
+	":", 
+	[[-0.25, 0.75], [-0.25, 1.25], [0.25, 1.25], [0.25, 0.75], [-0.25, -1.25], [-0.25, -0.75], [0.25, -0.75], [0.25, -1.25]], 
+	[3, 0, 0, 1, 1, 2, 2, 3, 4, 5, 5, 6, 6, 7, 7, 4],
+	fontScale
+);
+
+AddChar(
+",", 
+[[0, 1.5], [-0.5, 1.75], [-0.5, 2], [0, 1.75], [0.25, 1.5], [0.25, 1], [0, 1], [0, 1.5]], 
+[5, 6, 6, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5],
+fontScale
+);
+
+
+// Create source
+OUTPUT_DIR = DetermineOutputDirectory();
+EmitHeaderFile("MeshData");
+EmitImplFile("MeshData");
+
+/**
+ * Emits the source code implementation file.
+ *
+ * @param basename	the name of the file to generate without file extensions
+ */ 
+function EmitImplFile(basename)
+{
+	clearChannel(0);
+	EmitCopyrightHeader();
+
+	§:
+	// Local includes
+	#include "§{basename}.h"
+
+	using namespace astu;
+	using namespace std;
+
+	/////////////////////////////////////////////////
+	/////// Asteroids Data
+	/////////////////////////////////////////////////
+
+	:§
+
+	EmitMeshDataArray(asteroidsBig, "BigAsteroids");
+	EmitMeshDataArray(asteroidsMedium, "MediumAsteroids");
+	EmitMeshDataArray(asteroidsSmall, "SmallAsteroids");
+
+
+	maxWidth = characters[0].GetWidth();
+	maxHeight = characters[0].GetHeight();
+	for (i = 0; i < characters.length; ++i) {
+		width = characters[i].GetWidth();
+		height = characters[i].GetHeight();
+		if (width > maxWidth) {
+			maxWidth = width;
+		}
+		if (height > maxHeight) {
+			maxHeight = height;
+		}
+	}
+
+	§:
+	/////////////////////////////////////////////////
+	/////// Font Data
+	/////////////////////////////////////////////////
+
+	const float kFontWidth = §{NUM(maxWidth)}f;
+	const float kFontHeight = §{NUM(maxHeight)}f;
+
+	:§
+	EmitIndexedMeshDataArray(characters, "Font");
+
+	§:
+	/////////////////////////////////////////////////
+	/////// Other Entities Data
+	/////////////////////////////////////////////////
+
+	:§
+
+	for (i = 0; i < entities.length; ++i) {
+		§:
+		const MeshData k§{entities[i].name} = 
+
+		:§
+		indent(1);
+		entities[i].Emit(";");
+		indent(-1);
+		§::§
+	}
+	store(0, OUTPUT_DIR + basename + ".cpp");
+}
+
+/**
+ * Emits implemenation of mesh data.
+ *
+ * @param list	the list of mesh data
+ * @param name	the variable name (without a leading 'k')
+ */
+function EmitMeshDataArray(list, name)
+{
+	§:
+	const std::array<MeshData, §{list.length}> k§{name} = {
+	:§
+	
+	indent(1);
+
+	for (i = 0; i < list.length; ++i) {		
+		if (i < list.length - 1) {
+			list[i].Emit(",");
+			§::§
+		} else {
+			list[i].Emit();
+		}
+	}
+	indent(-1);
+
+	§:
+	};
+
+	:§
+}
+
+/**
+ * Emits implemenation of indexed mesh data.
+ *
+ * @param list	the list of indexed mesh data
+ * @param name	the variable name (without a leading 'k')
+ */
+function EmitIndexedMeshDataArray(list, name)
+{
+	§:
+	const std::array<IndexedMeshData, §{list.length}> k§{name} = {
+	:§
+	
+	indent(1);
+
+	for (i = 0; i < list.length; ++i) {		
+		if (i < list.length - 1) {
+			list[i].Emit(",");
+			§::§
+		} else {
+			list[i].Emit();
+		}
+	}
+	indent(-1);
+
+	§:
+	};
+
+	:§
+}
+
+
+/**
+ * Emits the source code header file.
+ *
+ * @param basename	the name of the file to generate without file extensions
+ */ 
+function EmitHeaderFile(basename)
+{
+	clearChannel(0);
+	EmitCopyrightHeader();
+
+	§:
+	#pragma once
+
+	// AST-Utilities includes
+	#include <AstuMath.h>
+
+	// C++ Standard Library includes
+	#include <cstdint>
+	#include <array>
+	#include <vector>
+	#include <string>
+	
+	/**
+	 * Colletion of mesh-related data.
+	 */
+	class MeshData {
+	public:
+		/** The name of the mesh data. */
+		std::string name;
+
+		/** The vertices of the polygon-data. */
+		std::vector<astu::Vector2f> vertices;
+
+		/** The radius of this mesh. */
+		double radius;
+
+		/**
+		 * Constructor.
+		 * 
+		 * @param name	the name 
+		 * @param r			the radius
+		 * @param vtx		the vertices
+		 */
+		MeshData(const std::string & name, double r, const std::vector<astu::Vector2f>& vtx)
+			: name(name), vertices(vtx), radius(r) {}
+	};
+
+	/**
+	 * Contains indxed mesh data.
+	 */
+	class IndexedMeshData : public MeshData {
+	public:
+		/** The vertex indexes. */
+		std::vector<uint32_t> indices;
+
+		IndexedMeshData(
+			const std::string & name,
+			double r, 
+			const std::vector<astu::Vector2f>& vtx,
+			const std::vector<uint32_t>& idx
+		)
+			: MeshData(name, r, vtx)
+			, indices(idx)
+		{
+			// Intentionally left empty.
+		}
+	};
+
+	// Contains the big size dasteroids mesh data.
+	extern const std::array<MeshData, §{asteroidsBig.length}> kBigAsteroids;
+
+	// Contains the medium sized asteroids mesh data.
+	extern const std::array<MeshData, §{asteroidsMedium.length}> kMediumAsteroids;
+
+	// Contains the small sized asteroids mesh data.
+	extern const std::array<MeshData, §{asteroidsMedium.length}> kSmallAsteroids;
+
+	// Contains the font data.
+	extern const float kFontWidth;
+	extern const float kFontHeight;
+	extern const std::array<IndexedMeshData, §{characters.length}> kFont;
+
+	:§
+
+	for (i = 0; i < entities.length; ++i) {
+		§:
+		// Contains mesh data for §{entities[i].name}.
+		extern const MeshData k§{entities[i].name};		
+
+		:§
+	}
+
+	store(0, OUTPUT_DIR + basename + ".h");
+}
+
+/**
+ * Emits source code header with copyright information.
+ */ 
+function EmitCopyrightHeader()
+{
+	§:
+	/*
+	 * Asteroids Clone
+	 * 
+	 * Copyright (c) 2021 Roman Divotkey. All rights reserved.
+	 *
+	 * Code generated with SWORD 1.8.15
+	 * Last modified: Thu Aug 05 19:18:45 CEST 2021
+	 */
+
+	:§
+}
+
+/**
+ * Utility class for mesh data.
+ */
+class MeshData {
+	
+	/**
+	 * Constructor.
+	 *
+	 * @param vertices	the vertex data
+	 */
+	function constructor(vertices)
+	{
+		this.name = "";
+		this.vertices = vertices;
+		this.verticesPerLine = 4;
+		this.indicesPerLine = 8;
+		this.indices = [];
+		this.indexed = false;
+	}
+
+	/**
+	 * Sets the name of this mesh.
+	 *
+	 * @param name	the name	 */	
+	function SetName(name)
+	{
+		this.name = name;
+	}
+
+	/**
+	 * Scales the vertices by the given factor.
+	 *
+	 * @param s	the scaling factor
+	 */
+	function Scale(s)
+	{
+		for (i = 0; i < this.vertices.length; ++i) {
+			this.vertices[i][0] *= s;
+			this.vertices[i][1] *= s;
+		}
+	}
+
+	/**
+	 * Flips x and y coordinate of the vertices.
+	 */
+	function Flip()
+	{
+		for (i = 0; i < this.vertices.length; ++i) {
+			tmp = this.vertices[i][0];
+			this.vertices[i][0] = this.vertices[i][1];
+			this.vertices[i][1] = tmp;
+		}
+	}
+	
+	/**
+	 * Calculates the length of a vertex.
+	 *
+	 * @param idx	the index of the vertex
+	 * @return the length of the vertex
+	 */
+	function GetVertexLength(idx)
+	{
+		x = this.vertices[idx][0];
+		y = this.vertices[idx][1];
+		return sqrt(x * x + y * y);
+	}
+
+	/**
+	 * Calculates the radius using the median length.
+	 *
+	 * @return the radius of the mesh data
+	 */
+	function CalcRadiusMedian()
+	{
+		if (this.vertices.length == 0) {
+			return 0.0;
+		}
+
+		values = [];
+		for (i = 0; i < this.vertices.length; ++i) {
+			values.push(this.GetVertexLength(i));
+		}
+		SortList(values);
+		return values[values.length/2];
+	}
+
+	/**
+	 * Calculates the radius using the average length.
+	 *
+	 * @return the radius of the mesh data
+	 */
+	function CalcRadiusAverage()
+	{
+		if (this.vertices.length == 0) {
+			return 0.0;
+		}
+
+		sum = 0;
+		for (i = 0; i < this.vertices.length; ++i) {
+			sum += this.GetVertexLength(i);
+		}
+
+		return sum / this.vertices.length;
+	}
+
+	/**
+	 * Calculates the radius that approximates the mesh data.
+	 *
+	 * @return the radius of the mesh data
+	 */
+	function CalcRadius()
+	{
+		return this.CalcRadiusMedian();
+	}
+	
+	/**
+	 * Returns whether this mesh is indexed.
+	 *
+	 * @return true if this mesh is indexed
+	 */
+	function IsIndexed() {
+		return this.indexed;
+	}
+
+	/**
+	 * Returns the width of this mesh.
+	 *
+	 * @return the width of this mesh
+	 */
+	function GetWidth() {
+		if (this.vertices.length <= 0) {
+			return 0;
+		}
+
+		min = this.vertices[0][0];
+		max = min;
+		for (i = 1; i < this.vertices.length; ++i) {
+			if (this.vertices[i][0] < min) {
+				min = this.vertices[i][0];
+			}
+			if (this.vertices[i][0] > max) {
+				max = this.vertices[i][0];
+			}
+		}
+		
+		return max - min;
+	}
+
+	/**
+	 * Returns the height of this mesh.
+	 *
+	 * @return the height of this mesh
+	 */
+	function GetHeight() {
+		if (this.vertices.length <= 0) {
+			return 0;
+		}
+
+		min = this.vertices[0][1];
+		max = min;
+		for (i = 1; i < this.vertices.length; ++i) {
+			if (this.vertices[i][1] < min) {
+				min = this.vertices[i][1];
+			}
+			if (this.vertices[i][1] > max) {
+				max = this.vertices[i][1];
+			}
+		}
+		
+		return max - min;
+	}
+
+
+	function Emit(endString) {
+		if (endString == undefined) endString = "";
+
+		className = "MeshData";
+		if (this.IsIndexed()) {
+			className = "Indexed" + className;
+		}
+
+		§:
+		§{className}(
+			// Name
+			"§{this.name}",
+
+			// Radius
+			§{this.CalcRadius()}f, 
+
+		:§		
+
+		s = "";
+		for (i = 0; i < this.vertices.length; ++i) {
+			s += "{" + NUM(this.vertices[i][0]) + "f, " + NUM(this.vertices[i][1]) + "f}";
+			if (i < this.vertices.length - 1) {
+				s += ", ";
+			}
+
+			if ((i != 0) && (imod(i + 1, this.verticesPerLine) == 0)) {
+				s += "\n\t";
+			}
+		}
+				
+		if (this.IsIndexed()) {
+			§:
+				// §{this.vertices.length} Vertices
+				{§{s}},	
+
+			:§
+		} else {
+			§:
+				// §{this.vertices.length} Vertices
+				{§{s}}
+			:§
+		}
+
+		if (this.IsIndexed()) {
+			s = "";
+			for (i = 0; i < this.indices.length; ++i) {
+				s += this.indices[i];
+				if (i < this.indices.length - 1) {
+					s += ", ";
+				}	
+
+				if ((i != 0) && (imod(i + 1, this.indicesPerLine) == 0)) {
+					s += "\n\t";
+				}
+			}
+
+			§:
+				// §{this.indices.length} Indices
+				{§{s}}
+			:§
+		}
+
+		§:
+		)§{endString}
+		:§
+	}
+
+}
+
+/**
+ * Creates and adds a new meshdata object for the entity vertices.
+ *
+ * @param name			the name of the entity
+ * @param vertices	the vertices of the entity
+ * @param scale			additional scaling factor
+ * @param flip			whether to flip x and y coordinates of vertices
+ */
+function AddEntity(name, vertices, scale, flip)
+{
+	if (scale == undefined) scale = 1.0;
+	if (flip == undefined) flip = false;
+
+	mesh = new MeshData(vertices);
+	mesh.SetName(name);
+	mesh.Scale(GLOBAL_SCALE * scale);
+	if (flip) mesh.Flip();
+	entities.push(mesh);
+}
+
+function AddChar(name, vertices, indices, scale, flip)
+{
+	if (scale == undefined) scale = 1.0;
+	if (flip == undefined) flip = false;
+
+	mesh = new MeshData(vertices);
+	mesh.indices = indices;
+	mesh.SetName(name);
+	mesh.Scale(GLOBAL_SCALE * scale);
+	mesh.indexed = true;
+	if (flip) mesh.Flip();
+	characters.push(mesh);
+}
+
+
+/**
+ * Creates and adds a new meshdata object for the asteroid's vertices.
+ *
+ * @param name			the name of the asteroid
+ * @param vertices	the vertices of the asteroid
+ * @param scale			additional scaling factor
+ */
+function AddBigAsteroid(name, vertices, scale)
+{
+	if (scale == undefined) scale = 1.0;
+
+	mesh = new MeshData(vertices);
+	mesh.SetName(name);
+	mesh.Scale(GLOBAL_SCALE * scale);
+	asteroidsBig.push(mesh);
+}
+
+/**
+ * Creates a scaled version of a big asteroid as medium asteroid.
+ *
+ * @param source		the name of the big source asteroid
+ * @param name			the name of the new asteroid
+ * @param scale			the scaling factor
+ */
+function AddMediumAsteroid(source, name, scale)
+{
+	if (scale == undefined) scale = 1.0;
+
+	md = FindMeshData(asteroidsBig, source);
+
+	newVertices = [];
+	mesh = new MeshData(CopyVertices(md.vertices));
+	mesh.SetName(name);
+	mesh.Scale(scale);
+	asteroidsMedium.push(mesh);
+}
+
+/**
+ * Creates a scaled version of a big asteroid as small asteroid.
+ *
+ * @param source		the name of the big source asteroid
+ * @param name			the name of the new asteroid
+ * @param scale			the scaling factor
+ */
+function AddSmallAsteroid(source, name, scale)
+{
+	if (scale == undefined) scale = 1.0;
+
+	md = FindMeshData(asteroidsBig, source);
+
+	newVertices = [];
+	mesh = new MeshData(CopyVertices(md.vertices));
+	mesh.SetName(name);
+	mesh.Scale(scale);
+	asteroidsSmall.push(mesh);
+}
+
+
+/**
+ * Creates a copy of the specified list of vertices.
+ *
+ * @param	vertices	the list of vertices to copy
+ * @return the copy of the specified vertices
+ */
+function CopyVertices(vertices)
+{
+	result = [];
+	for (i = 0; i< vertices.length; ++i)
+	{
+		result.push([vertices[i][0], vertices[i][1]]);
+	}
+
+	return result;
+}
+
+/**
+ * Searches a list of mesh data for mesh with specified name.
+ *
+ * @param list	the list to search
+ * @param name	the name of the mesh data
+ * @return the requested mesh data
+ */
+function FindMeshData(list, name)
+{
+	for (i = 0; i < list.length; ++i) {
+		if (list[i].name == name) {
+			return list[i];
+		}
+	}
+
+	ReportError("Entity '" + name + "' not found");
+}
+
+/**
+ * Reports a script error and terminates.
+ *
+ * @param errorText	the error message to show
+ */
+function ReportError(errorText)
+{
+	messageBox(errorText, "SWORD Script Error", 0);
+	exit;
+}
+
+/**
+ * Convertes a number to a reduced precission.
+ *
+ * @param x	the number convert
+ * @return the converted number
+ */
+function NUM(x) {
+	return round(x * 10000) / 10000.0;
+}
+
+/**
+ * Sorts the specified list.
+ *
+ * @param list	the list to sort
+ */
+function SortList(list)
+{
+	// Bubble sort algorithm
+	n = list.length;
+	swapped = true;
+	while (swapped) {
+		swapped = false;
+		for (i = 0; i < list.length - 1; ++i) {
+			if (list[i] > list[i + 1]) {
+				tmp = list[i];
+				list[i] = list[i + 1];
+				list[i + 1] = tmp;
+				swapped = true;
+			}
+			n -= 1;
+		}
+	}	
+}
+
+/**
+ * Queries the output directory from the user.
+ * 
+ * @param memorizeKey	the key to store the output directory for reusage
+ * @return the output diretory.
+ */
+function DetermineOutputDirectory(memorizeKey) {
+	if (memorizeKey == undefined) memorizeKey = "outdir";
+	outputDir = recall(memorizeKey);
+
+	if (outputDir == undefined) {
+		outputDir = "";
+	}
+
+	result = selectSaveDir(outputDir, "Select Source Code Output Directory");
+	if (!result.approved) {
+		exit;
+	}
+	memorize(memorizeKey, result.file);
+	outputDir = result.file;
+	return outputDir + filePathSeparator();
+}

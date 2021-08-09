@@ -7,6 +7,9 @@ project(AstuExamples)
 # ASTU Library, must be in subdirectory 'astu'
 add_subdirectory(${PROJECT_SOURCE_DIR}/astu astu)
 
+# ASTU-Box2d Library, must be in subdirectory 'astu-box2d'
+add_subdirectory(${PROJECT_SOURCE_DIR}/astu-box2d astu-box2d)
+
 # Small Examples using AST-Utilites API-Level 0
 add_subdirectory(${PROJECT_SOURCE_DIR}/src/ASTU-Basics/Hello\ Astu helloastu)
 add_subdirectory(${PROJECT_SOURCE_DIR}/src/ASTU-Basics/Number\ Guessing\ Game number_guessing)
@@ -19,4 +22,4 @@ add_subdirectory(${PROJECT_SOURCE_DIR}/src/Game-Basics/Camera\ Demo camera_demo)
 add_subdirectory(${PROJECT_SOURCE_DIR}/src/Game-Basics/Entity\ Demo\ 1 entity_demo1)
 
 # Playable Demo Games
-#add_subdirectory(${PROJECT_SOURCE_DIR}/src/Playable-Games Asteroids\ Clone)
+add_subdirectory(${PROJECT_SOURCE_DIR}/src/Playable-Games/Asteroids)

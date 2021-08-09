@@ -39,7 +39,7 @@ This is a list of demo/sample applications that show how to make games and inter
 
 #### Playable Demo Games
 
-- Asteroids Clone (not included yet)
+- Asteroids Clone
 
 ## Disclaimer
 
