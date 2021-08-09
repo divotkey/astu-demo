@@ -4,4 +4,4 @@ This directory contains playable (demo) games. New games will be added gradually
 
 ## Games
 
-- Asteroids Clone (Atari's classic arcage game)
+- Asteroids Clone (Atari's classic arcade game)
