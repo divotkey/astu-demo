@@ -91,6 +91,7 @@ int main()
 	// Uncomment to run in fullscreen full-hd resoultion
 	// app.SetResolution(Resolution::FHD);
 	// app.SetFullscreen(true);
+	// app.EnableTerminateOnEscape(true);						
 	// ASTU_SERVICE(WindowService).ShowCursor(false);
 
 	// Run the application.
