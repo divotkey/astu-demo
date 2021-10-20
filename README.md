@@ -13,6 +13,12 @@ recommended to check out the repository with the command:
 
 Some examples require to have Simple Direct Layer - Version 2 (SDL2) installed.
 
+### Ubuntu
+
+On Ubuntu, you may see an error in the CMake file when compiling. The problem is in the CMake file of the Box2D physics engine. The error displayed is that the RandR library headers are not found.
+
+```sudo apt-get install xorg-dev libglu1-mesa-dev``` should fix the problem. 
+
 ## Sample Projects
 
 Each subdirectory contains a standalone sample project and a corresponding
