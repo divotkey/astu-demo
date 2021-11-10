@@ -37,5 +37,10 @@
 # Ignore Visual Studio Code Configurations
 .vscode
 
+# CLion Configuration
+.idea
+cmake-build-debug
+cmakd-build-release
+
 # Ignore macOS 'Desktop Services Store' fles
 .DS_Store

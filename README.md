@@ -28,12 +28,12 @@ README file that contains more detailed information.
 
 This list shows sample programs written with AST-Utilities API level 0. The source code for these examples can be found in the directory `src/ASTU-Basics`.
 
+- Hello Astu
+- Number Guessing Game
+
 ### Video Games and Interactive Applications
 
 This is a list of demo/sample applications that show how to make games and interactive applications using AST-Utilities. The source code for these examples can be found in the directory `src/Game-Basics`.
-
-- Hello Astu
-- Number Guessing Game
 
 #### Smaller Example and Tutorials
 
